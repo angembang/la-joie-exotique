@@ -1,9 +1,9 @@
 <?php
 
-// Charge l'autoload de composer
+// Load the composer autoloader
 require "vendor/autoload.php";
 
-// Charge le contenu du .env dans $_ENV
+// Load the contents of the .env file into $_ENV
 $dotenv = Dotenv\Dotenv::createImmutable(__DIR__);
 $dotenv->load();
 
