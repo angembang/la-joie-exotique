@@ -37,7 +37,7 @@ class Payment
 
   /**
    * Payment constructor
-   * @param int|null $id The unique identifier of the payment.
+   * @param int|null $id The unique identifier of the payment. Null for a new payment.
    * @param int $orderId The order identifier of the payment.
    * @param string $paymentmethod The payment method of the payment.
    * @param DateTime $paymentDate The payment date of the payment.
