@@ -38,6 +38,7 @@ class UserManager extends AbstractManager
 
       // Return the created user object
       return $user;
+    
     } catch (Exception $e) {
         // Handle the exception appropriately
         throw new Exception("Failed to create user: " . $e->getMessage());
@@ -69,6 +70,7 @@ class UserManager extends AbstractManager
 
       // Call the fetchUser method to retrieve the user
       return $this->fetchUser($query, $parameters);
+    
     } catch (Exception $e) {
         // Handle the exception appropriately
         throw new Exception("Failed to find user: " . $e->getMessage());
@@ -100,6 +102,7 @@ class UserManager extends AbstractManager
 
       // Call the fetchUser method to retrieve the user
       return $this->fetchUser($query, $parameters);
+    
     } catch(Exception $e) {
         throw new Exception("Failed to find user:" . $e->getMessage());
     }
@@ -130,6 +133,7 @@ class UserManager extends AbstractManager
 
       // Call the fetchUser method to retrieve the user
       return $this->fetchUser($query, $parameters);
+    
     } catch(Exception $e) {
         throw new Exception("Failed to find user:" .$e->getMessage());
     }   
@@ -160,6 +164,7 @@ class UserManager extends AbstractManager
 
       // Call the fetchUser method to retrieve the user
       return $this->fetchUser($query, $parameters);
+    
     } catch(Exception $e) {
       throw new Exception("Failed to find user:" .$e->getMessage());
     }
@@ -205,6 +210,7 @@ class UserManager extends AbstractManager
         // Return the array of the user objects
         return $users;
       }
+
     } catch(Exception $e) {
       throw new Exception("Failed to find user:" .$e->getMessage());
     }
@@ -244,6 +250,7 @@ class UserManager extends AbstractManager
       if($success) {
         return $user;
       }  
+    
     } catch(Exception $e) {
       throw new Exception("Failed to update user:" .$e->getMessage());
     }
@@ -277,6 +284,7 @@ class UserManager extends AbstractManager
       } else {
         return false;
     }
+  
   } catch(Exception $e) {
     throw new Exception("Failed to delete user:" .$e->getMessage());
   }
@@ -312,7 +320,8 @@ class UserManager extends AbstractManager
             $userData["address_id"]
           );
           return $user;
-      } 
+      
+        } 
       // Throw an exception if user is not found
       throw new Exception("User not found");
     }
