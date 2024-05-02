@@ -187,6 +187,7 @@ class UserManager extends AbstractManager
       // Check if users data is not empty
       if($usersData) {
         $users = [];
+        
         // Loop through each user data
         foreach($usersData as $userData) {
           // Create a user for each user data
@@ -287,6 +288,8 @@ class UserManager extends AbstractManager
      * Executes a query to fetch user data from the database and returns a User object if found.
      * 
      * @param PDOStatement $query The prepared statement object.
+     * 
+     * @param $parameters The parameters of the query.
      * 
      * @return User The retrieved user.
      */
