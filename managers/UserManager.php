@@ -42,7 +42,7 @@ class UserManager extends AbstractManager
     } catch (Exception $e) {
         // Handle the exception appropriately
         throw new Exception("Failed to create user: " . $e->getMessage());
-      }
+    }
   }
   
 
@@ -74,8 +74,7 @@ class UserManager extends AbstractManager
     } catch (Exception $e) {
         // Handle the exception appropriately
         throw new Exception("Failed to find user: " . $e->getMessage());
-      }   
-    
+    }     
   }
 
 
@@ -105,8 +104,7 @@ class UserManager extends AbstractManager
     
     } catch(Exception $e) {
         throw new Exception("Failed to find user:" . $e->getMessage());
-    }
-    
+    }  
   }
 
 
@@ -136,8 +134,7 @@ class UserManager extends AbstractManager
     
     } catch(Exception $e) {
         throw new Exception("Failed to find user:" .$e->getMessage());
-    }   
-   
+    }    
   }
 
 
@@ -167,8 +164,7 @@ class UserManager extends AbstractManager
     
     } catch(Exception $e) {
       throw new Exception("Failed to find user:" .$e->getMessage());
-    }
-    
+    }   
   }
 
 
@@ -213,8 +209,7 @@ class UserManager extends AbstractManager
 
     } catch(Exception $e) {
       throw new Exception("Failed to find user:" .$e->getMessage());
-    }
-    
+    }  
   }
 
 
@@ -253,8 +248,7 @@ class UserManager extends AbstractManager
     
     } catch(Exception $e) {
       throw new Exception("Failed to update user:" .$e->getMessage());
-    }
-    
+    }  
   }
   
   
@@ -283,12 +277,11 @@ class UserManager extends AbstractManager
         return true;
       } else {
         return false;
-    }
+      }
   
-  } catch(Exception $e) {
-    throw new Exception("Failed to delete user:" .$e->getMessage());
-  }
-    
+    } catch(Exception $e) {
+        throw new Exception("Failed to delete user:" .$e->getMessage());
+    }  
   }
 
 
