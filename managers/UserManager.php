@@ -176,10 +176,9 @@ class UserManager extends AbstractManager
       // Check if users data is not empty
       if($usersData) {
         $users = [];
-        
         // Loop through each user data
         foreach($usersData as $userData) {
-          // Create a user for each user data
+          // Instantiate an user for each user data
           $user = new User(
             $userData["id"],
             $userData["email_or_phone"],
@@ -187,8 +186,7 @@ class UserManager extends AbstractManager
             $userData["role"],
             $userData["address_id"]
           );
-
-          // Add the created user object to the users array
+          // Add the instantiated user object to the users array
           $users[] = $user;
         }
         // Return the array of the user objects
@@ -292,7 +290,7 @@ class UserManager extends AbstractManager
 
       // Check if user is found
       if ($userData) {
-          // Create a new user with retrieved data
+          // Instantiate a new user with retrieved data
           $user = new User(
             $userData["id"],
             $userData["email_or_phone"],
