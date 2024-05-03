@@ -60,16 +60,13 @@ class UserManager extends AbstractManager
       // Prepare the SQL query to retrieve the user by its unique identifier
       $query = $this->db->prepare("SELECT * FROM users WHERE id = :id");
     
-      // Bind parameters with their values.
-      $parameters = [
+      // Bind the parameter with its value.
+      $parameter = [
         ":id" => $userId
       ];
 
-      // Execute the query with parameters.
-      $query->execute($parameters);
-
-      // Call the fetchUser method to retrieve the user
-      return $this->fetchUser($query, $parameters);
+      // Call the private method fetchUser to execute the query with the parameter and retrieve the user.
+      return $this->fetchUser($query, $parameter);
     
     } catch (Exception $e) {
         // Handle the exception appropriately
@@ -91,16 +88,13 @@ class UserManager extends AbstractManager
       // Prepare the SQL query to retrieve the user by its email or phone.
       $query = $this->db->prepare("SELECT * FROM users WHERE email_or_phone = :email_or_phone");
 
-      // Bind parameters with their values.
-      $parameters = [
+      // Bind the parameter with its value.
+      $parameter = [
         ":email_or_phone" => $emailOrPhone
       ];
 
-      // Execute the query with parameters.
-      $query->execute($parameters);
-
-      // Call the fetchUser method to retrieve the user
-      return $this->fetchUser($query, $parameters);
+      // Call the private method fetchUser to execute the query with the parameter and retrieve the user.
+      return $this->fetchUser($query, $parameter);
     
     } catch(Exception $e) {
         throw new Exception("Failed to find user:" . $e->getMessage());
@@ -121,16 +115,13 @@ class UserManager extends AbstractManager
       // Prepare the SQL query to retrieve the user by its address identifier.
       $query = $this->db->prepare("SELECT * FROM users WHERE address_id = :address_id");
 
-      // Bind parameters with their values.
-      $parameters = [
+      // Bind the parameter with its value.
+      $parameter = [
         ":address_id" => $addressId
       ];
 
-      // Execute The query with parameters.
-      $query->execute($parameters);
-
-      // Call the fetchUser method to retrieve the user
-      return $this->fetchUser($query, $parameters);
+      // Call the private method fetchUser to execute the query with the parameter and retrieve the user.
+      return $this->fetchUser($query, $parameter);
     
     } catch(Exception $e) {
         throw new Exception("Failed to find user:" .$e->getMessage());
@@ -151,16 +142,13 @@ class UserManager extends AbstractManager
       // Prepare the SQL query to retrieve the user by its role.
       $query = $this->db->prepare("SELECT * users WHERE role = :role");
 
-      // Bind parameters with their values.
-      $parameters = [
+      // Bind the parameter with its value.
+      $parameter = [
         ":role" => $role
       ];
 
-      // Execute the query with parameters.
-      $query->execute($parameters);
-
-      // Call the fetchUser method to retrieve the user
-      return $this->fetchUser($query, $parameters);
+      // Call the private method fetchUser to execute the query with the parameter and retrieve the user.
+      return $this->fetchUser($query, $parameter);
     
     } catch(Exception $e) {
       throw new Exception("Failed to find user:" .$e->getMessage());
@@ -294,10 +282,10 @@ class UserManager extends AbstractManager
      * 
      * @return User The retrieved user.
      */
-    private function fetchUser(PDOStatement $query, array $parameters): User
+    private function fetchUser(PDOStatement $query, array $parameter): User
     {
-      // Execute the query with parameters
-      $query->execute($parameters);
+      // Execute the query with the parameter
+      $query->execute($parameter);
 
       // Fetch the user data from the database
       $userData = $query->fetch(PDO::FETCH_ASSOC);
