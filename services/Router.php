@@ -137,7 +137,7 @@
           break;
 
         default:
-         // Default route, display the home page
+          // Default route, display the home page
           $this->pageController->home();
           break;
       }
