@@ -14,7 +14,7 @@ class CategoryManager extends AbstractManager
    * 
    * @throws PDOException If the category is not create.
    */
-  public function createCategory(Category $category): ?Category 
+  public function createCategory(Category $category): Category 
   {
     try {
       // Prepare the SQL query to insert a new category into the database
@@ -124,8 +124,70 @@ class CategoryManager extends AbstractManager
       );
       return $category;
       } 
+
     } catch(PDOException $e) {
         throw new PDOException("Failed to found a category");
+    }
+  }
+
+
+  /**
+   * update a tag in the database
+   * 
+   * @param Tag $tag The tag to be updated.
+   * 
+   * @return Tag The tag updated.
+   * 
+   * @throws PDOException If the tag is not updated
+   */
+  public function updateCategory(Category $category): Category 
+  {
+    try {
+      // Prepare the SQL query to update the category
+      $query = $this->db->prepare("UPDATE categories SET
+      name = :name,
+      description = :description 
+      WHERE id = :id");
+
+      // Bind parameters with their values
+      $parameters = [
+        ":id" => $category->getId(),
+        ":name" => $category->getName(),
+        ":description" =>$category->getDescription()
+      ];
+
+      // Execute the query with parameters
+      $query->execute($parameters);
+      return $category;
+    
+    } catch(PDOException $e) {
+        throw new PDOException("Failed to update the category");
+    }
+  }
+
+
+  /**
+   * Deletes a category from the database
+   * 
+   * @param int $categoryId The unique identifier of the category to be deleted.
+   * 
+   */
+  public function deleteCategoryById(int $categoryId): void 
+  {
+    try {
+      // Prepare the SQL query to delete a category by its unique identifier
+      $query = $this->db->prepare("DELETE FROM categories WHERE id = :id");
+
+      // Bind the parameter with its value
+      $parameter = [
+        ":id" => $categoryId
+      ];
+
+      // Execute the query with the parameter.
+      $query->execute($parameter);
+    
+    } catch(PDOException $e) {
+        throw new PDOException("Failed to delete the category");
     }
   }
 }
