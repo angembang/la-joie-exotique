@@ -1,6 +1,7 @@
 <?php
 
 /**
+ * Class ProductImage
  * Defines a product image in the platform
  */
 class ProductImage 

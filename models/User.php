@@ -1,6 +1,7 @@
 <?php
 
 /** 
+ * Class User
  * Defines an user in the plateform.
  */
 class User 

@@ -1,6 +1,7 @@
 <?php
 
 /**
+ * class Stock
  * Defines a stock in the platform
  */
 class Stock 

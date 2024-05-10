@@ -1,6 +1,7 @@
 <?php
 
 /**
+ * Class Order
  * Defines an order in the platform
  */
 class Order 

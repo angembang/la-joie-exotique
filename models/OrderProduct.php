@@ -1,6 +1,7 @@
 <?php
 
 /**
+ * Class OrderProduct
  * Defines an order product in the platform
  */
 class OrderProduct

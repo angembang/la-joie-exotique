@@ -1,6 +1,7 @@
 <?php
 
 /**
+ * Class Payment
  * Defines a payment in the platform
  */
 class Payment 

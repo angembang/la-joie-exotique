@@ -1,6 +1,7 @@
 <?php
 
 /**
+ * Class Delivery
  * Defines a delivrery in the platform
  */
 class Delivery

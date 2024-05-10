@@ -1,6 +1,7 @@
 <?php
 
 /**
+ * Class Category 
  * Defines a category in the platform
  */
 class Category 

@@ -1,6 +1,7 @@
 <?php
 
 /**
+ * Class Address 
  * Defines an address in the platform
  */
 class Address 

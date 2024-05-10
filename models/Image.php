@@ -1,6 +1,7 @@
 <?php
 
 /**
+ * Class Image
  * Defines an image in the platform
  */
 class Image

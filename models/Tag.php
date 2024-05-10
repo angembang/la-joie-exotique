@@ -1,6 +1,7 @@
 <?php
 
 /**
+ * Class Tag
  * Defines a tag in the patform
  */
 class Tag 

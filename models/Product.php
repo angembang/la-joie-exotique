@@ -1,6 +1,7 @@
 <?php
 
 /**
+ * Class Product 
  * Defines a product in the platform
  */
 class Product 
