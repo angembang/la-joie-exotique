@@ -43,7 +43,7 @@ class AddressManager extends AbstractManager
       return $address;
     
     } catch(Exception $e) {
-        throw new Exception("Failed to create address:" .$e->getMessage());
+        throw new Exception("Failed to create address:");
     }
   }
 
@@ -86,7 +86,7 @@ class AddressManager extends AbstractManager
         return $address;
       }
     } catch(Exception $e) {
-        throw new Exception("Failed to found address:" .$e->getMessage());
+        throw new Exception("Failed to found address:");
     }
   }
 
@@ -136,7 +136,7 @@ class AddressManager extends AbstractManager
         return $addresses;
       }
     } catch(Exception $e) {
-        throw new Exception("failed to found addresses:" .$e->getMessage());
+        throw new Exception("failed to found addresses:");
     }
   }
 
