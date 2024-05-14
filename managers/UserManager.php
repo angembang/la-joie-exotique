@@ -10,9 +10,11 @@ class UserManager extends AbstractManager
    * 
    * @param User $user The user object to be created.
    * 
-   * @return User The created user object with the assigned identifier.
+   * @return User|null The created user object with the assigned identifier. Null if not created
+   * 
+   * @throws PDOException If an error occurs during the database operation.
    */
-  public function createUser(User $user): ?User
+  public function createUser(User $user): User
   {
     try {
       // Prepare the SQL query to insert a new user into the database
@@ -39,9 +41,9 @@ class UserManager extends AbstractManager
       // Return the created user object
       return $user;
     
-    } catch (Exception $e) {
+    } catch (PDOException $e) {
         // Handle the exception appropriately
-        throw new Exception("Failed to create user: ");
+        throw new PDOException("Failed to create an user");
     }
   }
   
@@ -53,6 +55,8 @@ class UserManager extends AbstractManager
    * @param int $userId The unique identifier of the user
    * 
    * @return User|null The retrieved user or null if not found.
+   * 
+   * @throws PDOException If an error occurs during the database operation.
    */
   public function findUserById(int $userId): ?User
   {
@@ -65,12 +69,22 @@ class UserManager extends AbstractManager
         ":id" => $userId
       ];
 
-      // Call the private method fetchUser to execute the query with the parameter and retrieve the user.
-      return $this->fetchUser($query, $parameter);
-    
-    } catch (Exception $e) {
+      // Execute the query with the parameter
+      $query->execute($parameter);
+
+      // Fetch the user data from the database
+      $userData = $query->fetch(PDO::FETCH_ASSOC);
+
+      // Check if user is found
+      if ($userData) {
+        return $this->hydrateUser($userData); 
+      } else {
+        return null;
+      }
+
+    } catch (PDOException $e) {
         // Handle the exception appropriately
-        throw new Exception("Failed to find user: ");
+        throw new PDOException("Failed to find user: ");
     }     
   }
 
@@ -78,9 +92,11 @@ class UserManager extends AbstractManager
   /**
    * Retrieves an user by its email or phone
    * 
-   * @param string $emailOrPhone The emil or phone of the user.
+   * @param string $emailOrPhone The email or phone of the user.
    * 
    * @return User|null The retrieved user or null if not found. 
+   * 
+   * @throws PDOException If an error occurs during the database operation.
    */
   public function findUserByEmailOrPhone(string $emailOrPhone): ?User
   {
@@ -93,11 +109,21 @@ class UserManager extends AbstractManager
         ":email_or_phone" => $emailOrPhone
       ];
 
-      // Call the private method fetchUser to execute the query with the parameter and retrieve the user.
-      return $this->fetchUser($query, $parameter);
+      // Execute the query with the parameter
+      $query->execute($parameter);
+
+      // Fetch the user data from the database
+      $userData = $query->fetch(PDO::FETCH_ASSOC);
+
+      // Check if user is found
+      if ($userData) {
+        return $this->hydrateUser($userData); 
+      } else {
+        return null;
+      }
     
-    } catch(Exception $e) {
-        throw new Exception("Failed to find user:");
+    } catch(PDOException $e) {
+        throw new PDOException("Failed to find user");
     }  
   }
 
@@ -108,6 +134,8 @@ class UserManager extends AbstractManager
    * @param int $addressId The address identifier of the user.
    * 
    * @return User|null The retrieved user or null if not found.
+   * 
+   * @throws PDOException If an error occurs during the database operation.
    */
   public function findUserByAddressId(int $addressId): ?User
   {
@@ -120,11 +148,21 @@ class UserManager extends AbstractManager
         ":address_id" => $addressId
       ];
 
-      // Call the private method fetchUser to execute the query with the parameter and retrieve the user.
-      return $this->fetchUser($query, $parameter);
+      // Execute the query with the parameter
+      $query->execute($parameter);
+
+      // Fetch the user data from the database
+      $userData = $query->fetch(PDO::FETCH_ASSOC);
+
+      // Check if user is found
+      if ($userData) {
+        return $this->hydrateUser($userData); 
+      } else {
+        return null;
+      }
     
-    } catch(Exception $e) {
-        throw new Exception("Failed to find user:");
+    } catch(PDOException $e) {
+        throw new PDOException("Failed to find user");
     }    
   }
 
@@ -135,23 +173,35 @@ class UserManager extends AbstractManager
    * @param string $role The role of the user.
    * 
    * @return User|null The user retrieved by its role or null if not found.
+   * 
+   * @throws PDOException If an error occurs during the database operation.
    */
   public function findUserByRole(string $role): ?User
   {
     try {
       // Prepare the SQL query to retrieve the user by its role.
-      $query = $this->db->prepare("SELECT * users WHERE role = :role");
+      $query = $this->db->prepare("SELECT * FROM users WHERE role = :role");
 
       // Bind the parameter with its value.
       $parameter = [
         ":role" => $role
       ];
 
-      // Call the private method fetchUser to execute the query with the parameter and retrieve the user.
-      return $this->fetchUser($query, $parameter);
+      // Execute the query with the parameter
+      $query->execute($parameter);
+
+      // Fetch the user data from the database
+      $userData = $query->fetch(PDO::FETCH_ASSOC);
+
+      // Check if user is found
+      if ($userData) {
+        return $this->hydrateUser($userData); 
+      } else {
+        return null;
+      }
     
-    } catch(Exception $e) {
-      throw new Exception("Failed to find user:");
+    } catch(PDOException $e) {
+      throw new PDOException("Failed to find user");
     }   
   }
 
@@ -160,6 +210,8 @@ class UserManager extends AbstractManager
    * Retrieves all users
    *
    * @return array User|null The array of user or null if not found.
+   * 
+   * @throws PDOException If an error occurs during the database operation.
    */
   public function findAll(): ?array 
   {
@@ -193,8 +245,8 @@ class UserManager extends AbstractManager
         return $users;
       }
 
-    } catch(Exception $e) {
-      throw new Exception("Failed to find user:");
+    } catch(PDOException $e) {
+      throw new PDOException("Failed to find user");
     }  
   }
 
@@ -204,7 +256,9 @@ class UserManager extends AbstractManager
    * 
    * @param User $user The user to be updated.
    * 
-   * @return User The user updated.
+   * @return User|null The user updated or null if not updated.
+   * 
+   * @throws PDOException If an error occurs during the database operation.
    */
   public function updateUser(User $user): ?User
   {
@@ -214,10 +268,11 @@ class UserManager extends AbstractManager
       email_or_phone = :email_or_phone,
       password = :password,
       role = :role,
-      address_id = :address_id");
+      address_id = :address_id WHERE id = :id");
 
       // Bind parameters with their values
       $parameters = [
+        ":id" => $user->getId(),
         ":email_or_phone" => $user->getEmailOrPhone(),
         ":password" => $user->getPassword(),
         ":role" => $user->getRole(),
@@ -230,10 +285,12 @@ class UserManager extends AbstractManager
       // Check if success
       if($success) {
         return $user;
-      }  
+      } else {
+        return null;
+      } 
     
-    } catch(Exception $e) {
-      throw new Exception("Failed to update user:");
+    } catch(PDOException $e) {
+      throw new PDOException("Failed to update user");
     }  
   }
   
@@ -243,7 +300,9 @@ class UserManager extends AbstractManager
    * 
    * @param int $userId The unique identifier of the user to be deleted
    * 
-   * @return bool True if the operation is successful, false if not
+   * @return bool True if the operation is successful, false if not.
+   * 
+   * @throws PDOException If an error occurs during the database operation.
    */
   public function deleteUserById(int $userId): bool
   {
@@ -264,44 +323,29 @@ class UserManager extends AbstractManager
       } else {
         return false;
       }
-  
-    } catch(Exception $e) {
-        throw new Exception("Failed to delete user:");
+    } catch(PDOException $e) {
+        throw new PDOException("Failed to delete user:");
     }  
   }
 
 
   /**
-     * Executes a query to fetch user data from the database and returns a User object if found.
+     * Helper method to hydrate Product objects from data.
      * 
-     * @param PDOStatement $query The prepared statement object.
-     * 
-     * @param $parameters The parameters of the query.
+     * @param $userData The parameters of the query.
      * 
      * @return User The retrieved user.
      */
-    private function fetchUser(PDOStatement $query, array $parameter): User
+    private function hydrateUser($userData): User
     {
-      // Execute the query with the parameter
-      $query->execute($parameter);
-
-      // Fetch the user data from the database
-      $userData = $query->fetch(PDO::FETCH_ASSOC);
-
-      // Check if user is found
-      if ($userData) {
-          // Instantiate a new user with retrieved data
-          $user = new User(
-            $userData["id"],
-            $userData["email_or_phone"],
-            $userData["password"],
-            $userData["role"],
-            $userData["address_id"]
-          );
-          return $user;
-      
-        } 
-      // Throw an exception if user is not found
-      throw new Exception("User not found");
+      // Instantiate a new user with retrieved data
+      $user = new User(
+        $userData["id"],
+        $userData["email_or_phone"],
+        $userData["password"],
+        $userData["role"],
+        $userData["address_id"]
+      );
+      return $user;
     }
 }
