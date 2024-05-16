@@ -43,7 +43,7 @@ class UserManager extends AbstractManager
     
     } catch (PDOException $e) {
       // Log the error message and code to the error log file
-      error_log("Failed to create an user:" .$e->getMessage(), $e->getCode());
+      error_log("Failed to create an user" .$e->getMessage(), $e->getCode());
       // Handle the exception appropriately
       throw new PDOException("Failed to create an user");
     }
@@ -80,9 +80,8 @@ class UserManager extends AbstractManager
       // Check if user is found
       if ($userData) {
         return $this->hydrateUser($userData); 
-      } else {
-        return null;
-      }
+      } 
+      return null;
 
     } catch (PDOException $e) {
       // Log the error message and code to the error log file
@@ -122,9 +121,8 @@ class UserManager extends AbstractManager
       // Check if user is found
       if ($userData) {
         return $this->hydrateUser($userData); 
-      } else {
-        return null;
-      }
+      } 
+      return null;
     
     } catch(PDOException $e) {
       error_log("Failed to find an user:" .$e->getMessage(), $e->getCode());
@@ -162,9 +160,8 @@ class UserManager extends AbstractManager
       // Check if user is found
       if ($userData) {
         return $this->hydrateUser($userData); 
-      } else {
-        return null;
       }
+      return null;
     
     } catch(PDOException $e) {
       error_log("Failed to find an user:" .$e->getMessage(), $e->getCode());
@@ -202,9 +199,8 @@ class UserManager extends AbstractManager
       // Check if user is found
       if ($userData) {
         return $this->hydrateUser($userData); 
-      } else {
-        return null;
-      }
+      } 
+      return null;
     
     } catch(PDOException $e) {
       error_log("Failed to find an user:" .$e->getMessage(), $e->getCode());
@@ -295,9 +291,8 @@ class UserManager extends AbstractManager
       // Check if success
       if($success) {
         return $user;
-      } else {
-        return null;
       } 
+      return null;
     
     } catch(PDOException $e) {
       error_log("Failed to update the user:" .$e->getMessage(), $e->getCode());
@@ -331,9 +326,9 @@ class UserManager extends AbstractManager
 
       if($success) {
         return true;
-      } else {
-        return false;
-      }
+      } 
+      return false;
+      
     } catch(PDOException $e) {
       error_log("Failed to delete the user: " .$e->getMessage(), $e->getCode());
       throw new PDOException("Failed to delete the user");
