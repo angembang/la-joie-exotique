@@ -6,13 +6,13 @@
 class CategoryManager extends AbstractManager 
 {
   /**
-   * Creates a new Category and persits its in the database
+   * Creates a new Category and persists its in the database
    * 
    * @param Category $category The category object to be created.
    * 
    * @return Category The created category object with the assigned identifier.
    * 
-   * @throws PDOException If the category is not create.
+   * @throws PDOException If an error occurs during the database operation.
    */
   public function createCategory(Category $category): Category 
   {
@@ -31,7 +31,7 @@ class CategoryManager extends AbstractManager
       // Execute the query with parameters
       $query->execute($parameters);
 
-      // Retrieves the last inserted identifier
+      // Retrieve the last inserted identifier
       $categoryId = $this->db->lastInsertId();
 
       // Set the identifier for the created category
@@ -41,8 +41,10 @@ class CategoryManager extends AbstractManager
       return $category;
     
     } catch(PDOException $e) {
-        // Handle the exception appropriately
-        throw new PDOException("Failed to create a new category");
+      // Log the error message and code to the error log file
+      error_log("Failed to create a new category: " .$e->getMessage(), $e->getCode());
+      // Handle the exception appropriately
+      throw new PDOException("Failed to create a new category");
     }
   }
 
@@ -52,9 +54,9 @@ class CategoryManager extends AbstractManager
    * 
    * @param int $categoryId The unique identifier of the category.
    * 
-   * @return Category|null The retrieved category. Null if not found.
+   * @return Category|null The retrieved category, or null if not found.
    * 
-   * @throws PDOException If the category is not found.
+   * @throws PDOException If an error occurs during the database operation.
    */
   public function findCategoryById(int $categoryId): ?Category
   {
@@ -81,10 +83,12 @@ class CategoryManager extends AbstractManager
           $categoryData["description"]
         );
         return $category;
-      } 
+      }
+      return null; 
 
     } catch(PDOException $e) {
-        throw new PDOException("Failed to found a category");
+      error_log("Failed to find the category: " .$e->getMessage(), $e->getCode());
+      throw new PDOException("Failed to find the category");
     }
   }
 
@@ -94,9 +98,9 @@ class CategoryManager extends AbstractManager
    * 
    * @param string $categoryName The name of the category.
    * 
-   * @return Category|null The retrieved category. Null if not found.
+   * @return Category|null The retrieved category, or null if not found.
    * 
-   * @throws PDOException If the category is not found.
+   * @throws PDOException If an error occurs during the database operation.
    */
   public function findCategoryByName(string $categoryName): ?Category 
   {
@@ -123,10 +127,12 @@ class CategoryManager extends AbstractManager
         $categoryData["description"]
       );
       return $category;
-      } 
+      }
+      return null; 
 
     } catch(PDOException $e) {
-        throw new PDOException("Failed to found a category");
+      error_log("Failed to find the category: " .$e->getMessage(), $e->getCode());
+      throw new PDOException("Failed to find a category");
     }
   }
 
@@ -136,11 +142,11 @@ class CategoryManager extends AbstractManager
    * 
    * @param Tag $tag The tag to be updated.
    * 
-   * @return Tag The tag updated.
+   * @return Tag|null The tag updated, or null if not.
    * 
-   * @throws PDOException If the tag is not updated
+   * @throws PDOException If an error occurs during the database operation.
    */
-  public function updateCategory(Category $category): Category 
+  public function updateCategory(Category $category): ?Category 
   {
     try {
       // Prepare the SQL query to update the category
@@ -157,11 +163,17 @@ class CategoryManager extends AbstractManager
       ];
 
       // Execute the query with parameters
-      $query->execute($parameters);
-      return $category;
+      $success = $query->execute($parameters);
+
+      // Check if success
+      if($success) {
+        return $category;
+      }
+      return null;
     
     } catch(PDOException $e) {
-        throw new PDOException("Failed to update the category");
+      error_log("Failed to update the category: " .$e->getMessage(), $e->getCode());
+      throw new PDOException("Failed to update the category");
     }
   }
 
@@ -171,8 +183,10 @@ class CategoryManager extends AbstractManager
    * 
    * @param int $categoryId The unique identifier of the category to be deleted.
    * 
+   * @return bool True if successful, false if not.
+   * 
    */
-  public function deleteCategoryById(int $categoryId): void 
+  public function deleteCategoryById(int $categoryId): bool
   {
     try {
       // Prepare the SQL query to delete a category by its unique identifier
@@ -184,10 +198,15 @@ class CategoryManager extends AbstractManager
       ];
 
       // Execute the query with the parameter.
-      $query->execute($parameter);
+      $success = $query->execute($parameter);
+      if($success) {
+        return true;
+      }
+      return false;
     
     } catch(PDOException $e) {
-        throw new PDOException("Failed to delete the category");
+      error_log("Failed to delete the category: " .$e->getMessage(), $e->getCode());
+      throw new PDOException("Failed to delete the category");
     }
   }
 }
