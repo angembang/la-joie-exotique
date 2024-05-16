@@ -42,8 +42,10 @@ class UserManager extends AbstractManager
       return $user;
     
     } catch (PDOException $e) {
-        // Handle the exception appropriately
-        throw new PDOException("Failed to create an user");
+      // Log the error message and code to the error log file
+      error_log("Failed to create an user:" .$e->getMessage(), $e->getCode());
+      // Handle the exception appropriately
+      throw new PDOException("Failed to create an user");
     }
   }
   
@@ -83,8 +85,10 @@ class UserManager extends AbstractManager
       }
 
     } catch (PDOException $e) {
-        // Handle the exception appropriately
-        throw new PDOException("Failed to find user: ");
+      // Log the error message and code to the error log file
+      error_log("Failed to find an user:" .$e->getMessage(), $e->getCode());
+      // Handle the exception appropriately
+      throw new PDOException("Failed to find an user");
     }     
   }
 
@@ -123,7 +127,8 @@ class UserManager extends AbstractManager
       }
     
     } catch(PDOException $e) {
-        throw new PDOException("Failed to find user");
+      error_log("Failed to find an user:" .$e->getMessage(), $e->getCode());
+      throw new PDOException("Failed to find an user");
     }  
   }
 
@@ -162,7 +167,8 @@ class UserManager extends AbstractManager
       }
     
     } catch(PDOException $e) {
-        throw new PDOException("Failed to find user");
+      error_log("Failed to find an user:" .$e->getMessage(), $e->getCode());
+      throw new PDOException("Failed to find an user");
     }    
   }
 
@@ -201,7 +207,8 @@ class UserManager extends AbstractManager
       }
     
     } catch(PDOException $e) {
-      throw new PDOException("Failed to find user");
+      error_log("Failed to find an user:" .$e->getMessage(), $e->getCode());
+      throw new PDOException("Failed to find an user");
     }   
   }
 
@@ -248,7 +255,8 @@ class UserManager extends AbstractManager
       return null;
 
     } catch(PDOException $e) {
-      throw new PDOException("Failed to find user");
+      error_log("Failed to find users:" .$e->getMessage(), $e->getCode());
+      throw new PDOException("Failed to find users");
     }  
   }
 
@@ -292,7 +300,8 @@ class UserManager extends AbstractManager
       } 
     
     } catch(PDOException $e) {
-      throw new PDOException("Failed to update user");
+      error_log("Failed to update the user:" .$e->getMessage(), $e->getCode());
+      throw new PDOException("Failed to update the user");
     }  
   }
   
@@ -326,15 +335,16 @@ class UserManager extends AbstractManager
         return false;
       }
     } catch(PDOException $e) {
-        throw new PDOException("Failed to delete user:");
+      error_log("Failed to delete the user: " .$e->getMessage(), $e->getCode());
+      throw new PDOException("Failed to delete the user");
     }  
   }
 
 
   /**
-     * Helper method to hydrate Product objects from data.
+     * Helper method to hydrate Product object from data.
      * 
-     * @param $userData The parameters of the query.
+     * @param $userData The data of the user retrieve from the database.
      * 
      * @return User The retrieved user.
      */
