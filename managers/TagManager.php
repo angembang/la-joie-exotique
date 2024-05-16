@@ -6,13 +6,13 @@
 class TagManager extends AbstractManager
 {
   /**
-   * Creates a new tag and persits its in the database
+   * Creates a new tag and persists its in the database
    * 
    * @param Tag $tag The tag object to be created.
    * 
    * @return Tag The created tag object with the assigned identifier.
    * 
-   * @throws PDOException If the tag is not created.
+   * @throws PDOException If an error occurs during the database operation.
    */
   public function createTag(Tag $tag): Tag 
   {
@@ -42,8 +42,10 @@ class TagManager extends AbstractManager
       return $tag;
     
     } catch(PDOException $e) {
-        // Handle the exception appropriately
-        throw new PDOException("Failed to create a new tag");
+      // Log the error message and code to the error log file
+      error_log("Failed to create a new tag: " .$e->getMessage(), $e->getCode());
+      // Handle the exception appropriately
+      throw new PDOException("Failed to create a new tag");
     }
   }
 
@@ -53,9 +55,9 @@ class TagManager extends AbstractManager
    * 
    * @param int $tagId The unique identifier of the tag.
    * 
-   * @return Tag|null The retrieved tag. Null if not found.
+   * @return Tag|null The retrieved tag, or null if not found.
    * 
-   * @throws PDOException If the tag is not found.
+   * @throws PDOException If an error occurs during the database operation.
    */
   public function findTagById(int $tagId): ?Tag
   {
@@ -76,17 +78,13 @@ class TagManager extends AbstractManager
 
       // Check if category data is found
       if($tagData) {
-        $tag = new Tag(
-          $tagData["id"],
-          $tagData["category_id"],
-          $tagData["name"],
-          $tagData["description"]
-        );
-        return $tag;
+       return $this->hydrateTag($tagData);
       } 
+      return null;
 
     } catch(PDOException $e) {
-        throw new PDOException("Failed to found a tag");
+      error_log("Failed to find the tag: " .$e->getMessage(), $e->getCode());
+      throw new PDOException("Failed to find the tag");
     }
   }
 
@@ -96,9 +94,9 @@ class TagManager extends AbstractManager
    * 
    * @param int $categoryId The category identifier of the tag.
    * 
-   * @return Tag|null The retrieved tag. Null if not found.
+   * @return Tag|null The retrieved tag, or null if not found.
    * 
-   * @throws PDOException If the tag is not found.
+   * @throws PDOException If an error occurs during the database operation.
    */
   public function findTagByCategoryId(int $categoryId): ?Tag
   {
@@ -119,17 +117,13 @@ class TagManager extends AbstractManager
 
       // Check if category data is found
       if($tagData) {
-        $tag = new Tag(
-          $tagData["id"],
-          $tagData["category_id"],
-          $tagData["name"],
-          $tagData["description"]
-        );
-        return $tag;
-      } 
+        return $this->hydrateTag($tagData);
+      }
+      return null; 
 
     } catch(PDOException $e) {
-        throw new PDOException("Failed to found a tag");
+      error_log("Failed to find the tag: " .$e->getMessage(), $e->getCode());
+      throw new PDOException("Failed to find the tag");
     }
   }
 
@@ -139,9 +133,9 @@ class TagManager extends AbstractManager
    * 
    * @param string $tagName The name of the tag.
    * 
-   * @return Tag|null The retrieved tag. Null if not found.
+   * @return Tag|null The retrieved tag, or null if not found.
    * 
-   * @throws PDOException If the tag is not found.
+   * @throws PDOException If an error occurs during the database operation.
    */
   public function findTagByName(string $tagName): ?Tag
   {
@@ -162,18 +156,60 @@ class TagManager extends AbstractManager
 
       // Check if category data is found
       if($tagData) {
-        $tag = new Tag(
-          $tagData["id"],
-          $tagData["category_id"],
-          $tagData["name"],
-          $tagData["description"]
-        );
-        return $tag;
-      } 
+        return $this->hydrateTag($tagData);
+      }
+      return null; 
 
     } catch(PDOException $e) {
-        throw new PDOException("Failed to found a tag");
+      error_log("Failed to find the tag: " .$e->getMessage(), $e->getCode());
+      throw new PDOException("Failed to find the tag");
     }
+  }
+
+
+  /**
+   * Retrieves all tags
+   *
+   * @return array tag|null The array of tag, or null if not found.
+   * 
+   * @throws PDOException If an error occurs during the database operation.
+   */
+  public function findAll(): ?array 
+  {
+    try {
+      // Prepare the SQL query to retrieve all tags into the database
+      $query = $this->db->prepare("SELECT * FROM tags");
+
+      // Execute the query
+      $query->execute();
+
+      // Fetch users data from the database
+      $tagsData = $query->fetchAll(PDO::FETCH_ASSOC);
+
+      // Check if users data is not empty
+      if($tagsData) {
+        $tags = [];
+        // Loop through each user data
+        foreach($tagsData as $tagData) {
+          // Instantiate an user for each user data
+          $tag = new Tag(
+            $tagData["id"],
+            $tagData["category_id"],
+            $tagData["name"],
+            $tagData["description"]
+          );
+          // Add the instantiated tag object to the tags array
+          $tags[] = $tag;
+        }
+        // Return the array of the user objects
+        return $tags;
+      }
+      return null;
+
+    } catch(PDOException $e) {
+      error_log("Failed to find tags: " .$e->getMessage(), $e->getCode());
+      throw new PDOException("Failed to find tags");
+    }  
   }
 
 
@@ -182,11 +218,11 @@ class TagManager extends AbstractManager
    * 
    * @param Tag $tag The tag to be updated.
    * 
-   * @return Tag The tag updated.
+   * @return Tag|null The tag updated, or null if not.
    * 
-   * @throws PDOException If the tag is not updated
+   * @throws PDOException If an error occurs during the database operation.
    */
-  public function updateTag(Tag $tag): Tag 
+  public function updateTag(Tag $tag): ?Tag 
   {
     try {
       // Prepare the SQL query to update the Tag
@@ -205,11 +241,17 @@ class TagManager extends AbstractManager
       ];
 
       // Execute the query with parameters
-      $query->execute($parameters);
-      return $tag;
+      $success = $query->execute($parameters);
+
+      // Check if success
+      if($success) {
+        return $tag;
+      }
+      return null;
     
     } catch(PDOException $e) {
-        throw new PDOException("Failed to update the tag");
+      error_log("Failed to update the tag: " .$e->getMessage(), $e->getCode());
+      throw new PDOException("Failed to update the tag");
     }
   }
 
@@ -219,8 +261,9 @@ class TagManager extends AbstractManager
    * 
    * @param int $tagId The unique identifier of the tag to be deleted.
    * 
+   * @return bool True if successful, false if not.
    */
-  public function deleteTagById(int $tagId): void 
+  public function deleteTagById(int $tagId): bool 
   {
     try {
       // Prepare the SQL query to delete a tag by its unique identifier
@@ -232,11 +275,38 @@ class TagManager extends AbstractManager
       ];
 
       // Execute the query with the parameter.
-      $query->execute($parameter);
+      $success = $query->execute($parameter);
+
+      // Check if success
+      if($success) {
+        return true;
+      }
+      return false;
     
     } catch(PDOException $e) {
-        throw new PDOException("Failed to delete the tag");
+      error_log("Failed to delete the tag: " .$e->getMessage(), $e->getCode());
+      throw new PDOException("Failed to delete the tag");
     }
   }
+
+
+  /**
+     * Helper method to hydrate Tag object from data.
+     * 
+     * @param $tagData The data of the tag retrieve from the database.
+     * 
+     * @return Tag The retrieved tag.
+     */
+    private function hydrateTag($tagData): Tag
+    {
+      // Instantiate a new user with retrieved data
+      $tag = new Tag(
+        $tagData["id"],
+        $tagData["category_id"],
+        $tagData["name"],
+        $tagData["description"]
+      );
+      return $tag;
+    }
 
 }
