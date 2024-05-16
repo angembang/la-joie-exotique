@@ -337,7 +337,7 @@ class UserManager extends AbstractManager
 
 
   /**
-     * Helper method to hydrate Product object from data.
+     * Helper method to hydrate User object from data.
      * 
      * @param $userData The data of the user retrieve from the database.
      * 
