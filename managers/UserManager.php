@@ -244,6 +244,8 @@ class UserManager extends AbstractManager
         // Return the array of the user objects
         return $users;
       }
+      // No user is found, return null.
+      return null;
 
     } catch(PDOException $e) {
       throw new PDOException("Failed to find user");
