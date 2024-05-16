@@ -42,7 +42,8 @@ class ProductManager extends AbstractManager
       return $product;
     
     } catch(PDOException $e) {
-        throw new PDOException("Failed to create a new product");
+      error_log("Failed to create a new product: " .$e->getMessage(), $e->getCode());
+      throw new PDOException("Failed to create a new product");
     }
   }
   
@@ -88,7 +89,8 @@ class ProductManager extends AbstractManager
       return null;
     
     } catch(PDOException $e) {
-        throw new PDOException("Failed to found the product");
+      error_log("Failed to find the product: " .$e->getMessage(), $e->getCode());
+      throw new PDOException("Failed to find the product");
     }
   }
 
@@ -122,12 +124,12 @@ class ProductManager extends AbstractManager
       // Check if products are found
       if($productsData) {
         return $this->hydrateProducts($productsData);
-      } else {
-        return null;
       }
+        return null;
     
     } catch(PDOException $e) {
-        throw new PDOException("Failed to found a product");
+      error_log("Failed to find products: " .$e->getMessage(), $e->getCode());
+      throw new PDOException("Failed to find products");
     }
   }
 
@@ -162,12 +164,12 @@ class ProductManager extends AbstractManager
       // Check if products are found
       if($productsData) {
         return $this->hydrateProducts($productsData);
-      } else {
-        return null;
       }
+      return null;
     
     } catch(PDOException $e) {
-      throw new PDOException("Failed to find a product");
+      error_log("Failed to find products: " .$e->getMessage(), $e->getCode());
+      throw new PDOException("Failed to find products");
     }  
   }
   
@@ -201,12 +203,12 @@ class ProductManager extends AbstractManager
       // Check if products are found
       if($productsData) {
         return $this->hydrateProducts($productsData);
-      } else {
-        return null;
-      }
+      } 
+      return null;
     
     } catch(PDOException $e) {
-        throw new PDOException("Failed to found products");
+      error_log("Failed to find products: " .$e->getMessage(), $e->getCode());
+      throw new PDOException("Failed to find products");
     }
   }
 
@@ -233,12 +235,12 @@ class ProductManager extends AbstractManager
       // Check if users data is not empty
       if($productsData) {
         return $this->hydrateProducts($productsData);
-      } else {
-        return null;
       }
+      return null;
     
     } catch(PDOException $e) {
-      throw new PDOException("Failed to products");
+      error_log("Failed to find products: " .$e->getMessage(), $e->getCode());
+      throw new PDOException("Failed to find products");
     }  
   }
 
@@ -277,11 +279,11 @@ class ProductManager extends AbstractManager
       // Check if success
       if($success) {
         return $product;
-      } else {
-        return null;
       }
+      return null;
     
     } catch(PDOException $e) {
+      error_log("Failed to update the product: " .$e->getMessage(), $e->getCode());
       throw new PDOException("Failed to update the product");
     }  
   }
@@ -312,11 +314,12 @@ class ProductManager extends AbstractManager
 
       if($success) {
         return true;
-      } else {
-        return false;
-      }
+      } 
+      return false;
+  
     } catch(PDOException $e) {
-        throw new PDOException("Failed to delete the product");
+      error_log("Failed to delete the product: " .$e->getMessage(), $e->getCode());
+      throw new PDOException("Failed to delete the product");
     }  
   }
 
