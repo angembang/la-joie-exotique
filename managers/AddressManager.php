@@ -45,8 +45,8 @@ class AddressManager extends AbstractManager
       return $address;
     
     } catch(PDOException $e) {
-      error_log("failed to create address" .$e->getMessage(),  $e->getCode());
-      throw new PDOException("Failed to create address");
+      error_log("failed to create the address:" .$e->getMessage(),  $e->getCode());
+      throw new PDOException("Failed to create the address");
     }
   }
 
@@ -95,8 +95,8 @@ class AddressManager extends AbstractManager
       return null;
     
     } catch(PDOException $e) {
-      error_log("Failed to find address" .$e->getMessage(), $e->getCode());
-      throw new PDOException("Failed to find address");
+      error_log("Failed to find the address:" .$e->getMessage(), $e->getCode());
+      throw new PDOException("Failed to find the address");
     }
   }
 
@@ -135,7 +135,7 @@ class AddressManager extends AbstractManager
       return null;
     
     } catch(PDOException $e) {
-      error_log("Failed to find addresses" .$e->getMessage(), $e->getCode());
+      error_log("Failed to find addresses:" .$e->getMessage(), $e->getCode());
       throw new PDOException("Failed to find addresses");
     }
   }
@@ -168,7 +168,7 @@ class AddressManager extends AbstractManager
       return null;
        
     } catch(PDOException $e) {
-      error_log("Failed to find addresses" .$e->getMessage(), $e->getCode());
+      error_log("Failed to find addresses:" .$e->getMessage(), $e->getCode());
       throw new PDOException("Failed to find addresses");
     }
   }
@@ -216,7 +216,7 @@ class AddressManager extends AbstractManager
       }
     
     } catch(PDOException $e) {
-      error_log("Failed to update the address" .$e->getMessage(), $e->getCode());
+      error_log("Failed to update the address:" .$e->getMessage(), $e->getCode());
       throw new PDOException("Failed to update the address");
     }
   }
@@ -253,7 +253,7 @@ class AddressManager extends AbstractManager
       }
 
     } catch(PDOException $e) {
-      error_log("Failed to delete the address" .$e->getMessage(), $e->getCode());
+      error_log("Failed to delete the address:" .$e->getMessage(), $e->getCode());
       throw new PDOException("Failed to delete the address");
     }
   }
