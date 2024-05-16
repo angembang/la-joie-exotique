@@ -10,7 +10,7 @@ class UserManager extends AbstractManager
    * 
    * @param User $user The user object to be created.
    * 
-   * @return User|null The created user object with the assigned identifier. Null if not created
+   * @return User The created user object with the assigned identifier. 
    * 
    * @throws PDOException If an error occurs during the database operation.
    */
