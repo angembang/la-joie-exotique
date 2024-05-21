@@ -6,7 +6,7 @@
 class ProductManager extends AbstractManager
 {
   /**
-   * Creates a new Product and persists its in the database
+   * Creates a new Product and persists it in the database
    * 
    * @param Product $product The product object to be created.
    * 
