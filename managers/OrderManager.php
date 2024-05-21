@@ -110,7 +110,11 @@ class OrderManager extends AbstractManager
   {
     try {
       // Prepare the query to retrieve orders by the user identifier.
-      $query = $this->db->prepare("SELECT * FROM orders WHERE user_id = :user_id");
+      $query = $this->db->prepare("SELECT orders.*, users.* 
+      FROM orders
+      JOIN users 
+      ON user_id = users.id
+      WHERE user_id = :user_id");
 
       // Bind the parametre with its value.
       $parameter = [
