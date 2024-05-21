@@ -6,7 +6,7 @@
 class CategoryManager extends AbstractManager 
 {
   /**
-   * Creates a new Category and persists its in the database
+   * Creates a new Category and persists it in the database
    * 
    * @param Category $category The category object to be created.
    * 
