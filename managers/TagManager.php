@@ -6,7 +6,7 @@
 class TagManager extends AbstractManager
 {
   /**
-   * Creates a new tag and persists its in the database
+   * Creates a new tag and persists it in the database
    * 
    * @param Tag $tag The tag object to be created.
    * 
