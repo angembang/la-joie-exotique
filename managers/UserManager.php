@@ -6,7 +6,7 @@
 class UserManager extends AbstractManager
 {
   /**
-   * creates a new user and persists its in the database.
+   * creates a new user and persists it in the database.
    * 
    * @param User $user The user object to be created.
    * 
