@@ -144,7 +144,11 @@ class UserManager extends AbstractManager
   {
     try {
       // Prepare the SQL query to retrieve the user by its address identifier.
-      $query = $this->db->prepare("SELECT * FROM users WHERE address_id = :address_id");
+      $query = $this->db->prepare("SELECT users.*, addresses.* 
+      FROM users 
+      JOIN addresses 
+      ON address_id = addresses.id 
+      WHERE address_id = :address_id");
 
       // Bind the parameter with its value.
       $parameter = [
