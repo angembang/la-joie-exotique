@@ -187,7 +187,11 @@ class ProductManager extends AbstractManager
   {
     try {
       // Prepare the SQL query to retrieve products by their name and price.
-      $query = $this->db->prepare("SELECT * FROM products WHERE tag_id = :tag_id");
+      $query = $this->db->prepare("SELECT products.*, tags.* 
+      FROM products
+      JOIN tags
+      ON tag_id = tags.id 
+      WHERE tag_id = :tag_id");
       
       // Bind the parameter with its value.
       $parameter = [
