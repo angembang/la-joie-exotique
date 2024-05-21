@@ -6,7 +6,7 @@
 class AddressManager extends AbstractManager
 {
   /**
-   * Creates a new Address and persists its in the database
+   * Creates a new Address and persists it in the database
    * 
    * @param Address $address The address object to be created.
    * 
