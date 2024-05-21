@@ -32,9 +32,9 @@ class Order
   private string $status;
 
   /**
-   * @var DateTime The update datetime of the order.
+   * @var DateTime|null The update datetime of the order. Null if not updated
    */
-  private DateTime $updatedAt;
+  private ?DateTime $updatedAt;
 
   /**
    * Order constructor
@@ -45,11 +45,11 @@ class Order
    * @param string $status The status of the order.
    * @param DateTime $updatedAt The update datetime of the order.
    */
-  public function __construct(?int $id, int $userId, DateTime $createdAt, float $totalPrice, string $status, DateTime $updatedAt)
+  public function __construct(?int $id, int $userId, DateTime $createdAt, float $totalPrice, string $status, ?DateTime $updatedAt)
   {
     $this->id = $id;
     $this->userId = $userId;
-    $this->createdAt = $createdAt;
+    $this->createdAt =  new DateTime(); // Set to current date and time automatically
     $this->totalPrice = $totalPrice;
     $this->status = $status;
     $this->updatedAt = $updatedAt;
@@ -160,7 +160,7 @@ class Order
    * 
    * @return DateTime The updated datetime of the order. 
    */
-  public function getUpdatedAt(): DateTime 
+  public function getUpdatedAt(): ?DateTime 
   {
     return $this->updatedAt;
   }
@@ -169,7 +169,7 @@ class Order
    * Set the updated datetime of the order.
    * @param DateTime The updated datetime of the order.
    */
-  public function setUpdatedAt(DateTime $updatedAt): void 
+  public function setUpdatedAt(?DateTime $updatedAt): void 
   {
     $this->updatedAt = $updatedAt;
   }
