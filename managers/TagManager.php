@@ -102,7 +102,11 @@ class TagManager extends AbstractManager
   {
     try {
       // Prepare the SQL query to retrieve the tag by its category identifier
-      $query = $this->db->prepare("SELECT * FROM tags WHERE category_id = :category_id");
+      $query = $this->db->prepare("SELECT tags.*, categories.* 
+      FROM tags 
+      JOIN Categories 
+      ON category_id = categories.id 
+      WHERE category_id = :category_id");
 
       // Bind the parameter with its value
       $parameter = [
