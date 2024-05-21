@@ -280,7 +280,39 @@ class OrderManager extends AbstractManager
       // Execute the query with the parameter.
       $query->execute($parameter);
    
-      // Fetch the order data from the database.
+      // Fetch orders data from the database.
+      $ordersData = $query->fetchAll(PDO::FETCH_ASSOC);
+   
+      // Check if orders are found
+      if($ordersData) {
+        return $this->hydrateOrders($ordersData);
+      }
+      return null; 
+
+    } catch(PDOException $e) {
+      error_log("Failed to find orders: " .$e->getMessage(), $e->getCode());
+      throw new PDOException("Failed to find orders");
+    }
+  }
+
+
+  /**
+   * Retrieves all orders
+   * 
+   * @return array|null The array of retrieved orders or null if no order is found.
+   * 
+   * @throws PDOException if an error occurs during the database operation.
+   */
+  public function findAll(): ?array 
+  {
+    try {
+      // Prepare the query to retrieve all orders into the database;
+      $query = $this->db->prepare("SELECT * FROM  orders");
+
+      // Execute the query with the parameter.
+      $query->execute();
+
+      // Fetch orders data from the database.
       $ordersData = $query->fetchAll(PDO::FETCH_ASSOC);
    
       // Check if orders are found
@@ -359,7 +391,7 @@ class OrderManager extends AbstractManager
   {
     try {
       // Prepare SQL query to delete an order into the database
-      $query = $this->db->prepare("DELETE * FROM orders WHERE id = :id");
+      $query = $this->db->prepare("DELETE FROM orders WHERE id = :id");
 
       // Bind the parameter with its value.
       $parameter = [
