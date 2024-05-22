@@ -35,10 +35,10 @@ class TagManager extends AbstractManager
       // Retrieves the last inserted identifier
       $tagId = $this->db->lastInsertId();
 
-      // Set the identifier for the created category
+      // Set the identifier for the created tag
       $tag->setId($tagId);
 
-      // Return the created category
+      // Return the created tag
       return $tag;
     
     } catch(PDOException $e) {
