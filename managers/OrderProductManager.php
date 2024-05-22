@@ -87,7 +87,9 @@ class OrderProductManager extends AbstractManager
       WHERE po.order_id = :order_id");
 
       // Bind the parameter with its value.
-      $parameter = [":order_id" => $orderId];
+      $parameter = [
+        ":order_id" => $orderId
+      ];
 
       // Execute the query with the parameter.
       $query->execute($parameter);
