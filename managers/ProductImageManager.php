@@ -8,13 +8,14 @@ class ProductImageManager extends AbstractManager
   /**
    * Creates a new product image and persists it in the database
    * 
-   * @param ProductImage $productImage The product image object to be created.
+   * @param int $productId The product identifier of the product image object to be created.
+   * @param int $imageId The image identifier of the product image object to be created.
    * 
-   * @return ProductImage The created product image with the assigned identifier.
+   * @return bool True if successfull, false if not.
    * 
    * @throws PDOException if an error occurs during the database operation.
    */
-  public function createProductImage(ProductImage $productImage): ProductImage 
+  public function createProductImage(int $productId, int $imageId): bool 
   {
     try {
       // Prepare the SQL query to insert the product image into the database.
@@ -25,21 +26,18 @@ class ProductImageManager extends AbstractManager
 
       // Bind parameters with their values.
       $parameters = [
-        ":product_id" => $productImage->getProductId(),
-        ":image_id" => $productImage->getImageId()
+        ":product_id" => $productId,
+        ":image_id" => $imageId
       ];
 
       // Execute the query with parameters.
-      $query->execute($parameters);
+      $success = $query->execute($parameters);
 
-      // Retrieve the last insert identifier
-      $productImageId = $this->db->lastInsertId();
-
-      // Set the identifier for the created product image
-      $productImage->setId($productImageId);
-
-      // Return the created product image
-      return $productImage;
+      // Check if success
+      if($success) {
+        return true;
+      }
+      return false;
 
     } catch(PDOException $e) {
       error_log("Failed to create a new product image: " .$e->getMessage(), $e->getCode());
@@ -60,7 +58,7 @@ class ProductImageManager extends AbstractManager
    * 
    * @throws PDOException if an error occurs during the database operation.
    */
-  public function findImagesByProductId(int $productId): ?array 
+  public function findProductImagesByProductId(int $productId): ?array 
   {
     try {
       // Prepare the SQL query to retrieve images by the product identifier.
@@ -74,27 +72,25 @@ class ProductImageManager extends AbstractManager
         ":product_id" => $productId
       ];
 
-      // Evecute the query with the parameter.
+      // Execute the query with the parameter.
       $query->execute($parameter);
 
       // Fetch the product image data from the database.
-      $imagesData = $query->fetchAll(PDO::FETCH_ASSOC);
+      $productImagesData = $query->fetchAll(PDO::FETCH_ASSOC);
 
       // Check if product images data are found.
-      if($imagesData) {
-        $images = [];
+      if($productImagesData) {
+        $productImages = [];
 
         // Loop through each product image in the array.
-        foreach($imagesData as $imageData) {
-          $image = new Image(
-            $imageData["id"],
-            $imageData["name"],
-            $imageData["file_name"],
-            $imageData["alt"]
+        foreach($productImagesData as $productImageData) {
+          $productImage = new ProductImage(
+            $productImageData["product_id"],
+            $productImageData["product_image"]
           );
-          $images[] = $image;
+          $productImages[] = $productImage;
         }
-        return $images;
+        return $productImages;
       }
       return null;
 
