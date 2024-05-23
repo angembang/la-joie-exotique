@@ -8,23 +8,17 @@ class OrderProductManager extends AbstractManager
   /**
    * Creates a new order-product relation and persists it in the database
    * 
-   * @param OrderProduct $orderProduct The order product to be created.
+   * @param int $orderId The order identifier of the order product to be created.
+   * @param int $productId The product identifier of the order product to be created.
+   * @param int $quantity The quantity of the order product to be created.
    * 
-   * @return OrderProduct The created order product with the assigned identifier.
+   * @return bool True if successfull, false if not.
    * 
    * @throws PDOException if an error occurs during the database operation.
    */
-  public function createOrderProduct(OrderProduct $orderProduct): OrderProduct 
+  public function createOrderProduct(int $orderId, int $productId, int $quantity): bool
   {
     try {
-      // Validate parameters
-      $orderId = $orderProduct->getOrderId();
-      $productId = $orderProduct->getProductId();
-      $quantity = $orderProduct->getQuantity();
-
-      if (!$orderId || !$productId || !$quantity) {
-        throw new InvalidArgumentException("Invalid parameters");
-      }
       // Retrieve and validate the product
       $productManager = new ProductManager();
       $product = $productManager->findProductById($productId);
@@ -49,17 +43,13 @@ class OrderProductManager extends AbstractManager
       ];
 
       // Execute the query with parameters
-      $query->execute($parameters);
+      $success = $query->execute($parameters);
 
-      // Retrieve the last insert identifier
-      $orderProductId = $this->db->lastInsertId();
-      
-      // Set the identifier for the created order product and subtotal for the created order product
-      $orderProduct->setId($orderProductId);
-      $orderProduct->setSubtotal($subtotal);
-    
-      // Return the created order product
-      return $orderProduct;
+      // Check if success
+      if($success) {
+        return true;
+      }
+      return false;
 
     } catch (PDOException | InvalidArgumentException $e) {
       error_log("Failed to create a new order-product: " . $e->getMessage(), $e->getCode());
@@ -95,11 +85,11 @@ class OrderProductManager extends AbstractManager
       $query->execute($parameter);
 
       // Fetch products data from the database.
-      $productsData = $query->fetchAll(PDO::FETCH_ASSOC);
+      $orderProductsData = $query->fetchAll(PDO::FETCH_ASSOC);
 
       // Check if products are found
-      if ($productsData) {
-        return $this->hydrateProducts($productsData);
+      if ($orderProductsData) {
+        return $this->hydrateOrderProducts($orderProductsData);
       }
       return null; 
 
@@ -125,7 +115,10 @@ class OrderProductManager extends AbstractManager
   {
     try {
       // Prepare the SQL query to update the product quantity in the order.
-      $query = $this->db->prepare("UPDATE products_orders SET quantity = :quantity, subtotal = :subtotal WHERE order_id = :order_id AND product_id = :product_id");
+      $query = $this->db->prepare("UPDATE products_orders SET 
+      quantity = :quantity, 
+      subtotal = :subtotal 
+      WHERE order_id = :order_id AND product_id = :product_id");
 
       // Calculate the new subtotal (price * quantity)
       $productManager = new ProductManager();
@@ -173,7 +166,8 @@ class OrderProductManager extends AbstractManager
   {
     try {
       // Prepare the SQL query to delete the product from the order.
-      $query = $this->db->prepare("DELETE FROM products_orders WHERE order_id = :order_id AND product_id = :product_id");
+      $query = $this->db->prepare("DELETE FROM products_orders 
+      WHERE order_id = :order_id AND product_id = :product_id");
 
       // Bind parameters with their values.
       $parameters = [
@@ -198,23 +192,23 @@ class OrderProductManager extends AbstractManager
   
   
   /**
-   * Deletes an order product
+   * Deletes an order product by its order identifier
    * 
-   * @param int $orderProductId The unique identifier of the order product.
+   * @param int $orderId The order identifier of the order product.
    * 
    * @return bool True if succesfull, false if not.
    * 
    * @throws PDOException if an error occurs during the database operation.
    */
-  public function deleteOrderProduct(int $orderProductId): bool 
+  public function deleteOrderProduct(int $orderId): bool 
   {
     try {
       // Prepare the SQL query to delete an order product by its unique identifier.
-      $query = $this->db->prepare("DELETE FROM orders_products WHERE id = :id");
+      $query = $this->db->prepare("DELETE FROM orders_products WHERE order_id = order_:id");
 
       // Bind the parameter
       $parameter = [
-        ":id" => $orderProductId
+        ":order_id" => $orderId
       ];
 
       // Execute the query with the parameter.
@@ -234,33 +228,32 @@ class OrderProductManager extends AbstractManager
 
 
   /**
-   * Helper method to hydrate Product objects from data array.
+   * Helper method to hydrate order product objects from data array.
    *
-   * @param array $productsData The array of product data retrieved from the database.
+   * @param array $orderProductsData The array of product data retrieved from the database.
    * 
-   * @return array An array of Product objects hydrated from the provided data.
+   * @return array An array of Order Product objects hydrated from the provided data.
    */
-  private function hydrateProducts(array $productsData): array 
+  private function hydrateOrderProducts(array $orderProductsData): array 
   {
     // Initialize an empty array to store the hydrated Product objects.
-    $products = [];
+    $orderProducts = [];
 
-    // Loop through each product data in the array.
-    foreach ($productsData as $productData) {
-      // Create a new Product object using the data from the current iteration.
-      $product = new Product(
-        $productData["id"],
-        $productData["name"],
-        $productData["description"],
-        $productData["price"],
-        $productData["tag_id"]
+    // Loop through each order product data in the array.
+    foreach ($orderProductsData as $orderProductData) {
+      // Create a new OrderProduct object using the data from the current iteration.
+      $orderProduct = new OrderProduct(
+        $orderProductData["order_id"],
+        $orderProductData["product_id"],
+        $orderProductData["quantity"],
+        $orderProductData["subtotal"]
       );
 
       // Add the newly created Product object to the array.
-      $products[] = $product;
+      $orderProducts[] =  $orderProduct;
     }
 
     // Return the array of hydrated Product objects.
-    return $products;
+    return  $orderProducts;
   }
 }
