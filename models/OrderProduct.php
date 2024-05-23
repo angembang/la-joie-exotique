@@ -7,11 +7,6 @@
 class OrderProduct
 {
   /**
-   * @var int|null The unique identifier of the order product. Nul for a new order product (not yet store into the database).
-   */
-  private ?int $id;
-
-  /**
    * @var int The order identifier of the order product.
    */
   private int $orderId;
@@ -33,42 +28,20 @@ class OrderProduct
 
   /**
    * Order product constructor
-   * @param int|null $id The unique identifier of the order product. Null for a new order product.
    * @param int $orderId The order identifier of the order product.
    * @param int $productId The product identifier of the order product.
    * @param int $quantity The quantity of the order product.
    * @param float $subtotal The subtotal of the order product.
    */
-  public function __construct(?int $id, int $orderId, int $productId, int $quantity, float $subtotal)
+  public function __construct(int $orderId, int $productId, int $quantity, float $subtotal)
   {
-    $this->id = $id;
     $this->orderId = $orderId;
     $this->productId = $productId;
     $this->quantity = $quantity;
     $this->subtotal = $subtotal;
   }
 
-
-  /**
-   * Get the unique identifier of the order product
-   * 
-   * @return int|null The unique identifier of the order product. Null for a new order product.
-   */
-  public function getId(): ?int
-  {
-    return $this->id;
-  }
-
-  /**
-   * Set the unique identifier of the order product
-   * @param int|null The unique identifier of the order product. 
-   */
-  public function setId(?int $id): void 
-  {
-    $this->id = $id;
-  }
-
-
+  
   /**
    * Get the order identifier of the order product
    * 
