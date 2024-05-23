@@ -7,11 +7,6 @@
 class Stock 
 {
   /**
-   * @var int|null The unique identifier of the stock. Null for a new stock (not yet store in the database).
-   */
-  private ?int $id;
-
-  /**
    * @var int The product identifier of the stock.
    */
   private int $productId;
@@ -27,34 +22,13 @@ class Stock
    * @param int $productId The product Identifier of the stock.
    * @param int $quantity The quantity of the stock.
    */
-  public function __construct(?int $id, int $productId, int $quantity) 
+  public function __construct(int $productId, int $quantity) 
   {
-    $this->id = $id;
     $this->productId = $productId;
     $this->quantity = $quantity;
   }
 
-
-  /**
-   * Get the unique identifier of the stock
-   * 
-   * @return int|null The unique identifier of the stock. Null for a new stock.
-   */
-  public function getId(): ?int
-  {
-    return $this->id;
-  }
-
-  /**
-   * Set the unique identifier of the stock
-   * @param int|null The unique identifier of the stock
-   */
-  public function setId(?int $id): void 
-  {
-    $this->id = $id;
-  }
-
-
+  
   /**
    * Get the product identifier of the stock
    * 
