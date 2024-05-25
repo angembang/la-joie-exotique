@@ -138,11 +138,57 @@ class CategoryManager extends AbstractManager
 
 
   /**
-   * update a tag in the database
+   * Retrieves all categories
+   *
+   * @return array category|null The array of category, or null if not found.
    * 
-   * @param Tag $tag The tag to be updated.
+   * @throws PDOException If an error occurs during the database operation.
+   */
+  public function findAll(): ?array 
+  {
+    try {
+      // Prepare the SQL query to retrieve allcategories into the database
+      $query = $this->db->prepare("SELECT * FROM categories");
+
+      // Execute the query
+      $query->execute();
+
+      // Fetch categories data from the database
+      $categoriesData = $query->fetchAll(PDO::FETCH_ASSOC);
+
+      // Check if categories data is not empty
+      if($categoriesData) {
+        $categories = [];
+        // Loop through each category data
+        foreach($categoriesData as $categoryData) {
+          // Instantiate an user for each user data
+          $category = new Category(
+            $categoryData["id"],
+            $categoryData["name"],
+            $categoryData["description"]
+          );
+          // Add the instantiated category object to the categories array
+          $categories[] = $category;
+        }
+        // Return the array of the category objects
+        return $categories;
+      }
+      return null;
+
+    } catch(PDOException $e) {
+      error_log("Failed to find categories: " .$e->getMessage(), $e->getCode());
+      throw new PDOException("Failed to find categories");
+    }  
+  }
+
+
+
+  /**
+   * update a category in the database
    * 
-   * @return Tag|null The tag updated, or null if not.
+   * @param Category $category The category to be updated.
+   * 
+   * @return Category|null The category updated, or null if not.
    * 
    * @throws PDOException If an error occurs during the database operation.
    */
