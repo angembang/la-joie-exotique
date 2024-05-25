@@ -187,15 +187,15 @@ class TagManager extends AbstractManager
       // Execute the query
       $query->execute();
 
-      // Fetch users data from the database
+      // Fetch tags data from the database
       $tagsData = $query->fetchAll(PDO::FETCH_ASSOC);
 
-      // Check if users data is not empty
+      // Check if tags data is not empty
       if($tagsData) {
         $tags = [];
-        // Loop through each user data
+        // Loop through each tag data
         foreach($tagsData as $tagData) {
-          // Instantiate an user for each user data
+          // Instantiate an tag for each tags data
           $tag = new Tag(
             $tagData["id"],
             $tagData["category_id"],
@@ -205,7 +205,7 @@ class TagManager extends AbstractManager
           // Add the instantiated tag object to the tags array
           $tags[] = $tag;
         }
-        // Return the array of the user objects
+        // Return the array of the tag objects
         return $tags;
       }
       return null;
