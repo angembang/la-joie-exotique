@@ -94,14 +94,14 @@ class TagManager extends AbstractManager
    * 
    * @param int $categoryId The category identifier of the tag.
    * 
-   * @return Tag|null The retrieved tag, or null if not found.
+   * @return array|null An array The retrieved tag, or null if no tag is found.
    * 
    * @throws PDOException If an error occurs during the database operation.
    */
-  public function findTagByCategoryId(int $categoryId): ?Tag
+  public function findTagsByCategoryId(int $categoryId): ?array
   {
     try {
-      // Prepare the SQL query to retrieve the tag by its category identifier
+      // Prepare the SQL query to retrieve tags by their category identifier
       $query = $this->db->prepare("SELECT tags.*, categories.* 
       FROM tags 
       JOIN Categories 
@@ -116,12 +116,12 @@ class TagManager extends AbstractManager
       // Execute the query with the parameter
       $query->execute($parameter);
 
-      // Fetch the category data from the database
-      $tagData = $query->fetch(PDO::FETCH_ASSOC);
+      // Fetch tags data from the database
+      $tagsData = $query->fetchAll(PDO::FETCH_ASSOC);
 
-      // Check if category data is found
-      if($tagData) {
-        return $this->hydrateTag($tagData);
+      // Check if tags data are found
+      if($tagsData) {
+        return $this->hydrateTags($tagsData);
       }
       return null; 
 
@@ -193,20 +193,7 @@ class TagManager extends AbstractManager
       // Check if tags data is not empty
       if($tagsData) {
         $tags = [];
-        // Loop through each tag data
-        foreach($tagsData as $tagData) {
-          // Instantiate an tag for each tags data
-          $tag = new Tag(
-            $tagData["id"],
-            $tagData["category_id"],
-            $tagData["name"],
-            $tagData["description"]
-          );
-          // Add the instantiated tag object to the tags array
-          $tags[] = $tag;
-        }
-        // Return the array of the tag objects
-        return $tags;
+        return $this->hydrateTags($tagsData);
       }
       return null;
 
@@ -312,5 +299,33 @@ class TagManager extends AbstractManager
       );
       return $tag;
     }
+
+
+  /**
+   * Helper method to hydrate Tag objects from data array.
+   *
+   * @param array $tagsData The array of tag data retrieved from the database.
+   * 
+   * @return array An array of tag objects hydrated from the provided data.
+   */
+  private function hydrateTags(array $tagsData): array {
+    // Initialize an empty array to store the hydrated Tag objects.
+    $tags = [];
+  
+    // Loop through each tag data in the array.
+    foreach($tagsData as $tagData) {
+      // Create a new Tag object using the data from the current iteration.
+      $tag = new Tag(
+        $tagData["id"],
+        $tagData["category_id"],
+        $tagData["name"],
+        $tagData["description"]        
+    );  
+    // Add the newly created Tag object to the array.
+    $tags[] = $tag;
+  }
+  // Return the array of hydrated Tag objects.
+  return $tags;
+  }
 
 }
