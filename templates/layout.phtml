@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="fr">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    
+    <!-- Title and Description -->
+    <title>La Joie Exotique</title>
+    <meta name="description" content="Explorez notre boutique exotique en ligne pour acheter des produits alimentaires et cosmétiques exotiques, livraison à domicile">
+
+    <!-- Keywords for SEO -->
+    <meta name="keywords" content="boutique en ligne, acheter des produits exotiques,  meilleurs prix, livraison à domicile">
+
+    <!-- Author -->
+    <meta name="author" content="La Joie Exotique">
+
+    <!-- Social Media Integration -->
+    <meta property="og:title" content="La Joie Exotique">
+    <meta property="og:description" content="Explorez notre boutique exotique en ligne pour acheter des produits alimentaires et cosmétiques exotiques, livraison à domicile.">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://www.lajoiexotique.fr">
+    <meta property="og:image" content="https://url_de__image_dusite.jpg">
+
+    <!-- Twitter Card -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="La Joie Exotique">
+    <meta name="twitter:description" content="Explorez notre boutique exotique en ligne pour acheter des produits alimentaires et cosmétiques exotiques, livraison à domicile.">
+    <meta name="twitter:image" content="https://www.url_de__image_dusite.jpg">
+
+    <!-- Favicons ------ -->
+    <link rel="icon" href="../images/faviconLaJoieExotique.png" type="image/x-icon">
+    <link rel="apple-touch-icon" href="../images/faviconLaJoieExotique.png">
+
+    <!-- Font Awesome CDN -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+
+    <!-- Google font -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Aclonica&family=Merienda:wght@300..900&display=swap" rel="stylesheet">
+    
+    <!-- CSS Files -->
+    <link rel="stylesheet" href="../assets/css/style.css">
+    
+  </head>
+  <body>
+    <header>
+      <nav role="navigation" aria-label="Navigation principale">
+        <!-- Navigation Links -->
+        <button class="burger" aria-label="Ouvrir le menu">
+        <i class="fa-solid fa-bars"></i>
+        </button>
+        <ul>
+          <li><a href="#" aria-label="Accueil">Accueil</a></li>
+          <li><a href="#" aria-label="Panier">
+            <i class="fa-solid fa-cart-shopping"></i>
+          </a></li>
+          <li><a href="#" aria-label="A-propos">A-propos</a></li>
+          <li><a href="#" aria-label="Connexion">
+            <i class="fa-solid fa-user"></i>
+          </a></li>
+          <li><a href="#" aria-label="Contact">Contact</a></li>
+        </ul>
+      </nav>
+    </header>
+
+    <main>
+      <?php
+        require "templates/$template.phtml";
+      ?>    
+    </main>
+
+    <footer>
+      <!-- Social media links -->
+      <div>
+        <a href="#" aria-label="Facebook"><i class="fa-brands fa-square-facebook"></i></a>
+        <a href="#" aria-label="Instagram"><i class="fa-brands fa-square-instagram"></i></a>
+      </div>
+      
+      <!-- List of pages link -->
+      <ul>
+        <li><a href="#" aria-label="Mentions légales">Mentions légales</a></li>
+        <li><a href="#" aria-label="Politique de confidentialité">Politique de confidentialité</a></li>
+      </ul>
+      
+      <!-- Copyright -->
+      <p>Copyright &copy; <?= date('Y') ?> La Joie Exotique.</p>
+    </footer>
+
+    <!-- JavaScript Files -->
+    <script src="../assets/js/main.js"></script>
+  
+  </body>
+
+</html>
