@@ -15,10 +15,10 @@ abstract class AbstractManager
    * AbstractManager constructor
    * Initialize the database connection using the provided environment variables.
    */ 
-  public function construct()
+  public function __construct()
   {
     // Construct the PDO connection string using environment variables.
-    $connexion = "mysql:host=".$_ENV["DB_HOST"].";port=8080;charset=".$_ENV["DB_CHARSET"]."; dbname=".$_ENV["DB_NAME"];
+    $connexion = "mysql:host=".$_ENV["DB_HOST"].";port=3306;charset=".$_ENV["DB_CHARSET"]."; dbname=".$_ENV["DB_NAME"];
 
      // Initialize PDO instance for database connection.
     $this->db = new PDO(
