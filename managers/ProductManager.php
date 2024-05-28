@@ -18,15 +18,16 @@ class ProductManager extends AbstractManager
   {
     try {
       // Prepare the SQL query to insert a new product into the database.
-      $query = $this->db->prepare("INSERT INTO products (name, description, price, tag_id) VALUES 
-      (:name, :description, :price, :tag_id)");
+      $query = $this->db->prepare("INSERT INTO products (name, description, price, tag_id, product_id) VALUES 
+      (:name, :description, :price, :tag_id, :product_id)");
 
       // Bind parameters with their values.
       $parameters = [
         ":name" => $product->getName(),
         ":description" => $product->getDescription(),
         ":price" => $product->getPrice(),
-        ":tag_id" => $product->getTagId()
+        ":tag_id" => $product->getTagId(),
+        ":product_id" => $product->getCategoryId()
       ];
 
       // Execute the query with parameters.
@@ -82,7 +83,8 @@ class ProductManager extends AbstractManager
           $productData["name"],
           $productData["description"],
           $productData["price"],
-          $productData["tag_id"]
+          $productData["tag_id"],
+          $productData["category_id"]
         );
         return $product;
       }
@@ -250,6 +252,49 @@ class ProductManager extends AbstractManager
 
 
   /**
+   * Retrieves products by its category identifier
+   * 
+   * @param int $categoryId The category identifier of the products.
+   * 
+   * @return array|null An array The retrieved product, or null if no product is found.
+   * 
+   * @throws PDOException If an error occurs during the database operation.
+   */
+  public function findProductsByCategoryId(int $categoryId): ?array
+  {
+    /*try {*/
+      // Prepare the SQL query to retrieve products by their category identifier
+      $query = $this->db->prepare("SELECT products.*, categories.* 
+      FROM products 
+      JOIN categories 
+      ON category_id = categories.id 
+      WHERE category_id = :category_id");
+
+      // Bind the parameter with its value
+      $parameter = [
+        ":category_id" => $categoryId
+      ];
+
+      // Execute the query with the parameter
+      $query->execute($parameter);
+
+      // Fetch products data from the database
+      $productsData = $query->fetchAll(PDO::FETCH_ASSOC);
+
+      // Check if tags data are found
+      if($productsData) {
+        return $this->hydrateProducts($productsData);
+      }
+      return null; 
+
+    /*} catch(PDOException $e) {
+      error_log("Failed to find products: " .$e->getMessage());
+      throw new PDOException("Failed to find products");
+    }*/
+  }
+
+
+  /**
    * Updates a product in the database
    * 
    * @param Product $product The product to be updated.
@@ -347,7 +392,8 @@ private function hydrateProducts(array $productsData): array {
           $productData["name"],        
           $productData["description"],  
           $productData["price"],        
-          $productData["tag_id"]        
+          $productData["tag_id"],
+          $productData["category_id"]        
       );
       
       // Add the newly created Product object to the array.
