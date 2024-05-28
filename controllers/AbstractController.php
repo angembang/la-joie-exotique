@@ -13,7 +13,7 @@ abstract class AbstractController
    * @param array $data The data to pass to the template.
    * @return void
    */
-  protected function render(string $templates, array $data): void
+  protected function render(string $template, array $data): void
   {
     // Include the layout.phtml which wraps around the specified template.
     require "templates/layout.phtml";
