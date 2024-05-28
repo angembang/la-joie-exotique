@@ -7,4 +7,12 @@ require "vendor/autoload.php";
 $dotenv = Dotenv\Dotenv::createImmutable(__DIR__);
 $dotenv->load();
 
-echo "Bienvenu dans la joie exotique";
+/**
+ * @var Router $router An instance of the Router class for handling requests.
+ */ 
+$router = new Router();
+
+/**
+ * Handle the request based on the $_GET parameters
+ */
+$router->handleRequest($_GET);
