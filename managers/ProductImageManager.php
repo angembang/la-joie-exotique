@@ -86,7 +86,7 @@ class ProductImageManager extends AbstractManager
         foreach($productImagesData as $productImageData) {
           $productImage = new ProductImage(
             $productImageData["product_id"],
-            $productImageData["product_image"]
+            $productImageData["image_id"]
           );
           $productImages[] = $productImage;
         }
