@@ -32,20 +32,27 @@ class Product
   private int $tagId;
 
   /**
+   * @var int  The category identifier of the product. 
+   */
+  private int $categoryId;
+
+  /**
    * Product constructor
    * @param int|null $id The unique identifier of the product.
    * @param string $name The name of the product.
    * @param string $description The description of the product.
    * @param float $price The price of the product.
    * @param int $tagId The tag identifier of the product;
+   * @param int $categoryId The category identifier of the product
    */
-  public function __construct(?int $id, string $name, string $description, float $price, int $tagId) 
+  public function __construct(?int $id, string $name, string $description, float $price, int $tagId, int $categoryId) 
   {
     $this->id = $id;
     $this->name = $name;
     $this->description = $description;
     $this->price = $price;
     $this->tagId = $tagId;
+    $this->categoryId = $categoryId;
   }
 
 
@@ -146,6 +153,26 @@ class Product
   public function setTagId(int $tagId): void 
   {
     $this->tagId = $tagId;
+  }
+
+
+  /**
+   * Get the category identifier of the product
+   * 
+   * @return int The category identifier of the product.
+   */
+  public function getCategoryId(): int 
+  {
+    return $this->categoryId;
+  }
+
+  /**
+   * Set the category identifier of the product
+   * @param int The category identifier of the product.
+   */
+  public function setCategoryId(int $categoryId): void 
+  {
+    $this->categoryId = $categoryId;
   }
 
 }
