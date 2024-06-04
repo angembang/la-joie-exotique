@@ -18,8 +18,8 @@ class ProductManager extends AbstractManager
   {
     try {
       // Prepare the SQL query to insert a new product into the database.
-      $query = $this->db->prepare("INSERT INTO products (name, description, price, tag_id, product_id) VALUES 
-      (:name, :description, :price, :tag_id, :product_id)");
+      $query = $this->db->prepare("INSERT INTO products (name, description, price, tag_id, category_id, image1_id, image2_id, image3_id, image4_id) VALUES 
+      (:name, :description, :price, :tag_id, :category_id, :image1_id, :image2_id, :image3_id, :image4_id)");
 
       // Bind parameters with their values.
       $parameters = [
@@ -27,7 +27,11 @@ class ProductManager extends AbstractManager
         ":description" => $product->getDescription(),
         ":price" => $product->getPrice(),
         ":tag_id" => $product->getTagId(),
-        ":product_id" => $product->getCategoryId()
+        ":category_id" =>$product->getCategoryId(),
+        ":image1_id" =>$product->getImage1Id(),
+        ":image2_id" =>$product->getImage2Id(),
+        ":image3_id" =>$product->getImage3Id(),
+        ":image4_id" =>$product->getImage4Id(),
       ];
 
       // Execute the query with parameters.
@@ -43,7 +47,7 @@ class ProductManager extends AbstractManager
       return $product;
     
     } catch(PDOException $e) {
-      error_log("Failed to create a new product: " .$e->getMessage(), $e->getCode());
+      error_log("Failed to create a new product: " .$e->getMessage(). $e->getCode());
       throw new PDOException("Failed to create a new product");
     }
   }
@@ -84,14 +88,18 @@ class ProductManager extends AbstractManager
           $productData["description"],
           $productData["price"],
           $productData["tag_id"],
-          $productData["category_id"]
+          $productData["category_id"],
+          $productData["image1_id"],
+          $productData["image2_id"],
+          $productData["image3_id"],
+          $productData["image4_id"]
         );
         return $product;
       }
       return null;
     
     } catch(PDOException $e) {
-      error_log("Failed to find the product: " .$e->getMessage(), $e->getCode());
+      error_log("Failed to find the product: " .$e->getMessage(). $e->getCode());
       throw new PDOException("Failed to find the product");
     }
   }
@@ -130,7 +138,7 @@ class ProductManager extends AbstractManager
         return null;
     
     } catch(PDOException $e) {
-      error_log("Failed to find products: " .$e->getMessage(), $e->getCode());
+      error_log("Failed to find products: " .$e->getMessage(). $e->getCode());
       throw new PDOException("Failed to find products");
     }
   }
@@ -170,7 +178,7 @@ class ProductManager extends AbstractManager
       return null;
     
     } catch(PDOException $e) {
-      error_log("Failed to find products: " .$e->getMessage(), $e->getCode());
+      error_log("Failed to find products: " .$e->getMessage(). $e->getCode());
       throw new PDOException("Failed to find products");
     }  
   }
@@ -213,7 +221,7 @@ class ProductManager extends AbstractManager
       return null;
     
     } catch(PDOException $e) {
-      error_log("Failed to find products: " .$e->getMessage(), $e->getCode());
+      error_log("Failed to find products: " .$e->getMessage(). $e->getCode());
       throw new PDOException("Failed to find products");
     }
   }
@@ -245,7 +253,7 @@ class ProductManager extends AbstractManager
       return null;
     
     } catch(PDOException $e) {
-      error_log("Failed to find products: " .$e->getMessage(), $e->getCode());
+      error_log("Failed to find products: " .$e->getMessage(). $e->getCode());
       throw new PDOException("Failed to find products");
     }  
   }
@@ -262,12 +270,9 @@ class ProductManager extends AbstractManager
    */
   public function findProductsByCategoryId(int $categoryId): ?array
   {
-    /*try {*/
+    try {
       // Prepare the SQL query to retrieve products by their category identifier
-      $query = $this->db->prepare("SELECT products.*, categories.* 
-      FROM products 
-      JOIN categories 
-      ON category_id = categories.id 
+      $query = $this->db->prepare("SELECT * FROM products  
       WHERE category_id = :category_id");
 
       // Bind the parameter with its value
@@ -287,10 +292,10 @@ class ProductManager extends AbstractManager
       }
       return null; 
 
-    /*} catch(PDOException $e) {
+    } catch(PDOException $e) {
       error_log("Failed to find products: " .$e->getMessage());
       throw new PDOException("Failed to find products");
-    }*/
+    }
   }
 
 
@@ -311,7 +316,13 @@ class ProductManager extends AbstractManager
       name = :name,
       description = :description,
       price = :price,
-      tag_id = :tag_id WHERE id = :id");
+      tag_id = :tag_id,
+      category_id = :category_id,
+      image1_id = :image1_id,
+      image2_id = :image2_id,
+      image3_id = :image3_id,
+      image4_id = :image4_id 
+      WHERE id = :id");
 
       // Bind parameters with their values
       $parameters = [
@@ -319,7 +330,11 @@ class ProductManager extends AbstractManager
         ":name" => $product->getName(),
         ":description" => $product->getDescription(),
         ":price" => $product->getPrice(),
-        ":tag_id" => $product->getTagId()
+        ":tag_id" => $product->getTagId(),
+        ":image1_id" =>$product->getImage1Id(),
+        ":image2_id" =>$product->getImage2Id(),
+        ":image3_id" =>$product->getImage3Id(),
+        ":image4_id" =>$product->getImage4Id()
       ];
 
       // Execute the query with parameters
@@ -332,7 +347,7 @@ class ProductManager extends AbstractManager
       return null;
     
     } catch(PDOException $e) {
-      error_log("Failed to update the product: " .$e->getMessage(), $e->getCode());
+      error_log("Failed to update the product: " .$e->getMessage(). $e->getCode());
       throw new PDOException("Failed to update the product");
     }  
   }
@@ -367,7 +382,7 @@ class ProductManager extends AbstractManager
       return false;
   
     } catch(PDOException $e) {
-      error_log("Failed to delete the product: " .$e->getMessage(), $e->getCode());
+      error_log("Failed to delete the product: " .$e->getMessage(). $e->getCode());
       throw new PDOException("Failed to delete the product");
     }  
   }
@@ -384,21 +399,35 @@ private function hydrateProducts(array $productsData): array {
   // Initialize an empty array to store the hydrated Product objects.
   $products = [];
   
-  // Loop through each product data in the array.
-  foreach($productsData as $productData) {
-      // Create a new Product object using the data from the current iteration.
-      $product = new Product(
-          $productData["id"],          
-          $productData["name"],        
-          $productData["description"],  
-          $productData["price"],        
-          $productData["tag_id"],
-          $productData["category_id"]        
-      );
-      
-      // Add the newly created Product object to the array.
-      $products[] = $product;
-  }
+   // Loop through each product data in the array.
+   foreach ($productsData as $productData) {
+    // Validate the necessary keys
+    $requiredKeys = ["id", "name", "description", "price", "tag_id", "category_id", "image1_id", "image2_id", "image3_id", "image4_id"];
+    foreach ($requiredKeys as $key) {
+        if (!array_key_exists($key, $productData)) {
+            // Log an error or handle the missing key as appropriate
+            error_log("Missing key: $key in product data: " . json_encode($productData));
+            continue 2; // Skip this product data if a key is missing
+        }
+    }
+
+    // Create a new Product object using the validated data
+    $product = new Product(
+        $productData["id"],
+        $productData["name"],
+        $productData["description"],
+        $productData["price"],
+        $productData["tag_id"],
+        $productData["category_id"],
+        $productData["image1_id"],
+        $productData["image2_id"],
+        $productData["image3_id"],
+        $productData["image4_id"]
+    );
+
+    // Add the newly created Product object to the array.
+    $products[] = $product;
+}
   
   // Return the array of hydrated Product objects.
   return $products;
