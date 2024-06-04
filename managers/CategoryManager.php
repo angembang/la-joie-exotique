@@ -42,7 +42,7 @@ class CategoryManager extends AbstractManager
     
     } catch(PDOException $e) {
       // Log the error message and code to the error log file
-      error_log("Failed to create a new category: " .$e->getMessage(), $e->getCode());
+      error_log("Failed to create a new category: " .$e->getMessage(). $e->getCode());
       // Handle the exception appropriately
       throw new PDOException("Failed to create a new category");
     }
@@ -87,7 +87,7 @@ class CategoryManager extends AbstractManager
       return null; 
 
     } catch(PDOException $e) {
-      error_log("Failed to find the category: " .$e->getMessage(), $e->getCode());
+      error_log("Failed to find the category: " .$e->getMessage().$e->getCode());
       throw new PDOException("Failed to find the category");
     }
   }
@@ -131,7 +131,7 @@ class CategoryManager extends AbstractManager
       return null; 
 
     } catch(PDOException $e) {
-      error_log("Failed to find the category: " .$e->getMessage(), $e->getCode());
+      error_log("Failed to find the category: " .$e->getMessage(). $e->getCode());
       throw new PDOException("Failed to find a category");
     }
   }
@@ -176,7 +176,7 @@ class CategoryManager extends AbstractManager
       return null;
 
     } catch(PDOException $e) {
-      error_log("Failed to find categories: " .$e->getMessage(), $e->getCode());
+      error_log("Failed to find categories: " .$e->getMessage(). $e->getCode());
       throw new PDOException("Failed to find categories");
     }  
   }
@@ -218,7 +218,7 @@ class CategoryManager extends AbstractManager
       return null;
     
     } catch(PDOException $e) {
-      error_log("Failed to update the category: " .$e->getMessage(), $e->getCode());
+      error_log("Failed to update the category: " .$e->getMessage(). $e->getCode());
       throw new PDOException("Failed to update the category");
     }
   }
@@ -251,7 +251,7 @@ class CategoryManager extends AbstractManager
       return false;
     
     } catch(PDOException $e) {
-      error_log("Failed to delete the category: " .$e->getMessage(), $e->getCode());
+      error_log("Failed to delete the category: " .$e->getMessage(). $e->getCode());
       throw new PDOException("Failed to delete the category");
     }
   }

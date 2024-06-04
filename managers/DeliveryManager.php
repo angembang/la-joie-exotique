@@ -44,7 +44,7 @@ class DeliveryManager extends AbstractManager
       return $delivery;
     
     } catch(PDOException $e) {
-      error_log("Failed to create a new delivery: " .$e->getMessage(), $e->getCode());
+      error_log("Failed to create a new delivery: " .$e->getMessage(). $e->getCode());
       throw new PDOException("Failed to create a new delivery");
     }
   }
@@ -92,7 +92,7 @@ class DeliveryManager extends AbstractManager
       return null;
 
     } catch(PDOException $e) {
-      error_log("Failed to find the delivery: " .$e->getMessage(), $e->getCode());
+      error_log("Failed to find the delivery: " .$e->getMessage(). $e->getCode());
       throw new PDOException("Failed to find the delivery");
     }
   }
@@ -143,7 +143,7 @@ class DeliveryManager extends AbstractManager
       return null; 
 
     } catch(PDOException $e) {
-      error_log("Failed to find the delivery: " .$e->getMessage(), $e->getCode());
+      error_log("Failed to find the delivery: " .$e->getMessage(). $e->getCode());
       throw new PDOException("Failed to find the delivery");
     }
   }
@@ -182,7 +182,7 @@ class DeliveryManager extends AbstractManager
       return null;
 
     } catch(PDOException $e) {
-      error_log("Failed to find deliveries: " .$e->getMessage(), $e->getCode());
+      error_log("Failed to find deliveries: " .$e->getMessage(). $e->getCode());
       throw new PDOException("Failed to find deliveries");
     }
   }
@@ -214,7 +214,7 @@ class DeliveryManager extends AbstractManager
       return null;
 
     } catch(PDOException $e) {
-      error_log("Failed to find deliveries: " .$e->getMessage(), $e->getCode());
+      error_log("Failed to find deliveries: " .$e->getMessage(). $e->getCode());
       throw new PDOException("Failed to find deliveries");
     }
   }
@@ -261,7 +261,7 @@ class DeliveryManager extends AbstractManager
       return null;
 
     } catch(PDOException $e) {
-      error_log("Failed to update the delivery: " .$e->getMessage(), $e->getCode());
+      error_log("Failed to update the delivery: " .$e->getMessage(). $e->getCode());
       throw new PDOException("Failed to update the delivery");
     }
   }
@@ -297,7 +297,7 @@ class DeliveryManager extends AbstractManager
       return false;
 
     } catch(PDOException $e) {
-      error_log("Failed to delete the delivery: " .$e->getMessage(), $e->getCode());
+      error_log("Failed to delete the delivery: " .$e->getMessage(). $e->getCode());
       throw new PDOException("Failed to delete the delivery");
     }
   }

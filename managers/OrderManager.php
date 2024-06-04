@@ -43,7 +43,7 @@ class OrderManager extends AbstractManager
       return $order;
 
     } catch(PDOException $e) {
-      error_log("Failed to create a new order: " .$e->getMessage(), $e->getCode());
+      error_log("Failed to create a new order: " .$e->getMessage(). $e->getCode());
       throw new PDOException("Failed to create a new order");
     }
   }
@@ -91,7 +91,7 @@ class OrderManager extends AbstractManager
       return null;
 
     } catch(PDOException $e) {
-      error_log("Failed to find the orther: " .$e->getMessage(), $e->getCode());
+      error_log("Failed to find the orther: " .$e->getMessage(). $e->getCode());
       throw new PDOException("Failed to find the orther");
     }
   }
@@ -134,7 +134,7 @@ class OrderManager extends AbstractManager
       return null;  
 
     } catch(PDOException $e) {
-      error_log("Failed to find orders: " .$e->getMessage(), $e->getCode());
+      error_log("Failed to find orders: " .$e->getMessage(). $e->getCode());
       throw new PDOException("Failed to find orders");
     }
   }
@@ -173,7 +173,7 @@ class OrderManager extends AbstractManager
       return null; 
 
     } catch(PDOException $e) {
-      error_log("Failed to find orders: " .$e->getMessage(), $e->getCode());
+      error_log("Failed to find orders: " .$e->getMessage(). $e->getCode());
       throw new PDOException("Failed to find orders");
     }
   }
@@ -212,7 +212,7 @@ class OrderManager extends AbstractManager
       return null; 
 
     } catch(PDOException $e) {
-      error_log("Failed to find orders: " .$e->getMessage(), $e->getCode());
+      error_log("Failed to find orders: " .$e->getMessage(). $e->getCode());
       throw new PDOException("Failed to find orders");
     }
   }
@@ -251,7 +251,7 @@ class OrderManager extends AbstractManager
       return null; 
 
     } catch(PDOException $e) {
-      error_log("Failed to find orders: " .$e->getMessage(), $e->getCode());
+      error_log("Failed to find orders: " .$e->getMessage(). $e->getCode());
       throw new PDOException("Failed to find orders");
     }
   }
@@ -290,7 +290,7 @@ class OrderManager extends AbstractManager
       return null; 
 
     } catch(PDOException $e) {
-      error_log("Failed to find orders: " .$e->getMessage(), $e->getCode());
+      error_log("Failed to find orders: " .$e->getMessage(). $e->getCode());
       throw new PDOException("Failed to find orders");
     }
   }
@@ -322,7 +322,7 @@ class OrderManager extends AbstractManager
       return null; 
 
     } catch(PDOException $e) {
-      error_log("Failed to find orders: " .$e->getMessage(), $e->getCode());
+      error_log("Failed to find orders: " .$e->getMessage(). $e->getCode());
       throw new PDOException("Failed to find orders");
     }
   }
@@ -372,7 +372,7 @@ class OrderManager extends AbstractManager
       return null;
 
     } catch(PDOException $e) {
-      error_log("Failed to update the order: " .$e->getMessage(), $e->getCode());
+      error_log("Failed to update the order: " .$e->getMessage(). $e->getCode());
       throw new PDOException("Failed to update the order");
     }
   }
@@ -408,7 +408,7 @@ class OrderManager extends AbstractManager
       return false;
 
     }  catch(PDOException $e) {
-      error_log("Failed to delete the order: " .$e->getMessage(), $e->getCode());
+      error_log("Failed to delete the order: " .$e->getMessage(). $e->getCode());
       throw new PDOException("Failed to delete the order");
     }
   }

@@ -43,7 +43,7 @@ class TagManager extends AbstractManager
     
     } catch(PDOException $e) {
       // Log the error message and code to the error log file
-      error_log("Failed to create a new tag: " .$e->getMessage(),  E_USER_ERROR);
+      error_log("Failed to create a new tag: " .$e->getMessage(). $e->getCode());
       // Handle the exception appropriately
       throw new PDOException("Failed to create a new tag");
     }
@@ -83,7 +83,7 @@ class TagManager extends AbstractManager
       return null;
 
     } catch(PDOException $e) {
-      error_log("Failed to find the tag: " .$e->getMessage(),  E_USER_ERROR);
+      error_log("Failed to find the tag: " .$e->getMessage().$e->getCode());
       throw new PDOException("Failed to find the tag");
     }
   }
@@ -126,7 +126,7 @@ class TagManager extends AbstractManager
       return null; 
 
     } catch(PDOException $e) {
-      error_log("Failed to find the tag: " .$e->getMessage(),  E_USER_ERROR);
+      error_log("Failed to find the tag: " .$e->getMessage(). $e->getCode());
       throw new PDOException("Failed to find the tag");
     }
   }
@@ -165,7 +165,7 @@ class TagManager extends AbstractManager
       return null; 
 
     } catch(PDOException $e) {
-      error_log("Failed to find the tag: " .$e->getMessage(), E_USER_ERROR);
+      error_log("Failed to find the tag: " .$e->getMessage(). $e->getCode());
       throw new PDOException("Failed to find the tag");
     }
   }
@@ -198,7 +198,7 @@ class TagManager extends AbstractManager
       return null;
 
     } catch(PDOException $e) {
-      error_log("Failed to find tags: " .$e->getMessage(),  E_USER_ERROR);
+      error_log("Failed to find tags: " .$e->getMessage(). $e->getCode());
       throw new PDOException("Failed to find tags");
     }  
   }
@@ -241,7 +241,7 @@ class TagManager extends AbstractManager
       return null;
     
     } catch(PDOException $e) {
-      error_log("Failed to update the tag: " .$e->getMessage(),  E_USER_ERROR);
+      error_log("Failed to update the tag: " .$e->getMessage(). $e->getCode());
       throw new PDOException("Failed to update the tag");
     }
   }
@@ -275,7 +275,7 @@ class TagManager extends AbstractManager
       return false;
     
     } catch(PDOException $e) {
-      error_log("Failed to delete the tag: " .$e->getMessage(),  E_USER_ERROR);
+      error_log("Failed to delete the tag: " .$e->getMessage(). $e->getCode());
       throw new PDOException("Failed to delete the tag");
     }
   }

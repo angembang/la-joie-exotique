@@ -52,7 +52,7 @@ class OrderProductManager extends AbstractManager
       return false;
 
     } catch (PDOException | InvalidArgumentException $e) {
-      error_log("Failed to create a new order-product: " . $e->getMessage(), $e->getCode());
+      error_log("Failed to create a new order-product: " . $e->getMessage().$e->getCode());
       throw new PDOException("Failed to create a new order-product");
     }
   }
@@ -94,7 +94,7 @@ class OrderProductManager extends AbstractManager
       return null; 
 
     } catch(PDOException $e) {
-      error_log("Failed to find products of the order: " .$e->getMessage(), $e->getCode());
+      error_log("Failed to find products of the order: " .$e->getMessage(). $e->getCode());
       throw new PDOException("Failed to find products of the order");
     }
   }
@@ -146,7 +146,7 @@ class OrderProductManager extends AbstractManager
       return false;
 
     } catch(PDOException $e) {
-      error_log("Failed to update the product quantity in the order: " .$e->getMessage(), $e->getCode());
+      error_log("Failed to update the product quantity in the order: " .$e->getMessage(). $e->getCode());
       throw new PDOException("Failed to update the product quantity in the order");
     }
   }
@@ -185,7 +185,7 @@ class OrderProductManager extends AbstractManager
       return false;
 
     } catch(PDOException $e) {
-      error_log("Failed to remove the product from the order: " .$e->getMessage(), $e->getCode());
+      error_log("Failed to remove the product from the order: " .$e->getMessage(). $e->getCode());
       throw new PDOException("Failed to remove the product from the order");
     }
   }
@@ -221,7 +221,7 @@ class OrderProductManager extends AbstractManager
       return false;
 
     } catch(PDOException $e) {
-      error_log("Failed to delete the order product: " .$e->getMessage(), $e->getCode());
+      error_log("Failed to delete the order product: " .$e->getMessage(). $e->getCode());
       throw new PDOException("Failed to delete the order product");
     }
   }

@@ -43,7 +43,7 @@ class ImageManager extends AbstractManager
       return $image;
 
     } catch(PDOException $e) {
-      error_log("Failed to create a new image: " .$e->getMessage(), $e->getCode());
+      error_log("Failed to create a new image: " .$e->getMessage(). $e->getCode());
       throw new PDOException("Failed to create a new image");
     }
   }
@@ -89,7 +89,7 @@ class ImageManager extends AbstractManager
       return null;
 
     } catch(PDOException $e) {
-      error_log("Failed to find the image: " .$e->getMessage(), $e->getCode());
+      error_log("Failed to find the image: " .$e->getMessage(). $e->getCode());
       throw new PDOException("Failed to find the image");
     }
   }
@@ -132,7 +132,7 @@ class ImageManager extends AbstractManager
       return null;
 
     } catch(PDOException $e) {
-      error_log("Failed to update the image: " .$e->getMessage(), $e->getCode());
+      error_log("Failed to update the image: " .$e->getMessage(). $e->getCode());
       throw new PDOException("Failed to update the image");
     }
   }
@@ -168,7 +168,7 @@ class ImageManager extends AbstractManager
       return false;
 
     } catch(PDOException $e) {
-      error_log("Failed to delete the image: " .$e->getMessage(), $e->getCode());
+      error_log("Failed to delete the image: " .$e->getMessage(). $e->getCode());
       throw new PDOException("Failed to delete the image");
     }
   }

@@ -40,7 +40,7 @@ class ProductImageManager extends AbstractManager
       return false;
 
     } catch(PDOException $e) {
-      error_log("Failed to create a new product image: " .$e->getMessage(), $e->getCode());
+      error_log("Failed to create a new product image: " .$e->getMessage(). $e->getCode());
       throw new PDOException("Failed to create a new product image");
     }
   }
@@ -95,7 +95,7 @@ class ProductImageManager extends AbstractManager
       return null;
 
     } catch(PDOException $e) {
-      error_log("Failed to find the product images: " .$e->getMessage(), $e->getCode());
+      error_log("Failed to find the product images: " .$e->getMessage(). $e->getCode());
       throw new PDOException("to find the product images");
     }
   }

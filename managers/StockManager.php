@@ -40,7 +40,7 @@ class StockManager extends AbstractManager
       return false;
 
     } catch (PDOException $e) {
-      error_log("Failed to create a new stock: " . $e->getMessage(), $e->getCode());
+      error_log("Failed to create a new stock: " . $e->getMessage(). $e->getCode());
       throw new PDOException("Failed to create a new stock");
     }
   }
@@ -87,7 +87,7 @@ class StockManager extends AbstractManager
       return null;
 
     } catch (PDOException $e) {
-        error_log("Failed to find the stock: " . $e->getMessage(), $e->getCode());
+        error_log("Failed to find the stock: " . $e->getMessage(). $e->getCode());
         throw new PDOException("Failed to find the stock");
     }
   }
@@ -131,7 +131,7 @@ class StockManager extends AbstractManager
 
     } catch (PDOException $e) {
       // Log error and throw exception if an error occurs during the database operation.
-      error_log("Failed to update stock quantity: " . $e->getMessage(), $e->getCode());
+      error_log("Failed to update stock quantity: " . $e->getMessage(). $e->getCode());
       throw new PDOException("Failed to update stock quantity");
     }
   }
@@ -168,7 +168,7 @@ class StockManager extends AbstractManager
 
     } catch (PDOException $e) {
       // Log error and throw exception if an error occurs during the database operation.
-      error_log("Failed to delete the stock: " . $e->getMessage(), $e->getCode());
+      error_log("Failed to delete the stock: " . $e->getMessage(). $e->getCode());
       throw new PDOException("Failed to delete the stock");
     }
   }
