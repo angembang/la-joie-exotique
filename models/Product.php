@@ -37,6 +37,33 @@ class Product
   private int $categoryId;
 
   /**
+   * @var int  The image1 identifier of the product. 
+   */
+  private int $image1Id;
+
+  /**
+   * @var int|null  The image2 identifier of the product. Null if no image is set
+   */
+  private ?int $image2Id;
+
+  /**
+   * @var int|null  The image3 identifier of the product. Null if no image is set
+   */
+  private ?int $image4Id;
+
+  /**
+   * @var int|null  The image4 identifier of the product. Null if no image is set
+   */
+  private ?int $image3Id;
+
+  /**
+   * @var array The Array to store images associated with the product. 
+   */
+  private $images = [];
+
+
+
+  /**
    * Product constructor
    * @param int|null $id The unique identifier of the product.
    * @param string $name The name of the product.
@@ -44,8 +71,12 @@ class Product
    * @param float $price The price of the product.
    * @param int $tagId The tag identifier of the product;
    * @param int $categoryId The category identifier of the product
+   * @param int $image1Id The image1 identifier of the product
+   * @param int|null $image2Id The image2 identifier of the product
+   * @param int|null $image3Id The image3 identifier of the product
+   * @param int|null $image4Id The image4 identifier of the product
    */
-  public function __construct(?int $id, string $name, string $description, float $price, int $tagId, int $categoryId) 
+  public function __construct(?int $id, string $name, string $description, float $price, int $tagId, int $categoryId, int $image1Id, ?int $image2Id, ?int $image3Id, ?int $image4Id) 
   {
     $this->id = $id;
     $this->name = $name;
@@ -53,6 +84,10 @@ class Product
     $this->price = $price;
     $this->tagId = $tagId;
     $this->categoryId = $categoryId;
+    $this->image1Id = $image1Id;
+    $this->image2Id = $image2Id;
+    $this->image3Id = $image3Id;
+    $this->image4Id = $image4Id;
   }
 
 
@@ -175,4 +210,111 @@ class Product
     $this->categoryId = $categoryId;
   }
 
+
+   /**
+   * Get the image1 identifier of the product
+   * 
+   * @return int The image1 identifier of the product.
+   */
+  public function getImage1Id(): int 
+  {
+    return $this->image1Id;
+  }
+
+  /**
+   * Set the image1 identifier of the product
+   * @param int The image1 identifier of the product.
+   */
+  public function setImage1Id(int $image1Id): void 
+  {
+    $this->image1Id = $image1Id;
+  }
+
+
+   /**
+   * Get the image2 identifier of the product
+   * 
+   * @return int|null The image2 identifier of the product, or null if no image2 is set.
+   */
+  public function getImage2Id(): ?int 
+  {
+    return $this->image2Id;
+  }
+
+  /**
+   * Set the image2 identifier of the product
+   * @param int|null The image2 identifier of the product.
+   */
+  public function setImage2Id(?int $image2Id): void 
+  {
+    $this->image2Id = $image2Id;
+  }
+
+
+  /**
+   * Get the image3 identifier of the product
+   * 
+   * @return int|null The image3 identifier of the product, or null if no image3 is set.
+   */
+  public function getImage3Id(): ?int 
+  {
+    return $this->image3Id;
+  }
+
+  /**
+   * Set the image3 identifier of the product
+   * @param int|null The image3 identifier of the product.
+   */
+  public function setImage3Id(?int $image3Id): void 
+  {
+    $this->image3Id = $image3Id;
+  }
+
+
+  /**
+   * Get the image4 identifier of the product
+   * 
+   * @return int|null The image4 identifier of the product, or null if no image4 is set.
+   */
+  public function getImage4Id(): ?int 
+  {
+    return $this->image4Id;
+  }
+
+  /**
+   * Set the image4 identifier of the product
+   * @param int|null The image4 identifier of the product.
+   */
+  public function setImage4Id(?int $image4Id): void 
+  {
+    $this->image4Id = $image4Id;
+  }
+
+
+  /**
+   * Magic method to dynamically retrieve the value of a property.
+   *
+   * @param string $name The name of the property being accessed.
+   * 
+   * @return mixed|null The value of the property if it exists, null otherwise.
+   */
+  public function __get($name) {
+    if ($name === 'images') {
+      return $this->images;
+    }
+  }
+
+  /**
+   * Magic method to dynamically set the value of a property.
+   *
+   * @param string $name The name of the property being set.
+   * @param mixed $value The value to set for the property.
+   * 
+   * @return void
+   */
+  public function __set($name, $value) {
+    if ($name === 'images') {
+      $this->images = $value;
+    }
+  }
 }
