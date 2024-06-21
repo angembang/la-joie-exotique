@@ -19,7 +19,7 @@
     $authController = new AuthController();
     $pageController = new PageController();
     $productController = new ProductController();
-    $showController = new ShowController();
+    $shopController = new ShopController();
 
     // Check if a route is provided
     if(isset($get["route"])) {
@@ -64,29 +64,62 @@
           $productController->searchProduct(); 
           break;
 
-        case "products":
-          // Route for displaying all products
-          $showController->showProducts();
+          case "product":
+            if (isset($get["product_id"])) {
+                $productId = (int)$get["product_id"];
+                $productController->showProductById($productId);
+            } else {
+                error_log("Routeur: Aucun ID de produit reçu");
+                $pageController->error();
+            }
           break;
 
         case "category-products": 
           // Route for displaying products by category
-          $showController->showProductsByCategory();
+          // check if category identifier is provided
+          if(isset($get["category_id"])) {
+            $productController->showProductsByCategoryId($get["category_id"]);
+          } else {
+            // Redirect to error page if category id is not provided
+            $pageController->error();
+          }
           break;
 
         case "tag-products":
           // Route for displaying products by tag
-          $showController->showProductByTag();
+          $productController->showProductByTag();
           break;
 
-        case "product-detail":
-          // Route for displaying product details
-          $showController->showProductDetail(); 
+        case "add-product-cart":
+          // Route for displaying the product quantity form 
+          $productController->checkAndAddProductToCart();
           break;
 
-        case "card":
+        case "shopping-cart":
           // Route for displaying the shopping cart
-          $showController->showCard();
+          $shopController->showCart();
+          break;
+
+        case "clean-url":
+          // Route for cleaning url after payment
+          $pageController->cleanUrl();
+          break;
+
+        case "cart":
+          // Route for displaying the shopping cart
+          $shopController->addToCart();
+          break;
+
+        case "update-quantity":
+          $shopController->updateQuantity();
+          break;
+
+        case "clear-cart":
+          $shopController->clearCart();
+          break;
+        
+        case "delete-product":
+          $shopController->deleteProduct();
           break;
           
         case "order":
@@ -94,14 +127,29 @@
           $productController->order();
           break;
 
-        case "confirm-order":
-          // Route for confirming an order
-          $productController->confirmOrder();
+        case "payment-form":
+          // Route for displaying the payment form
+          $shopController->showPaymentForm();
           break;
 
         case "about":
           // Route for displaying the about page
           $pageController->about();
+          break;
+
+        case "legal-notice":
+          // Route for displaying the legal notice page
+          $pageController->legalnotice();
+          break;
+
+        case "privacy-policy":
+          // Route for displaying the privacy policy page
+          $pageController->privacypolicy();
+          break;
+
+        case "contact":
+          // Route for displaying the privacy policy page
+          $pageController->contact();
           break;
 
         default:

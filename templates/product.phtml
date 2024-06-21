@@ -1,0 +1,27 @@
+<main>
+     <!-- Search bar -->
+     <form class="search-bar" action="index.php?route=search-course" method="GET">
+        <!-- Label for the input field -->
+        <label for="productName">Saisissez le nom du produit</label>
+        <!-- Input field for entering the lesson name -->
+        <input type="text" name="productName" id="productName" placeholder="Rechercher produit">
+        <!-- Suggestions list -->
+        <ul id="suggestions-list"></ul>
+        <!-- Submit button for initiating the search -->
+        <button class="search-button" type="submit"><i class="fa-solid fa-magnifying-glass"></i></button>
+    </form>
+    <section class="product-detail">
+        <p class="product-description"><?= htmlspecialchars($product->getDescription()); ?></p>
+        <div class="product-images-slider-page">
+            <?php foreach ($product->images as $image): ?>
+                <div class="slider-product-page">
+                    <div class="img-product-page"><img src="<?= htmlspecialchars($image->getFileName()); ?>" alt="<?= htmlspecialchars($image->getAlt()); ?>" width="350px"></div>
+                </div>
+            <?php endforeach; ?>
+        </div>
+        <p class="product-price"><?= htmlspecialchars($product->getPrice()); ?>€</p>
+        <button class="ajouter-produit" data-product="<?=$product->getId(); ?>">Ajouter au panier</button>
+        
+    </section>
+</main>
+

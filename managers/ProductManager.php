@@ -273,7 +273,8 @@ class ProductManager extends AbstractManager
     try {
       // Prepare the SQL query to retrieve products by their category identifier
       $query = $this->db->prepare("SELECT * FROM products  
-      WHERE category_id = :category_id");
+      WHERE category_id = :category_id 
+      ORDER BY id DESC");
 
       // Bind the parameter with its value
       $parameter = [

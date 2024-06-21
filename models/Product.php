@@ -317,4 +317,20 @@ class Product
       $this->images = $value;
     }
   }
+
+
+
+  public function toArray() : array
+  {
+    return [
+      "id" => $this->id,
+      "name" => $this->name,
+      "description" => $this->description,
+      "price" => $this->price,
+      "imageId1" => $this->image1Id,
+      "image2Id" => $this->image2Id,
+      "image3Id" => $this->image3Id,
+      "image4Id" => $this->image4Id
+        ];
+    }
 }

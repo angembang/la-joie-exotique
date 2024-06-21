@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="fr">
+  <html lang="fr">
   <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -39,28 +39,45 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Aclonica&family=Merienda:wght@300..900&display=swap" rel="stylesheet">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Acme&display=swap" rel="stylesheet">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Aclonica&family=Acme&display=swap" rel="stylesheet">
+
+    <!-- Bootstrap css CDN -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css">
     
     <!-- CSS Files -->
     <link rel="stylesheet" href="../assets/css/style.css">
+
+    <!-- Stripe -->
+    <script src="https://js.stripe.com/v3/"></script>
     
   </head>
   <body>
     <header>
-      <nav role="navigation" aria-label="Navigation principale">
+      <nav class="home-nav-bar" role="navigation" aria-label="Navigation principale">
         <!-- Navigation Links -->
-        <button class="burger" aria-label="Ouvrir le menu">
-        <i class="fa-solid fa-bars"></i>
-        </button>
         <ul>
-          <li><a href="#" aria-label="Accueil">Accueil</a></li>
-          <li><a href="#" aria-label="Panier">
-            <i class="fa-solid fa-cart-shopping"></i>
-          </a></li>
-          <li><a href="#" aria-label="A-propos">A-propos</a></li>
-          <li><a href="#" aria-label="Connexion">
+          <li><button class="burger" aria-label="Ouvrir le menu">
+          <i class="fa-solid fa-bars"></i>
+          </li></button>
+          <ul class="display-none">
+            <li><a href="index.php?route=about" aria-label="A-propos">A-propos</a></li>
+            <li><a href="index.php?route=contact" aria-label="Contact">Contact</a></li>
+          </ul>
+        </ul>
+        <h1>La joie Exotique</h1>
+        <ul class="nav-icone">
+          <li class="burgercolor"><a href="#" aria-label="Connexion">
             <i class="fa-solid fa-user"></i>
-          </a></li>
-          <li><a href="#" aria-label="Contact">Contact</a></li>
+          </a></li> 
+          <li><a href="index.php?route=shopping-cart" aria-label="Panier">
+            <i class="fa-solid fa-cart-shopping"></i>
+            <span class="cart-item-count"><?=array_sum($_SESSION["cart"]);?></span>
+          </a></li> 
         </ul>
       </nav>
     </header>
@@ -78,18 +95,19 @@
         <a href="#" aria-label="Instagram"><i class="fa-brands fa-square-instagram"></i></a>
       </div>
       
-      <!-- List of pages link -->
-      <ul>
-        <li><a href="#" aria-label="Mentions légales">Mentions légales</a></li>
-        <li><a href="#" aria-label="Politique de confidentialité">Politique de confidentialité</a></li>
-      </ul>
+      <!-- Pages link -->
+      <a href="index.php?route=legal-notice" aria-label="Mentions légales">Mentions légales</a>
+      <a href="#" aria-label="Politique de confidentialité">Politique de confidentialité</a>
       
       <!-- Copyright -->
       <p>Copyright &copy; <?= date('Y') ?> La Joie Exotique.</p>
     </footer>
-
+    
+    <!-- Bootstrap js CDN -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
     <!-- JavaScript Files -->
-    <script src="../assets/js/main.js"></script>
+
+    <script src="assets/js/shoppingCart.js"></script>
   
   </body>
 

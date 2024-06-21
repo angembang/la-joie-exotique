@@ -15,6 +15,8 @@ abstract class AbstractController
    */
   protected function render(string $template, array $data): void
   {
+     // Extraire les variables du tableau $data
+     extract($data);
     // Include the layout.phtml which wraps around the specified template.
     require "templates/layout.phtml";
   }

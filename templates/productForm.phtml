@@ -1,0 +1,77 @@
+<main>
+  <h1>Ajout produit</h1>
+  <!-- Add product form -->
+  <form class="productForm" action="index.php?route=checkAddProduct" method="post" enctype="multipart/form-data">
+    <!-- Token field -->
+    <input type="hidden" name="csrf-token" id="csrf-token" value="<?=$_SESSION['csrf-token']; ?>"/>
+
+    <!-- Product name field -->
+    <fieldset>
+      <label for="name">Nom :</label>
+      <input type="text" id="name" name="name" placeholder="Entrez le nom du produit" required>
+    </fieldset>
+
+    <!-- Description field -->
+    <fieldset>
+      <label for="description">Description :</label>
+      <textarea id="description" name="description" placeholder="Entrez la description" required></textarea>
+    </fieldset>
+
+    <!-- Price field -->
+    <fieldset>
+      <label for="price">Prix :</label>
+      <input type="number" id="price" name="price" step="0.01" placeholder="Entrez le prix" required>
+    </fieldset>
+
+    <!-- Tag selection field -->
+    <fieldset>
+      <label for="tagId">Tag :</label>
+      <select id="tagId" name="tagId">
+        <option value="" disabled selected>Choisissez l'étiquette</option>
+        <!-- Loop to display tag selection options -->
+        <?php foreach($data['tags'] as $tag) {?>
+        <option value="<?= $tag->getId(); ?>"><?= $tag->getName(); ?></option>
+        <?php 
+        }
+        ?>
+      </select>
+    </fieldset>
+
+    <!-- Category selection field -->
+    <fieldset>
+      <label for="categoryId">Catégorie :</label>
+      <select id="categoryId" name="categoryId">
+        <option value="" disabled selected>Choisissez la catégorie</option>
+        <!-- Loop to display category selection options -->
+        <?php foreach($data['categories'] as $category) { ?>
+        <option value="<?= $category->getId(); ?>"><?= $category->getName(); ?></option>
+        <?php
+        } 
+        ?>
+      </select>
+    </fieldset>
+
+    <!-- Quantity field -->
+    <fieldset>
+      <label for="quantity">Quantité en stock :</label>
+      <input type="number" id="quantity" name="quantity" min="0" placeholder="Entrez quantité" required>
+    </fieldset>
+
+    <!--Images field -->
+    <fieldset>
+      <label for="image1_id">Image 1:</label>
+      <input type="file" id="image1" name="image1">
+
+      <label for="image2_id">Image 2:</label>
+      <input type="file" id="image2" name="image2">
+
+      <label for="image3_id">Image 3:</label>
+      <input type="file" id="image3" name="image3">
+
+      <label for="image4_id">Image 4:</label>
+      <input type="file" id="image4" name="image4">
+    </fieldset>
+
+    <button type="submit" id="submitButton">Ajouter</button>
+  </form>
+</main>

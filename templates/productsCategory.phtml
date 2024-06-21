@@ -1,0 +1,25 @@
+<main class="products-category">
+    <h1><?= $data['category']->getName(); ?></h1>
+    <ul class="category-product-list">
+        <?php foreach ($data['products'] as $product): ?>
+        <li>
+            <ul>
+                <li>
+                    <a href="index.php?route=product&product_id=<?= $product->getId(); ?>">
+                        <h2><?= $product->getName(); ?></h2>
+                        <?php foreach ($product->images as $image): ?>
+                        <div class="product-image">
+                            <img src="<?= $image->getFileName(); ?>" alt="<?= $image->getAlt(); ?>">
+                        </div>
+                        <?php endforeach; ?>
+                        <p><?= $product->getPrice(); ?>€</p>
+                    </a>
+                </li>
+                <li>
+                    <a href="index.php?route=cart&id=<?=$product->getId(); ?>">Ajouter au panier</a>
+                </li>
+            </ul>    
+        </li>
+        <?php endforeach; ?>
+    </ul>
+</main>
