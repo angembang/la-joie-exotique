@@ -1,0 +1,39 @@
+<main>
+    <!-- Search bar -->
+    <form class="search-bar" action="index.php?route=search-course" method="GET">
+        <!-- Label for the input field -->
+        <label for="productName">Saisissez le nom du produit</label>
+        <!-- Input field for entering the product name -->
+        <input type="text" name="product_name" id="product_name" placeholder="Rechercher produit">
+        <!-- Suggestions list -->
+        <ul id="suggestions-list"></ul>
+        <!-- Submit button for initiating the search -->
+        <button class="search-button" type="submit"><i class="fa-solid fa-magnifying-glass"></i></button>
+    </form>
+    <img class="img-far-home" src="../images/sliderHomePage.png" alt="Image de divers produits exotiques disponibles dans notre boutique en ligne">
+    <?php foreach ($data['productsCategoryArray'] as $categoryData): ?>
+        <h2 class="category-name">
+            <a href="index.php?route=category-products&category_id=<?= $categoryData['category']->getId(); ?>">
+                <?= $categoryData['category']->getName(); ?>
+            </a>
+        </h2>
+        <ul class="category-product-image">
+            <?php foreach ($categoryData['products'] as $product): ?>
+            <li>
+                <a href="index.php?route=product&product_id=<?= $product->getId(); ?>">
+                <?php foreach ($product->images as $image): ?>
+                        <div class="slider-home">
+                            <div class="home-slides-div">
+                                <div class="home-img-slide"><img src="<?= $image->getFileName(); ?>" alt="<?=$image->getAlt(); ?>"></div>
+                            </div>
+                        </div>
+                    <?php endforeach; ?>
+                </a>
+            </li>
+            <?php endforeach; ?>
+        </ul>
+        <?php endforeach; ?>
+                    
+</main>
+
+

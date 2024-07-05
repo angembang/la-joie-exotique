@@ -1,0 +1,92 @@
+<main class="main-container">
+    <section class="login-form form-section">
+        <h2>Connexion</h2>
+        <!-- Alert message section -->
+        <?php if (isset($_SESSION["error-message"])): ?>
+            <section class="alert alert-danger alert-dismissible fade show" role="alert">
+                <!-- Display error message -->
+                <?=$_SESSION["error-message"]; ?>
+                <!-- Button to close the error message -->
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="close"></button>
+            </section>
+        <?php endif; ?>
+        <?php unset($_SESSION["error-message"]); ?>
+        
+        <!---------------- Login form ------------------------>
+        <form id="loginForm" action="index.php?route=checkLogin" method="POST">
+            <!-- Token field -->
+            <input type="hidden" name="csrf-token" id="csrf-token" value="<?=$_SESSION["csrf-token"]; ?>" />
+
+            <!-- Hidden field for redirect parameter -->
+            <input type="hidden" name="redirect" value="<?= isset($_GET['redirect']) ? htmlspecialchars($_GET['redirect']) : ''; ?>">
+
+            <!-- Email or phone field -->
+            <label for="email_or_phone">Email or Phone:</label>
+            <input type="text" id="email_or_phone" name="emailOrPhone" required>
+        
+            <!-- Password field -->
+            <label for="password">Password:</label>
+            <input type="password" id="password" name="password" required>
+        
+            <!-- Submit button -->
+            <button type="submit">Se connecter</button>
+        </form>
+        <a href="#" id="toggleToRegister" class="toggle-link">Vous n'avez pas de compte, veuillez vous enrégistrer</a>
+    </section>
+
+    <section class="register-form form-section hidden">
+        <h2>Inscription</h2>
+        <!-- Alert message section -->
+        <?php if (isset($_SESSION["error-message"])): ?>
+            <section class="alert alert-danger alert-dismissible fade show" role="alert">
+                <!-- Display error message -->
+                <?=$_SESSION["error-message"]; ?>
+                <!-- Button to close the error message -->
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="close"></button>
+            </section>
+        <?php endif; ?>
+        <?php unset($_SESSION["error-message"]); ?>
+        
+        <!----------------- Register form ---------------------------->
+        <form action="index.php?route=checkRegister" method="POST">
+            <!-- Token field -->
+            <input type="hidden" name="csrf-token" id="csrf-token" value="<?=$_SESSION["csrf-token"]; ?>" />
+
+            <!-- Name or phone field -->
+            <label for="emailOrPhone">Email or Phone:</label>
+            <input type="text" id="emailOrPhone" name="emailOrPhone" placeholder="Email ou Numéro de téléphone" required>
+
+            <!-- Password field -->
+            <label for="password">Password:</label>
+            <input type="password" id="password" name="password" placeholder="Mot de passe" required>
+
+            <!-- Confirm password field -->
+            <label for="confirm-password">Confirm Password:</label>
+            <input type="password" id="confirm-password" name="confirm-password" placeholder="Confirmer le mot de passe" required>
+
+            <!-- City field -->
+            <label for="city">City:</label>
+            <input type="text" id="city" name="city" placeholder="Ville" required>
+
+            <!-- Postalcode field -->
+            <label for="postalCode">Postal Code:</label>
+            <input type="text" id="postalCode" name="postalCode" placeholder="Code postal" required>
+
+            <!-- Street field -->
+            <label for="street">Street:</label>
+            <input type="text" id="street" name="street" placeholder="Rue" required>
+
+            <!-- Number field -->
+            <label for="number">Number:</label>
+            <input type="text" id="number" name="number" placeholder="Numéro" required>
+
+            <!-- Digicode field -->
+            <label for="digicode-or-appt-name">Digicode or Apartment Name:</label>
+            <input type="text" id="digicode-or-appt-name" name="digicode-or-appt-name" placeholder="digicode ou nom figurant à la porte">
+
+            <!-- Submit button -->
+            <button type="submit">S'inscrire</button>
+        </form>
+        <a href="#" id="toggleToLogin" class="toggle-link">Vous avez déjà un compte? Connectez-vous</a>
+    </section>
+</main>

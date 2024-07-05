@@ -1,39 +1,43 @@
 <main>
     <div class="shopping-cart-page">
-    <?php foreach($productsWithImages as $item): ?>
-    <div class="card mb-3" style="max-width: 400px;" data-product-id="<?= $item['product']->getId(); ?>">
-        <div class="row g-0">
-            <div class="col-md-4 shopping-image">
-            <?php if (!empty($item["images"])): ?>
-                        <img src="<?= $item["images"][0]->getFileName(); ?>" class="img-fluid rounded-start" alt="<?= $item["images"][0]->getAlt(); ?>">
-                    <?php else: ?>
-                        <img src="placeholder.jpg" class="img-fluid rounded-start" alt="Image produit">
-                    <?php endif; ?>
-                </div>
-            <div class="col-md-8">
-                <div class="card-body">
-                    <h2 class="card-title"><?=$item["product"]->getName(); ?></h2>
-                    <p class="card-text"><?=$item["product"]->getPrice(); ?>€</p>
-                    <!-- Bar of quantity -->
-                    <div class="input-group mb-1">
-                        <button class="btn btn-outline-secondary btn-decrement" type="button">-</button>
-                        <input type="text" class="form-control text-center quantity" value="<?= $item['quantityInCart'] ?>" aria-label="Quantité" readonly>
-                        <button class="btn btn-outline-secondary btn-increment" type="button">+</button>
-                    </div>
-                    <p>Sous-total: <span class="subtotal"><?= $item['subtotal'] ?>€</span></p>
-                    <p><a href="#" class="btn-delete"><i class="fa-solid fa-trash-can"></i></a></p>
-                </div>
+    <?php if (isset($productsWithImages) && is_array($productsWithImages) && !empty($productsWithImages)): ?>   
+        <!-- the general total price of the cart -->
+        <div class="card mt-3 payment-cart-button" style="max-width: 400px;">
+            <div class="card-body">
+                <h2 class="card-title"><a href="index.php?route=payment-form">Passer la commande</a></h2>
+                <p class="card-text">Total: <span id="total-amount"><?= $totalAmount ?>€</span></p>
             </div>
         </div>
-    </div>
-    <?php endforeach; ?>
-    <!--  the general total price of the cart -->
-    <div class="card mt-3" style="max-width: 400px;">
-        <div class="card-body">
-            <h3 class="card-title"><a href="index.php?route=payment-form">Passer la commande</a></h3>
-            <p class="card-text">Total: <span id="total-amount"><?= $totalAmount ?>€</span></p>
-        </div>
-    </div>
+            
+        <?php foreach ($productsWithImages as $item): ?>
+            <div class="card mb-3 product-cart-item" style="max-width: 400px;" data-product-id="<?= $item['product']->getId(); ?>">
+                <div class="row g-0">
+                    <div class="col-md-4 shopping-image cart-image">
+                        <?php if (!empty($item["images"])): ?>
+                            <img src="<?= $item["images"][0]->getFileName(); ?>" class="img-fluid rounded-start" alt="<?= $item["images"][0]->getAlt(); ?>">
+                        <?php else: ?>
+                            <img src="placeholder.jpg" class="img-fluid rounded-start" alt="Image produit">
+                        <?php endif; ?>
+                    </div>
+                    <div class="col-md-8">
+                        <div class="card-body cart-product-title">
+                            <h3 class="card-title"><?= $item["product"]->getName(); ?></h3>
+                            <p class="card-text price-cart"><?= $item["product"]->getPrice(); ?>€</p>
+                            <!-- Bar of quantity -->
+                            <div class="input-group mb-1 cart-product-button">
+                                <button class="btn btn-outline-secondary btn-decrement" type="button">-</button>
+                                <input type="text" class="form-control text-center quantity" value="<?= $item['quantityInCart'] ?>" aria-label="Quantité" readonly>
+                                <button class="btn btn-outline-secondary btn-increment" type="button">+</button>
+                            </div>
+                            <p class="cart-subtotal">Sous-total: <span class="subtotal"><?= $item['subtotal'] ?>€</span></p>
+                            <p><a href="#" class="btn-delete"><i class="fa-solid fa-trash-can"></i></a></p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        <?php endforeach; ?>
+        <?php else: ?>
+            <p>Votre panier est vide.</p>
+        <?php endif; ?>
     </div>
 </main>
-

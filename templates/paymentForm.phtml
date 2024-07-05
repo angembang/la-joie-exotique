@@ -1,0 +1,47 @@
+<!-- templates/paymentForm.phtml -->
+<link rel="stylesheet" href="../assets/css/checkout.css">
+<script src="assets/js/checkout.js" defer></script>
+<section class="payment-style">
+    <!-- Delivery options -->
+    <div id="delivery-options" class="delivery-options">
+        <h2>Options de Livraison</h2>
+        <p>Veuillez choisir une option :</p>
+        <button id="login-option" class="option-button">Se connecter avant de passer la commande</button>
+        <button id="guest-option" class="option-button">Passer la commande sans se connecter</button>
+    </div>
+
+    <!-- payment form -->
+    <form id="payment-form" class="hidden" action="index.php?route=place-order" method="POST">
+        <input type="hidden" name="route" value="placeOrder">
+        <h1>Paiement</h1>
+        <fieldset class="fieldset-payment">
+            <legend><label for="guest-name">Nom :</label></legend>
+            <input type="text" id="guest-name" name="guest-name" placeholder="Votre nom" required>
+            <legend><label for="city">City:</label></legend>
+            <input type="text" id="city" name="city" placeholder="Ville" required>
+
+            <legend><label for="postalCode">Postal Code:</label></legend>
+            <input type="text" id="postalCode" name="postalCode" placeholder="Code postal" required>
+
+            <legend><label for="street">Street:</label></legend>
+            <input type="text" id="street" name="street" placeholder="Rue" required>
+
+            <legend><label for="number">Number:</label></legend>
+            <input type="text" id="number" name="number" placeholder="Numéro" required>
+
+            <legend><label for="digicode-or-appt-name">Digicode or Apartment Name:</label></legend>
+            <input type="text" id="digicode-or-appt-name" name="digicode-or-appt-name" placeholder="digicode ou nom figurant à la porte">
+            <legend><label for="totalAmount">Prix total :</label></legend>
+            <input type="text" id="total-amount" name="total-amount" value="<?= isset($_SESSION['totalAmount']) ? htmlspecialchars($_SESSION['totalAmount']) : ''; ?>">€
+            <input type="hidden" name="order-id" value="<?= isset($_GET['order_id']) ? htmlspecialchars($_GET['order_id']) : ''; ?>">
+        </fieldset>
+        <div id="payment-element">
+            <!-- Stripe.js injectera ici l'élément de paiement -->
+        </div>
+        <button id="submit" disabled="disabled">
+            <div class="spinner hidden" id="spinner"></div>
+            <span id="button-text">Payer</span>
+        </button>
+        <div id="payment-message" class="hidden"></div>
+    </form>
+</section>

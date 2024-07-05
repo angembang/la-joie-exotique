@@ -1,0 +1,35 @@
+<!-- templates/adminOrders.phtml -->
+<section class="admin-orders">
+    <h2>Commandes</h2>
+    <?php if (isset($data['orders']) && !empty($data['orders'])): ?>
+        <table>
+            <thead>
+                <tr>
+                    <th>ID Commande</th>
+                    <th>Nom du Client</th>
+                    <th>Date</th>
+                    <th>Total</th>
+                    <th>Status</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                <?php foreach ($data['orders'] as $order): ?>
+                    <tr>
+                        <td><?= $order->getId(); ?></td>
+                        <td><?= $order->getUserId() ? $order->getUserName() : $order->getGuestName(); ?></td>
+                        <td><?= $order->getCreatedAt()->format('Y-m-d H:i:s'); ?></td>
+                        <td><?= $order->getTotalPrice(); ?> €</td>
+                        <td><?= $order->getStatus(); ?></td>
+                        <td>
+                            <a href="index.php?route=view-order&order_id=<?= $order->getId(); ?>">Voir</a>
+                            <a href="index.php?route=update-order-status&order_id=<?= $order->getId(); ?>">Modifier le status</a>
+                        </td>
+                    </tr>
+                <?php endforeach; ?>
+            </tbody>
+        </table>
+    <?php else: ?>
+        <p>Aucune commande trouvée.</p>
+    <?php endif; ?>
+</section>

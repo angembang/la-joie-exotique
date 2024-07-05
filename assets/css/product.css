@@ -1,0 +1,38 @@
+.modal {
+  display: none; /* Masquée par défaut */
+  position: fixed; /* Rester en place (fixée) */
+  z-index: 1000; /* Rester au-dessus */
+  left: 0;
+  top: 0;
+  width: 100%; /* Pleine largeur */
+  height: 100%; /* Pleine hauteur */
+  overflow: auto; /* Activer le défilement si nécessaire */
+  background-color: rgba(0,0,0,0.4); /* Couleur de fond avec opacité */
+}
+
+/* modal content */
+.modal-content {
+  background-color: #fefefe;
+  margin: 10% auto; /* Centrer verticalement et horizontalement */
+  padding: 20px;
+  border: 1px solid #888;
+  width: 80%; /* Largeur de 80% de l'écran */
+  max-width: 350px; /* Limiter la largeur à 350px */
+  border-radius: 10px;
+  text-align: center;
+}
+
+/* Modal button */
+.close {
+  color: #aaa;
+  float: right;
+  font-size: 28px;
+  font-weight: bold;
+}
+
+.close:hover,
+.close:focus {
+  color: black;
+  text-decoration: none;
+  cursor: pointer;
+}

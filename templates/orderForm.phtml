@@ -1,0 +1,18 @@
+<!-- templates/orderForm.phtml -->
+<section class="order-form-style">
+    <h1>Confirmation de la commande</h1>
+    <form id="order-form" action="index.php?route=place-order" method="POST">
+        <fieldset>
+            <legend>Adresse de livraison :</legend>
+            <p>Nom : <?= $_SESSION['user']['name'] ?></p>
+            <p>Email : <?= $_SESSION['user']['email'] ?></p>
+            <p>Adresse : <?= $_SESSION['user']['address'] ?></p>
+        </fieldset>
+        <fieldset>
+            <legend>Détails de la commande :</legend>
+            <p>Total : <?= $_SESSION['totalAmount'] ?>€</p>
+            <input type="hidden" name="total-amount" value="<?= $_SESSION['totalAmount'] ?>">
+        </fieldset>
+        <button type="submit">Confirmer la commande</button>
+    </form>
+</section>

@@ -1,4 +1,11 @@
+<link rel="stylesheet" href="../assets/css/product.css">
 <main>
+    <div id="successModal" class="modal">
+       <div class="modal-content">
+           <span class="close">&times;</span>
+           <p id="modalMessage"></p>
+        </div>
+    </div>
      <!-- Search bar -->
      <form class="search-bar" action="index.php?route=search-course" method="GET">
         <!-- Label for the input field -->
@@ -12,15 +19,32 @@
     </form>
     <section class="product-detail">
         <p class="product-description"><?= htmlspecialchars($product->getDescription()); ?></p>
-        <div class="product-images-slider-page">
-            <?php foreach ($product->images as $image): ?>
-                <div class="slider-product-page">
-                    <div class="img-product-page"><img src="<?= htmlspecialchars($image->getFileName()); ?>" alt="<?= htmlspecialchars($image->getAlt()); ?>" width="350px"></div>
+        <!------------------------------------ images slider ------------------------------------------------->
+        <div id="carousel-<?= $product->getId(); ?>" class="carousel slide carrousel-img product-detail-slider-box-img" data-ride="carousel">
+            <div class="carousel-indicators">
+                <?php foreach ($product->images as $index => $image): ?>
+                    <button type="button" data-bs-target="#carousel-<?= $product->getId(); ?>" data-bs-slide-to="<?= $index; ?>" class="<?= $index === 0 ? 'active' : ''; ?>" aria-current="<?= $index === 0 ? 'true' : 'false'; ?>" aria-label="Slide <?= $index + 1; ?>"></button>
+                <?php endforeach; ?>
+            </div>  
+            <div class="carousel-inner">
+                <?php foreach ($product->images as $index => $image): ?>
+                <div class="carousel-item <?= $index === 0 ? 'active' : ''; ?>">
+                    <img src="<?= htmlspecialchars($image->getFileName()); ?>" alt="<?= htmlspecialchars($image->getAlt()); ?>" class="d-block w-100">
                 </div>
-            <?php endforeach; ?>
+                <?php endforeach; ?>
+            </div>
+            <button class="carousel-control-prev" type="button" data-bs-target="#carousel-<?= $product->getId(); ?>" data-bs-slide="prev">
+                <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                <span class="visually-hidden">Previous</span>
+            </button>
+            <button class="carousel-control-next" type="button" data-bs-target="#carousel-<?= $product->getId(); ?>" data-bs-slide="next">
+                <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                <span class="visually-hidden">Next</span>
+            </button>
         </div>
+        <!-------------------------------en of images slider ------------------------------------------------->
         <p class="product-price"><?= htmlspecialchars($product->getPrice()); ?>€</p>
-        <button class="ajouter-produit" data-product="<?=$product->getId(); ?>">Ajouter au panier</button>
+        <p class="product-category-cart product-link-add-cart"><a href="#" class="add-to-cart add-to-cart-button" data-product-id="<?= $product->getId(); ?>">Ajouter au panier</a></p>
         
     </section>
 </main>

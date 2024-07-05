@@ -18,8 +18,8 @@ class OrderManager extends AbstractManager
   {
     try {
       // Prepare the SQL query to insert a new order into the database
-      $query = $this->db->prepare("INSERT INTO orders (user_id, created_at, total_price, status, updated_at) VALUES 
-      (:user_id, :created_at, :total_price, :status, :updated_at)");
+      $query = $this->db->prepare("INSERT INTO orders (user_id, created_at, total_price, status, updated_at, guestName) VALUES 
+      (:user_id, :created_at, :total_price, :status, :updated_at, :guestName)");
 
       // Bind parameters with their values
       $parameters = [
@@ -27,7 +27,8 @@ class OrderManager extends AbstractManager
         ":created_at" => $order->getCreatedAt()->format('Y-m-d H:i:s'), 
         ":total_price" => $order->getTotalPrice(), 
         ":status" => $order->getStatus(), 
-        ":updated_at" => $order->getUpdatedAt()
+        ":updated_at" => $order->getUpdatedAt(),
+        ":guestName" => $order->getGuestName()
       ];
 
       // Execute the query with parameters
@@ -84,7 +85,8 @@ class OrderManager extends AbstractManager
           $orderData["created_at"],
           $orderData["total_price"],
           $orderData["status"],
-          $orderData["updated_at"]
+          $orderData["updated_at"],
+          $orderData["guestName"]
         );
         return $order;
       }
@@ -359,7 +361,8 @@ class OrderManager extends AbstractManager
         ":created_at" => $order->getCreatedAt(),
         ":total_price" => $order->getTotalPrice(),
         ":status" => $order->getStatus(),
-        ":updated_at" => $now->format('Y-m-d H:i:s')
+        ":updated_at" => $now->format('Y-m-d H:i:s'),
+        ":guestName" =>$order->getGuestName()
       ];
 
       // Execute the query with parameters.
@@ -434,7 +437,8 @@ private function hydrateOrders(array $ordersData): array {
         $orderData["created_at"],
         $orderData["total_price"],
         $orderData["status"],
-        $orderData["updated_at"]        
+        $orderData["updated_at"],
+        $orderData["guestName"]        
       );
       
       // Add the newly created Order object to the array.

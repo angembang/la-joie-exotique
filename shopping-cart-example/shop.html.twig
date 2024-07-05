@@ -1,0 +1,37 @@
+{% extends "base.html.twig" %}
+{% block main %}
+    <main id="shop">
+        <h2>
+            {{ title }}
+        </h2>
+        <ul>
+            {% for product in products %}
+                <li>
+                    <article>
+                        <header>
+                            <figure>
+                                <img src="{{ product.pictureUrl }}" alt="{{ product.pictureAlt }}" />
+                            </figure>
+                            <h3>
+                                {{ product.name }}
+                            </h3>
+                        </header>
+                        <section>
+                            <p>
+                                {{ product.description }}
+                            </p>
+                        </section>
+                        <footer>
+                            <h4>
+                                {{ product.price }} €
+                            </h4>
+                            <button class="btn-add-to-cart" data-product="{{ product.id }}">
+                                Ajouter au panier
+                            </button>
+                        </footer>
+                    </article>
+                </li>
+            {% endfor %}
+        </ul>
+    </main>
+{% endblock %}

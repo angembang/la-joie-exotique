@@ -22,7 +22,7 @@ class Delivery
   private bool $toUserAddress;
 
   /**
-   * @var int|null The address identifier of the delivrery. Null if not deliver to the user address.
+   * @var int|null The address identifier of the delivrery. Null for the guest.
    */
   private ?int $addressId;
 
@@ -41,7 +41,7 @@ class Delivery
    * @param int|null $id The unique identifier of the delivrery. Null for the new delivrery.
    * @param int $orderId The order identifier of the delivrery.
    * @param bool $toUserAddress The if to user address of the delivrery.
-   * @param ?int $addressId The address identifier of the delivrery. Null is not delivrery to the user address. 
+   * @param ?int $addressId The address identifier of the delivrery. Null for the guest. 
    * @param ?string $deliveryAddress The delivrery address of the the delivrery. Null if deliver to the user address. 
    * @param string $status The status of the delivrery.
    */

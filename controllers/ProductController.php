@@ -115,64 +115,6 @@ class ProductController extends AbstractController
     }
 
 
-    /**
-     * Add the product to the cart.
-     * This function verifies if the quantity is provided and calculates the total price.
-     * If the quantity is provided, it adds the product details in the cart.
-     *
-     * @return void
-     * 
-     * @throws PDOException if an error occurs during the database operation.
-     */
-    public function checkAndAddProductToCart(): void 
-    {
-        try {
-            // Check if the form is submitted via POST method
-            if($_SERVER["REQUEST_METHOD"] === "POST") {
-                // Check if the quantity is provided and not empty
-                if(isset($_POST["quantity"])) {
-                    // Get the quantity from the form
-                    $quantity = intval($_POST['quantity']);
-                    // Get the productId
-                    $productId = intval($_POST['product_id']);
-    
-                    // Instantiate the product manager for retrieve the product by its unique identifier
-                    $productManager = new ProductManager();
-                    $product = $productManager->findProductById($productId);
-    
-                    // Check if the product is found
-                    if($product) {
-                        $productPrice = $product->getPrice();
-                        $subtotal = $productPrice * $quantity;
-                        $productName = $product->getName();
-                        // Product data
-                        $responseData = [
-                            "productId" => $productId,
-                            "productName" => $productName,
-                            "quantity" => $quantity,
-                            "subtotal" => $subtotal
-                        ];
-
-                        $this->render("shoppingCart", [
-                            "product" => $responseData
-                        ]);
-                    } else {
-                        throw new PDOException("Failed to find the product");
-                    }
-    
-                } else {
-                    throw new Exception("the quantity is not provided");
-                }
-            } else {
-                throw new PDOException("The form is not submitted by post method");
-            }
-    
-        } catch(PDOException $e) {
-            error_log("Failed to add product to the cart: ".$e->getMessage().$e->getCode());
-            throw new PDOException("Failed to add product to the cart");
-        }
-    }
-
 
     /*
      * Displays products by category

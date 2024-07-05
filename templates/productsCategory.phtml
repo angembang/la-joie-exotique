@@ -1,25 +1,59 @@
 <main class="products-category">
-    <h1><?= $data['category']->getName(); ?></h1>
+    <div id="successModal" class="modal">
+       <div class="modal-content">
+           <span class="close">&times;</span>
+           <p id="modalMessage"></p>
+        </div>
+    </div>
+    <!-- Search bar -->
+    <form class="search-bar" action="index.php?route=search-course" method="GET">
+        <!-- Label for the input field -->
+        <label for="productName">Saisissez le nom du produit</label>
+        <!-- Input field for entering the product name -->
+        <input type="text" name="product_name" id="product_name" placeholder="Rechercher produit">
+        <!-- Suggestions list -->
+        <ul id="suggestions-list"></ul>
+        <!-- Submit button for initiating the search -->
+        <button class="search-button" type="submit"><i class="fa-solid fa-magnifying-glass"></i></button>
+    </form>
     <ul class="category-product-list">
         <?php foreach ($data['products'] as $product): ?>
         <li>
-            <ul>
-                <li>
-                    <a href="index.php?route=product&product_id=<?= $product->getId(); ?>">
-                        <h2><?= $product->getName(); ?></h2>
-                        <?php foreach ($product->images as $image): ?>
-                        <div class="product-image">
-                            <img src="<?= $image->getFileName(); ?>" alt="<?= $image->getAlt(); ?>">
-                        </div>
+            <div class="products-group">
+                <!------------------------------------ images slider ------------------------------------------------->
+                <div id="carousel-<?= $product->getId(); ?>" class="carousel slide carrousel-img" data-ride="carousel">
+                    <div class="carousel-indicators">
+                        <?php foreach ($product->images as $index => $image): ?>
+                            <button type="button" data-bs-target="#carousel-<?= $product->getId(); ?>" data-bs-slide-to="<?= $index; ?>" class="<?= $index === 0 ? 'active' : ''; ?>" aria-current="<?= $index === 0 ? 'true' : 'false'; ?>" aria-label="Slide <?= $index + 1; ?>"></button>
                         <?php endforeach; ?>
-                        <p><?= $product->getPrice(); ?>€</p>
-                    </a>
-                </li>
-                <li>
-                    <a href="index.php?route=cart&id=<?=$product->getId(); ?>">Ajouter au panier</a>
-                </li>
-            </ul>    
+                    </div>  
+                    <div class="carousel-inner">
+                        <?php foreach ($product->images as $index => $image): ?>
+                            <div class="carousel-item <?= $index === 0 ? 'active' : ''; ?>">
+                                <img src="<?= $image->getFileName(); ?>" alt="<?= $image->getAlt(); ?>" class="d-block w-100">
+                            </div>
+                        <?php endforeach; ?>
+                    </div>
+                    <button class="carousel-control-prev" type="button" data-bs-target="#carousel-<?= $product->getId(); ?>" data-bs-slide="prev">
+                        <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                        <span class="visually-hidden">Previous</span>
+                    </button>
+                    <button class="carousel-control-next" type="button" data-bs-target="#carousel-<?= $product->getId(); ?>" data-bs-slide="next">
+                         <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                        <span class="visually-hidden">Next</span>
+                    </button>
+                </div>
+                <!-------------------------------end of images slider ------------------------------------------------->
+                <div class="poduct-title-description">
+                    <h2><?= $product->getName(); ?></h2>
+                    <p><?= $product->getPrice(); ?>€</p>
+                    <p class="product-see-more"><a href="index.php?route=product&product_id=<?= $product->getId(); ?>">voir plus</a></p>
+                    <p class="product-category-cart"><a href="#" class="add-to-cart add-to-cart-button" data-product-id="<?= $product->getId(); ?>">Ajouter au panier</a></p>
+                </div>
+            </div>
+                    
         </li>
-        <?php endforeach; ?>
+    <?php endforeach; ?>
     </ul>
+    
 </main>

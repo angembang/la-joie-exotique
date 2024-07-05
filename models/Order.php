@@ -12,9 +12,14 @@ class Order
   private ?int $id;
 
   /**
-   * @var int The user identifier of the order.
+   * @var int|null The user identifier of the order.
    */
-  private int $userId;
+  private ?int $userId;
+
+  /**
+   * @var int|null The user identifier of the order.
+   */
+  private ?string $guestName;
 
   /**
    * @var DateTime The created datetime of the order.
@@ -39,13 +44,14 @@ class Order
   /**
    * Order constructor
    * @param int|null $id The unique identifier of the order. Null for a new order.
-   * @param int $userId The user identifier of the order.
+   * @param int|null $userId The user identifier of the order.
    * @param DateTime $createdAt The created date of the order.
    * @param float $totalPrice The total price of the order.
    * @param string $status The status of the order.
    * @param DateTime $updatedAt The update datetime of the order.
+   * @param ?string $guestName The guest name of the order.
    */
-  public function __construct(?int $id, int $userId, DateTime $createdAt, float $totalPrice, string $status, ?DateTime $updatedAt)
+  public function __construct(?int $id, ?int $userId, DateTime $createdAt, float $totalPrice, string $status, ?DateTime $updatedAt, ?string $guestName)
   {
     $this->id = $id;
     $this->userId = $userId;
@@ -53,6 +59,7 @@ class Order
     $this->totalPrice = $totalPrice;
     $this->status = $status;
     $this->updatedAt = $updatedAt;
+    $this->guestName = $guestName;
   }
 
 
@@ -79,9 +86,9 @@ class Order
   /**
    * Get the user identifier of the order
    * 
-   * @return int The user identifier of the order.
+   * @return int|null The user identifier of the order.
    */
-  public function getUserId(): int 
+  public function getUserId(): ?int 
   {
     return $this->userId;
   }
@@ -90,7 +97,7 @@ class Order
    * Set the user identifier of the order.
    * @param int The user identifier of the order.
    */
-  public function setUserId(int $userId): void 
+  public function setUserId(?int $userId): void 
   {
     $this->userId = $userId;
   }
@@ -167,10 +174,30 @@ class Order
 
   /**
    * Set the updated datetime of the order.
-   * @param DateTime The updated datetime of the order.
+   * @param ?string $guestName The updated datetime of the order.
    */
   public function setUpdatedAt(?DateTime $updatedAt): void 
   {
     $this->updatedAt = $updatedAt;
+  }
+
+
+   /**
+   * Get theguestName of the order
+   * 
+   * @return ?string $guestName The guestName of the order. 
+   */
+  public function getGuestName(): ?string
+  {
+    return $this->guestName;
+  }
+
+  /**
+   * Set the guestName of the order.
+   * @param ?string $guestName The guestName of the order.
+   */
+  public function setGuestName(?string $guestName): void 
+  {
+    $this->guestName = $guestName;
   }
 }

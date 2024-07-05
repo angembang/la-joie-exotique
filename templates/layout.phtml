@@ -71,12 +71,18 @@
         </ul>
         <h1>La joie Exotique</h1>
         <ul class="nav-icone">
-          <li class="burgercolor"><a href="#" aria-label="Connexion">
+          <li class="burgercolor"><a href="index.php?route=register-login" aria-label="Connexion">
             <i class="fa-solid fa-user"></i>
           </a></li> 
           <li><a href="index.php?route=shopping-cart" aria-label="Panier">
             <i class="fa-solid fa-cart-shopping"></i>
-            <span class="cart-item-count"><?=array_sum($_SESSION["cart"]);?></span>
+            <span class="cart-item-count">
+            <?php if (isset($_SESSION["cart"]) && is_array($_SESSION["cart"])): ?>
+              <?= array_sum($_SESSION["cart"]); ?>
+            <?php else: ?>
+              0
+            <?php endif; ?>
+            </span>
           </a></li> 
         </ul>
       </nav>
@@ -103,11 +109,20 @@
       <p>Copyright &copy; <?= date('Y') ?> La Joie Exotique.</p>
     </footer>
     
-    <!-- Bootstrap js CDN -->
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
-    <!-- JavaScript Files -->
-
+    
+     <!-- Bootstrap JS, Popper.js, and jQuery -->
+     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    
+    <!-- JavaScript File -->
     <script src="assets/js/shoppingCart.js"></script>
+    <script src="assets/js/clearCart.js"></script>
+    <script src="assets/js/addToCart.js"></script>
+    <script src="assets/js/registerLogin.js"></script>
+    <script src="assets/js/deliverieOption.js"></script>
+    <script src="assets/js/main.js"></script>
+   
   
   </body>
 

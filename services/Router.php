@@ -24,9 +24,9 @@
     // Check if a route is provided
     if(isset($get["route"])) {
       switch($get["route"]) {
-        case "register":
+        case "register-login":
           // Route for displaying the register form
-          $authController->register();
+          $authController->registerLogin();
           break;
 
         case "checkRegister":
@@ -34,14 +34,14 @@
            $authController->checkRegister();
           break;
 
-        case "login":
-          // Route for displaying the login form
-          $authController->login();
-          break;
-
         case "checkLogin":
           // Route for checking the login form submission
           $authController->checkLogin();
+          break;
+
+        case "admin":
+          // Route for displaying the admin page
+          $pageController->adminHome();
           break;
 
         case "logout":
@@ -90,11 +90,6 @@
           $productController->showProductByTag();
           break;
 
-        case "add-product-cart":
-          // Route for displaying the product quantity form 
-          $productController->checkAndAddProductToCart();
-          break;
-
         case "shopping-cart":
           // Route for displaying the shopping cart
           $shopController->showCart();
@@ -117,14 +112,28 @@
         case "clear-cart":
           $shopController->clearCart();
           break;
+
+        /*case "payment-success":
+          $shopController->paymentSuccess();
+          break;*/
         
         case "delete-product":
           $shopController->deleteProduct();
+          break;
+
+        case "place-order":
+          // Route for placing an order
+          $shopController->placeOrder();
           break;
           
         case "order":
           // Route for placing an order
           $productController->order();
+          break;
+
+        case "show-orders":
+          // Route for placing an order
+          $shopController->showOrders();
           break;
 
         case "payment-form":
