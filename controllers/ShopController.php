@@ -317,5 +317,138 @@ class ShopController extends AbstractController
     {
         $this->render("paymentForm", []);
     }
+    
+    
+    /**
+     * 
+     * 
+     */
+    public function createStripe(): void 
+    {
+        // Retrieve the Stripe secret key from .env file
+        $key = $_ENV['API_KEY'];
+
+        // Create an instance of stripe client
+        $stripe = new \Stripe\StripeClient($key);
+
+        header('Content-Type: application/json');
+
+        try {
+            // Retrieve JSON from post body
+            $jsonStr = file_get_contents('php://input');
+            $jsonObj = json_decode($jsonStr);
+
+            // Create a payment intent with amount and currency in $paymentIntent
+            $paymentIntent = $stripe->paymentIntents->create([
+                'amount' => $jsonObj->amount * 100, // The amount in centimes
+                'currency' => 'eur', // Payment devise
+            ]);
+
+            // Renvoyer le clientSecret au format JSON
+            //http_response_code(200);
+            //echo json_encode(['clientSecret' => $paymentIntent->client_secret]);
+            $output = [
+                'clientSecret' => $paymentIntent->client_secret
+            ];
+            echo json_encode($output);
+
+        } catch (\Stripe\Exception\ApiErrorException $e) {
+            // Manage the stripe error
+            http_response_code(500);
+            echo json_encode(['error' => $e->getMessage()]);
+        }
+    }
+    
+    
+    /**
+     * 
+     * 
+     */
+    public function paymentSuccess(): void
+    {
+        try {
+             // Activer l'affichage des erreurs pour ce script
+        ini_set('display_errors', 1);
+        ini_set('display_startup_errors', 1);
+        error_reporting(E_ALL);
+
+         // Retrieve the redirection parameters
+        $paymentIntentId = $_GET["payment_intent"] ?? null;
+        $guestName = isset($_GET["guest_name"]) ? urldecode($_GET["guest_name"]) : null;
+        $totalAmount = isset($_GET["total_amount"]) ? urldecode($_GET["total_amount"]) : null;
+        $userId = isset($_GET["user_id"]) ? $_GET["user_id"] : null;
+
+        error_log("Received parameters: Payment Intent ID = $paymentIntentId, Guest Name = $guestName, Total Amount = $totalAmount, User ID = $userId");
+
+        if (!$paymentIntentId || !$totalAmount) {
+            throw new Exception("Missing payment details.");
+        }
+
+        // Stocker les paramètres récupérés dans la session
+        $_SESSION['debug'] = [
+            "Payment Intent ID" => $paymentIntentId,
+            "Guest Name" => $guestName,
+            "Total Amount" => $totalAmount,
+            "User ID" => $userId
+        ];
+
+        // Check the payment status
+        $stripe = new \Stripe\StripeClient($_ENV["API_KEY"]);
+        $paymentIntent = $stripe->paymentIntents->retrieve($paymentIntentId);
+
+        if ($paymentIntent->status !== "succeeded") {
+            throw new Exception("Payment did not succeed.");
+        }
+
+        // Create an order object and persist it to the database
+        $createdAt = new DateTime();
+        $status = "commande payée en attente de préparation";
+        // Convert totalAmount to float
+        $totalAmount = (float)$totalAmount;
+
+        // Stocker les informations avant la création de la commande
+        $_SESSION['debug']["Before Creating Order"] = [
+            "User ID" => $userId,
+            "Guest Name" => $guestName,
+            "Total Amount" => $totalAmount
+        ];
+
+        $orderModel = new Order(null, $userId, $guestName, $createdAt, $totalAmount, $status, null);
+        $orderManager = new OrderManager();
+        $order = $orderManager->createOrder($orderModel);
+
+        // Retrieve the created order identifier
+        $orderId = $order->getId();
+
+        if (!$orderId) {
+            throw new Exception("Failed to create order.");
+        }
+
+        // Stocker les informations après la création de la commande
+        $_SESSION['debug']["Order Created"] = [
+            "Order ID" => $orderId
+        ];
+
+        // Update the stock quantity
+        // ...
+
+        // Redirect to the confirm order page
+        header("Location: /index.php?route=order-confirmation&order_id=" . $orderId);
+        exit();
+    } catch (Exception $e) {
+        error_log("Error: " . $e->getMessage()); // Log the error message
+        $_SESSION["error-message"] = $e->getMessage();
+        header("Location: /index.php?route=error");
+        exit();
+    }
+} 
+    /**
+     * 
+     * 
+     */
+    public function orderConfirmation(): void 
+    {
+        $this->render("orderConfirm", []);
+    }
 
 }

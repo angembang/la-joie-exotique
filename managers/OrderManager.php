@@ -18,33 +18,46 @@ class OrderManager extends AbstractManager
   {
     try {
       // Prepare the SQL query to insert a new order into the database
-      $query = $this->db->prepare("INSERT INTO orders (user_id, created_at, total_price, status, updated_at, guestName) VALUES 
-      (:user_id, :created_at, :total_price, :status, :updated_at, :guestName)");
+      $query = $this->db->prepare("INSERT INTO orders (user_id, guest_name, created_at, total_price, status, updated_at) VALUES 
+      (:user_id,  :guestName, :created_at, :total_price, :status, :updated_at)");
 
-      // Bind parameters with their values
-      $parameters = [
-        ":user_id" => $order->getUserId(), 
-        ":created_at" => $order->getCreatedAt()->format('Y-m-d H:i:s'), 
-        ":total_price" => $order->getTotalPrice(), 
-        ":status" => $order->getStatus(), 
-        ":updated_at" => $order->getUpdatedAt(),
-        ":guestName" => $order->getGuestName()
-      ];
+       // Stocker les paramètres avant exécution
+        $_SESSION['debug']["Order Parameters"] = [
+            ":user_id" => $order->getUserId(), 
+            ":created_at" => $order->getCreatedAt()->format('Y-m-d H:i:s'), 
+            ":total_price" => $order->getTotalPrice(), 
+            ":status" => $order->getStatus(), 
+            ":updated_at" => $order->getUpdatedAt(),
+            ":guestName" => $order->getGuestName()
+        ];
 
-      // Execute the query with parameters
-      $query->execute($parameters);
+        // Lier les paramètres avec leurs valeurs
+        $parameters = [
+            ":user_id" => $order->getUserId(), 
+            ":created_at" => $order->getCreatedAt()->format('Y-m-d H:i:s'), 
+            ":total_price" => $order->getTotalPrice(), 
+            ":status" => $order->getStatus(), 
+            ":updated_at" => $order->getUpdatedAt(),
+            ":guestName" => $order->getGuestName()
+        ];
 
-      // Retrieve the last insert Order
-      $orderId = $this->db->lastInsertId();
+        // Exécuter la requête avec les paramètres
+        $query->execute($parameters);
 
-      // set the identifier for the created Order
-      $order->setId($orderId);
+        // Récupérer l'identifiant de la dernière commande insérée
+        $orderId = $this->db->lastInsertId();
 
-      // return the created order
-      return $order;
+        // Définir l'identifiant pour la commande créée
+        $order->setId($orderId);
+
+        // Stocker l'identifiant de la commande créée
+        $_SESSION['debug']["Order ID"] = $orderId;
+
+        // Retourner la commande créée
+        return $order;
 
     } catch(PDOException $e) {
-      error_log("Failed to create a new order: " .$e->getMessage(). $e->getCode());
+        $_SESSION["debug"]["Order Error"] = $e->getMessage();
       throw new PDOException("Failed to create a new order");
     }
   }

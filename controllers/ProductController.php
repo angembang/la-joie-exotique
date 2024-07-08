@@ -93,11 +93,24 @@ class ProductController extends AbstractController
                 $createdProduct = $productManager->createProduct($product);
 
                 if ($createdProduct) {
+                    // Retrieve the product identifier
+                    $productId = $createdProduct->getId();
+                    // Instantiate the stock manager 
+                    $stockManager = new StockManager();
+                    // Create a stock object
+                    $stockModel = new Stock(null, $productId, $quantity);
+                    // Insert the stock to the database
+                    $stock = $stockManager->createStock($stockModel);
+                    if(!$stock) {
+                        throw new Exception("Failed to insert stock for the product");
+                    }
                     $categoryManager = new CategoryManager();
                     $categories = $categoryManager->findAll();
 
                     $tagManager = new TagManager();
                     $tags = $tagManager->findAll();
+                    
+                    $_SESSION["success-message"] = "Produit et stock ajoutés avec succès";
 
                     $this->render("productForm", [
                         "categories" => $categories,

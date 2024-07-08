@@ -120,10 +120,25 @@
         case "delete-product":
           $shopController->deleteProduct();
           break;
+          
+        case "create-paiement-stripe":
+          // Route for placing an order
+          $shopController->createStripe();
+          break;
 
         case "place-order":
           // Route for placing an order
           $shopController->placeOrder();
+          break;
+          
+        case "payment-success":
+          // Route for placing an order
+          $shopController->paymentSuccess();
+          break;
+          
+        case "order-confirmation":
+          // Route for placing an order
+          $shopController->orderConfirmation();
           break;
           
         case "order":

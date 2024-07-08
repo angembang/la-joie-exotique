@@ -7,6 +7,11 @@
 class Stock 
 {
   /**
+   * @var int|null The product identifier of the stock, null for a new stock.
+   */
+  private ?int $id;
+  
+  /**
    * @var int The product identifier of the stock.
    */
   private int $productId;
@@ -22,7 +27,7 @@ class Stock
    * @param int $productId The product Identifier of the stock.
    * @param int $quantity The quantity of the stock.
    */
-  public function __construct(int $productId, int $quantity) 
+  public function __construct(?int $id, int $productId, int $quantity) 
   {
     $this->productId = $productId;
     $this->quantity = $quantity;

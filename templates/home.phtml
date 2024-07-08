@@ -10,7 +10,7 @@
         <!-- Submit button for initiating the search -->
         <button class="search-button" type="submit"><i class="fa-solid fa-magnifying-glass"></i></button>
     </form>
-    <img class="img-far-home" src="../images/sliderHomePage.png" alt="Image de divers produits exotiques disponibles dans notre boutique en ligne">
+    <img class="img-far-home" src="./images/sliderHomePage.png" alt="Image de divers produits exotiques disponibles dans notre boutique en ligne">
     <?php foreach ($data['productsCategoryArray'] as $categoryData): ?>
         <h2 class="category-name">
             <a href="index.php?route=category-products&category_id=<?= $categoryData['category']->getId(); ?>">

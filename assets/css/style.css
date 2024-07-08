@@ -17,6 +17,10 @@ body {
 
 main {
   min-height: 80vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
 }
 
 header, footer {
@@ -65,9 +69,9 @@ a {
 
 .cart-item-count {
   position: absolute;
-  left: 64%;
+  left: 97%;
   font-size: 1.2rem;
-  top: 15px;
+  top: 14px;
   color: #AE7F24;
 }
 
@@ -148,6 +152,8 @@ form {
   display: flex;
   flex-direction: column;
   width: 80%;
+  justify-content: center;
+  align-items: center;
 }
 
 input, select, textarea {
@@ -697,17 +703,17 @@ footer i {
 /******************** end of add product page ******************************/
 
 /* Dark mode */
-@media (prefers-color-scheme: dark) {
+/*@media (prefers-color-scheme: dark) {
   body {
     background-color: rgba(36, 36, 36, 0.9);
     color: white;
   }
-}
+}*/
 
 /* High contrast mode */
-@media (prefers-contrast: high) {
+/*@media (prefers-contrast: high) {
   body {
     background-color: black;
     color: yellow;
   }
-}
+}*/

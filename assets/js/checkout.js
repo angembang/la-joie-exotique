@@ -8,7 +8,7 @@ document.addEventListener("DOMContentLoaded", function () {
   amount = parseFloat(amountInput);
 
   // Check if the amount is superior to 1
-  if(amount >= 1) {
+  if (amount >= 1) {
     initialise();
   }
 
@@ -16,21 +16,19 @@ document.addEventListener("DOMContentLoaded", function () {
 
   checkStatus();
 
-  document
-  .querySelector("#payment-form")
-  .addEventListener("submit", handleSubmit);
+  document.querySelector("#payment-form").addEventListener("submit", handleSubmit);
 
   // Fetches a payment intent and captures the client secret
   async function initialise() {
-    const {clientSecret} = await fetch("././create.php", {
+    const { clientSecret } = await fetch("./index.php?route=create-paiement-stripe", {
       method: "POST",
-      headers: {"Content-Type": "application/json"},
+      headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ amount }),
-    }).then((r) =>r.json());
+    }).then((r) => r.json());
 
-    elements = stripe.elements({clientSecret});
+    elements = stripe.elements({ clientSecret });
 
-    const paymentElementOptions  = {
+    const paymentElementOptions = {
       layout: "tabs",
     };
 
@@ -46,29 +44,44 @@ document.addEventListener("DOMContentLoaded", function () {
     e.preventDefault();
     setLoading(true);
 
-    const {error} = await stripe.confirmPayment({
-      elements,
-      confirmParams: {
-        // Return to the payment page after payment succeded
-        return_url: "http://localhost/index.php?route=clean-url",
-      },
-    });
+    const form = document.querySelector("#payment-form");
+    const guestName = form.querySelector("input[name='guest-name']").value;
+    const totalAmount = form.querySelector("input[name='total-amount']").value;
+    const userId = form.querySelector("input[name='user-id']").value || null;
 
-    if(error.type === "card_error" || ErrorEvent.type === "validation_error") {
-      showMessage(error.message);
-    } else {
-      showMessage("An error occurs during the operation");
+    console.log("Guest Name:", guestName);
+    console.log("Total Amount:", totalAmount);
+    console.log("User ID:", userId);
+
+    try {
+      const { error, paymentIntent } = await stripe.confirmPayment({
+        elements,
+        confirmParams: {
+          return_url: "https://angekamwangmbang.sites.3wa.io/php/la-joie-exotique/index.php?route=payment-success",
+        },
+      });
+
+      if (error) {
+        showMessage(error.message);
+        setLoading(false);
+      } else if (paymentIntent && paymentIntent.status === 'succeeded') {
+        // Payment succeeded, perform the redirection
+        window.location.href = `https://angekamwangmbang.sites.3wa.io/php/la-joie-exotique/index.php?route=payment-success&payment_intent=${paymentIntent.id}&guest_name=${encodeURIComponent(guestName)}&total_amount=${encodeURIComponent(totalAmount)}&user_id=${encodeURIComponent(userId)}`;
+      } else {
+        showMessage("An error occurred during the operation");
+        setLoading(false);
+      }
+    } catch (err) {
+      console.error('Error confirming payment:', err);
+      showMessage('An error occurred during the payment process');
+      setLoading(false);
     }
-    setLoading(false);
-
   }
 
   // Fetches the payment intent status after payment submission
   async function checkStatus() {
-    const clientSecret = new URLSearchParams(window.location.search).get(
-      "payment_intent_client_secret"
-    );
-    if(!clientSecret) {
+    const clientSecret = new URLSearchParams(window.location.search).get("payment_intent_client_secret");
+    if (!clientSecret) {
       return;
     }
 
@@ -78,15 +91,13 @@ document.addEventListener("DOMContentLoaded", function () {
       if (paymentIntent && paymentIntent.status === 'succeeded') {
         showMessage('Paiement réussi');
       } else {
-          // Handle other statuses like 'processing', 'requires_payment_method', etc.
-          showMessage('Payment processing or requires action');
+        showMessage('Payment processing or requires action');
       }
-  } catch (error) {
+    } catch (error) {
       console.error('Error fetching payment intent:', error);
       showMessage('Error fetching payment status');
-  }
-
     }
+  }
 
   // ------------------UI Helpers --------------
   function showMessage(messageText) {
@@ -100,10 +111,8 @@ document.addEventListener("DOMContentLoaded", function () {
     }, 4000);
   }
 
-  // Show a spinner on payment submission
   function setLoading(isLoading) {
     if (isLoading) {
-      // Disable the button and show a spinner
       document.querySelector("#submit").disabled = true;
       document.querySelector("#spinner").classList.remove("hidden");
       document.querySelector("#button-text").classList.add("hidden");
@@ -114,14 +123,7 @@ document.addEventListener("DOMContentLoaded", function () {
     }
   }
 
-
-  // Clean the URL after loading
   if (window.location.href.indexOf("payment_intent") > -1) {
     window.history.replaceState({}, document.title, "/index.php?route=clear-cart");
   }
-
-
 });
-
-
-

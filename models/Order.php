@@ -51,7 +51,7 @@ class Order
    * @param DateTime $updatedAt The update datetime of the order.
    * @param ?string $guestName The guest name of the order.
    */
-  public function __construct(?int $id, ?int $userId, DateTime $createdAt, float $totalPrice, string $status, ?DateTime $updatedAt, ?string $guestName)
+  public function __construct(?int $id, ?int $userId, ?string $guestName, DateTime $createdAt, float $totalPrice, string $status, ?DateTime $updatedAt)
   {
     $this->id = $id;
     $this->userId = $userId;

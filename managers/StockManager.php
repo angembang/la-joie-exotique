@@ -15,7 +15,7 @@ class StockManager extends AbstractManager
    * 
    * @throws PDOException if an error occurs during the database operation.
    */
-  public function createStock(int $productId, int $quantity): bool
+  public function createStock(Stock $stock): ?Stock
   {
     try {
       // Prepare the SQL query to insert the stock into the database.
@@ -26,8 +26,8 @@ class StockManager extends AbstractManager
 
       // Bind parameters with their values.
       $parameters = [
-        ":product_id" => $productId,
-        ":quantity" => $quantity
+        ":product_id" => $stock->getProductId(),
+        ":quantity" => $stock->getQuantity()
       ];
 
       // Execute the query with parameters.
@@ -35,9 +35,9 @@ class StockManager extends AbstractManager
 
       // Check if success
       if($success) {
-        return true;
+        return $stock;
       }
-      return false;
+      return null;
 
     } catch (PDOException $e) {
       error_log("Failed to create a new stock: " . $e->getMessage(). $e->getCode());

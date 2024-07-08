@@ -11,8 +11,9 @@
     </div>
 
     <!-- payment form -->
-    <form id="payment-form" class="hidden" action="index.php?route=place-order" method="POST">
-        <input type="hidden" name="route" value="placeOrder">
+    <form id="payment-form" class="hidden" action="index.php?route=payment-success" method="POST">
+        <input type="hidden" name="route" value="payment-success">
+        <input type="hidden" name="user-id" value="<?= isset($_SESSION['user_id']) ? htmlspecialchars($_SESSION['user_id']) : ''; ?>">
         <h1>Paiement</h1>
         <fieldset class="fieldset-payment">
             <legend><label for="guest-name">Nom :</label></legend>
@@ -32,11 +33,10 @@
             <legend><label for="digicode-or-appt-name">Digicode or Apartment Name:</label></legend>
             <input type="text" id="digicode-or-appt-name" name="digicode-or-appt-name" placeholder="digicode ou nom figurant à la porte">
             <legend><label for="totalAmount">Prix total :</label></legend>
-            <input type="text" id="total-amount" name="total-amount" value="<?= isset($_SESSION['totalAmount']) ? htmlspecialchars($_SESSION['totalAmount']) : ''; ?>">€
-            <input type="hidden" name="order-id" value="<?= isset($_GET['order_id']) ? htmlspecialchars($_GET['order_id']) : ''; ?>">
+            <input type="text" id="total-amount" name="total-amount" value="<?= isset($_SESSION['totalAmount']) ? htmlspecialchars($_SESSION['totalAmount'])."€" : ''; ?>">
         </fieldset>
         <div id="payment-element">
-            <!-- Stripe.js injectera ici l'élément de paiement -->
+            <!-- Stripe.js will inject the paiement element here -->
         </div>
         <button id="submit" disabled="disabled">
             <div class="spinner hidden" id="spinner"></div>
