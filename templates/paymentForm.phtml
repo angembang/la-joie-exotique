@@ -13,7 +13,7 @@
     <!-- payment form -->
     <form id="payment-form" class="hidden" action="index.php?route=payment-success" method="POST">
         <input type="hidden" name="route" value="payment-success">
-        <input type="hidden" name="user-id" value="<?= isset($_SESSION['user_id']) ? htmlspecialchars($_SESSION['user_id']) : ''; ?>">
+        <input type="hidden" name="user-id" value="<?= isset($_SESSION["user"]) ? htmlspecialchars($_SESSION["user"]) : null; ?>">
         <h1>Paiement</h1>
         <fieldset class="fieldset-payment">
             <legend><label for="guest-name">Nom :</label></legend>

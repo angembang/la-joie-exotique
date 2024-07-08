@@ -372,13 +372,34 @@ class ShopController extends AbstractController
         ini_set('display_startup_errors', 1);
         error_reporting(E_ALL);
 
-         // Retrieve the redirection parameters
+        // Définir le chemin du fichier de log
+        $logDir = __DIR__ . '/log';
+        $logfile = $logDir . '/debug.log';
+
+        // Vérifier si le répertoire de log existe, sinon le créer
+        if (!is_dir($logDir)) {
+            mkdir($logDir, 0777, true);
+        }
+
+        // Vérifier si le fichier de log est accessible
+        if (!file_exists($logfile)) {
+            touch($logfile);
+        }
+        if (!is_writable($logfile)) {
+            throw new Exception("Le fichier de log n'est pas accessible en écriture.");
+        }
+
+        // Log tous les paramètres GET reçus
+        error_log("Received GET parameters: " . print_r($_GET, true), 3, $logfile);
+
+        // Retrieve the redirection parameters
         $paymentIntentId = $_GET["payment_intent"] ?? null;
         $guestName = isset($_GET["guest_name"]) ? urldecode($_GET["guest_name"]) : null;
         $totalAmount = isset($_GET["total_amount"]) ? urldecode($_GET["total_amount"]) : null;
-        $userId = isset($_GET["user_id"]) ? $_GET["user_id"] : null;
+        $userId = isset($_GET["user"]) ? urldecode($_GET["user"]) : null;
 
-        error_log("Received parameters: Payment Intent ID = $paymentIntentId, Guest Name = $guestName, Total Amount = $totalAmount, User ID = $userId");
+        // Log des paramètres reçus
+        error_log("Received parameters: Payment Intent ID = $paymentIntentId, Guest Name = $guestName, Total Amount = $totalAmount, User ID = $userId", 3, $logfile);
 
         if (!$paymentIntentId || !$totalAmount) {
             throw new Exception("Missing payment details.");
@@ -429,19 +450,26 @@ class ShopController extends AbstractController
             "Order ID" => $orderId
         ];
 
+        // Log de la création de la commande
+        error_log("Order created with ID: $orderId", 3, $logfile);
+
         // Update the stock quantity
         // ...
 
         // Redirect to the confirm order page
-        header("Location: /index.php?route=order-confirmation&order_id=" . $orderId);
-        exit();
+        $this->redirect("index.php?route=order-confirmation&order_id={$order->getId()}");
     } catch (Exception $e) {
-        error_log("Error: " . $e->getMessage()); // Log the error message
-        $_SESSION["error-message"] = $e->getMessage();
-        header("Location: /index.php?route=error");
+        error_log("Error: " . $e->getMessage(), 3, $logfile); // Log the error message
+        $_SESSION["debug"] = [
+            "Error" => $e->getMessage(),
+            "GET Parameters" => $_GET // Add this line to store GET parameters in session
+        ];
+        header("Location: /php/la-joie-exotique/templates/logErrorPage.phtml");
         exit();
     }
-} 
+}
+
+    
     /**
      * 
      * 

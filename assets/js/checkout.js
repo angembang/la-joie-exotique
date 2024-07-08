@@ -57,7 +57,7 @@ document.addEventListener("DOMContentLoaded", function () {
       const { error, paymentIntent } = await stripe.confirmPayment({
         elements,
         confirmParams: {
-          return_url: "https://angekamwangmbang.sites.3wa.io/php/la-joie-exotique/index.php?route=payment-success",
+          return_url: `https://angekamwangmbang.sites.3wa.io/php/la-joie-exotique/index.php?route=payment-success&guest_name=${encodeURIComponent(guestName)}&total_amount=${encodeURIComponent(totalAmount)}&user_id=${encodeURIComponent(userId)}`,
         },
       });
 
