@@ -26,59 +26,73 @@ class ShopController extends AbstractController
         }
         // Retrieve product IDs from the session cart
         $ids = array_keys($_SESSION["cart"]);
-        // Instantiate the product manager
+        // Instantiate the product and image manager
         $productManager = new ProductManager();
+        $imageManager = new ImageManager();
         // Initialize an empty array for stocking products with their images and total amount
         $productsWithImages = [];
         $totalAmount = 0;
         // Loop through each product ID and retrieve the product details and images
-        foreach($ids as $id) {
-            $product = $productManager->findProductById($id);
-            if($product) {
-                // Retrieve images for the product
-                $imageManager = new ImageManager();
-                $imageIds = [
-                    $product->getImage1Id(),
-                    $product->getImage2Id(),
-                    $product->getImage3Id(),
-                    $product->getImage4Id()
-                ];
-        
-                $images = array_filter(array_map(function($imageId) use ($imageManager) {
-                    return $imageId ? $imageManager->findImageById($imageId) : null;
-                }, $imageIds));
+        // Loop through each product ID and retrieve the product details and images
+    foreach ($ids as $id) {
+        $product = $productManager->findProductById($id);
+        if ($product) {
+            // Retrieve images for the product
+            $imageIds = [
+                $product->getImage1Id(),
+                $product->getImage2Id(),
+                $product->getImage3Id(),
+                $product->getImage4Id()
+            ];
 
-                // Calculate the quantity of the product in the cart
-                $quantityInCart = isset($_SESSION["cart"][$id]) ? $_SESSION["cart"][$id] : 0;
+            $images = array_filter(array_map(function($imageId) use ($imageManager) {
+                return $imageId ? $imageManager->findImageById($imageId) : null;
+            }, $imageIds));
 
-                // Calculate subtotal for the current product
-                $quantityInCart = $_SESSION["cart"][$id];
-                $subtotal = $product->getPrice() * $quantityInCart;
+            // Retrieve quantity from the session
+            $quantity = $_SESSION["cart"][$id];
 
-                // Add subtotal to total amount
-                $totalAmount += $subtotal;
-        
-                // Add images to the product
-                $product->images = $images;
+            // Calculate subtotal for the current product
+            $subtotal = $product->getPrice() * $quantity;
 
-                // Add product with images to the array and subtotal to the array
-                $productsWithImages[] = [
-                    "product" => $product,
-                    "images" => $images,
-                    "quantityInCart" => $quantityInCart,
-                    "subtotal" => $subtotal
-                ];
-            }            
+            // Add subtotal to total amount
+            $totalAmount += $subtotal;
+
+            // Add images to the product
+            $product->images = $images;
+
+            // Add product with images to the array and subtotal to the array
+            $productsWithImages[] = [
+                "product" => $product,
+                "images" => $images,
+                "quantityInCart" => $quantity,
+                "subtotal" => $subtotal
+            ];
+
+            // Store individual product details in session
+            $_SESSION['product_details'][$id] = [
+                'product_id' => $id,
+                'quantity' => $quantity,
+                'subtotal' => $subtotal
+            ];
+        } else {
+            // Log the issue if product not found
+            error_log("Product with ID $id not found.", 3, __DIR__ . '/log/debug.log');
         }
-        // Store the total amount in session
-        $_SESSION['totalAmount'] = $totalAmount;
-               
-        // Render the shopping cart view with the retrieved products and total amount
-        $this->render("shoppingCart", [
-           "productsWithImages" => $productsWithImages,
-           "totalAmount" => $totalAmount,
-           "emptyMessage" => null 
-        ]);
+    }
+
+    // Store the total amount in session
+    $_SESSION['totalAmount'] = $totalAmount;
+
+    // Log the final cart structure
+    error_log("Cart structure: " . print_r($_SESSION["cart"], true), 3, __DIR__ . '/log/debug.log');
+
+    // Render the shopping cart view with the retrieved products and total amount
+    $this->render("shoppingCart", [
+        "productsWithImages" => $productsWithImages,
+        "totalAmount" => $totalAmount,
+        "emptyMessage" => null 
+    ]);
     }
 
 
@@ -162,13 +176,13 @@ class ShopController extends AbstractController
 
             $quantity = $_SESSION["cart"][$productId];
             $subtotal = number_format($product->getPrice() * $quantity, 2);
-            
+
             // Calculate the total amount of the cart
             $totalAmount = number_format(array_sum(array_map(function($id) use ($productManager) {
                 $product = $productManager->findProductById($id);
                 return $product->getPrice() * $_SESSION["cart"][$id];
             }, array_keys($_SESSION["cart"]))), 2);
-
+            
             echo json_encode([
                 'quantity' => $quantity,
                 'subtotal' => $subtotal,
@@ -177,7 +191,9 @@ class ShopController extends AbstractController
         } else {
             echo json_encode(['error' => 'Product not found in cart']);
         }
+           
         exit();
+         
     }
 
 
@@ -453,11 +469,57 @@ class ShopController extends AbstractController
         // Log de la création de la commande
         error_log("Order created with ID: $orderId", 3, $logfile);
 
-        // Update the stock quantity
-        // ...
+        // Retrieve product details from the session
+        if (!isset($_SESSION['product_details']) || empty($_SESSION['product_details'])) {
+            throw new Exception("No products found in the cart.");
+        }
 
+        $products = $_SESSION['product_details'];
+
+        // Create OrderProduct objects, persist them to the database and updating the product quantity
+        $orderProductManager = new OrderProductManager();
+        $productManager = new ProductManager();
+
+        foreach ($products as $product) {
+            if (isset($product['product_id'], $product['quantity'], $product['subtotal'])) {
+                $productId = (int)$product['product_id'];
+                $quantity = (int)$product['quantity'];
+                $subtotal = (float)$product['subtotal'];
+
+                // Ensure the values are not null or invalid
+                if ($productId > 0 && $quantity > 0 && $subtotal >= 0) {
+                    $orderProductData = new OrderProduct($orderId, $productId, $quantity, $subtotal);
+                    $orderProduct = $orderProductManager->createOrderProduct($orderProductData);
+
+                    // Log the creation of each order product
+                    error_log("OrderProduct created: Order ID = $orderId, Product ID = $productId, Quantity = $quantity, Subtotal = $subtotal", 3, $logfile);
+                    
+                    // Update the stock quantity
+                    $stockManager = new StockManager();
+                    $stockData = $stockManager->findStockByProductId($productId);
+                    if(!$stockData) {
+                        throw new Exception("No stock found with this product Id");
+                    }
+                    $stockQuantity = $stockData->getQuantity(); 
+                    $newStockQuantity = $stockQuantity - $quantity;
+                    $stockData->setQuantity($newStockQuantity);
+                    $updateProductStock = $stockManager->updateStockQuantity($stockData);
+                } else {
+                    error_log("Invalid product data: " . print_r($product, true), 3, $logfile);
+                }
+            } else {
+                error_log("Missing product data keys: " . print_r($product, true), 3, $logfile);
+            }
+        }
+
+        // Log the creation of order products
+        error_log("Order products created for Order ID: $orderId", 3, $logfile);
+
+        unset($_SESSION['cart']);
+        unset($_SESSION['product_details']);
         // Redirect to the confirm order page
         $this->redirect("index.php?route=order-confirmation&order_id={$order->getId()}");
+
     } catch (Exception $e) {
         error_log("Error: " . $e->getMessage(), 3, $logfile); // Log the error message
         $_SESSION["debug"] = [
@@ -476,7 +538,55 @@ class ShopController extends AbstractController
      */
     public function orderConfirmation(): void 
     {
-        $this->render("orderConfirm", []);
+        try {
+            $orderId = $_GET['order_id'] ?? null;
+
+            if (!$orderId) {
+                throw new Exception("Missing order ID.");
+            }
+
+            $orderManager = new OrderManager();
+            $order = $orderManager->findOrderById($orderId);
+
+            if (!$order) {
+                throw new Exception("Order not found.");
+            }
+
+            $orderProductManager = new OrderProductManager();
+            $orderProducts = $orderProductManager->findProductsByOrderId($orderId);
+        
+            if(!$orderProducts) {
+                throw new Exception("No products found for this order.");    
+            }
+
+            $productManager = new ProductManager();
+            $detailedOrderProducts = [];
+
+            foreach ($orderProducts as $orderProduct) {
+                $product = $productManager->findProductById($orderProduct->getProductId());
+
+                if ($product) {
+                    $detailedOrderProducts[] = [
+                        'productName' => $product->getName(),
+                        'quantity' => $orderProduct->getQuantity(),
+                        'subtotal' => $orderProduct->getSubtotal()
+                    ];
+                }
+            }
+
+            $this->render("orderConfirm", [
+                "order" => $order,
+                "orderProducts" => $detailedOrderProducts
+            ]);
+        } catch (Exception $e) {
+            error_log("Error: " . $e->getMessage(), 3, __DIR__ . '/log/debug.log');
+            $_SESSION["debug"] = [
+                "Error" => $e->getMessage(),
+                "GET Parameters" => $_GET
+            ];
+            header("Location: /php/la-joie-exotique/templates/logErrorPage.phtml");
+            exit();
+        }
     }
 
 }

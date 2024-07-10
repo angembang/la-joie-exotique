@@ -91,15 +91,19 @@ class OrderManager extends AbstractManager
 
       // Chech if order is found
       if($orderData) {
+        // Convert string dates to DateTime objects
+        $createdAt = new DateTime($orderData["created_at"]);
+        $updatedAt = isset($orderData["updated_at"]) ? new DateTime($orderData["updated_at"]) : null;
         // Instanciate a new order with retrieved data
         $order = new Order(
           $orderData["id"],
           $orderData["user_id"],
-          $orderData["created_at"],
+          $orderData["guest_name"],
+          $createdAt,
           $orderData["total_price"],
           $orderData["status"],
-          $orderData["updated_at"],
-          $orderData["guestName"]
+          $updatedAt
+          
         );
         return $order;
       }
@@ -430,35 +434,38 @@ class OrderManager extends AbstractManager
   }
 
 
-/**
- * Helper method to hydrate Order objects from data array.
- *
- * @param array $ordersData The array of order data retrieved from the database.
- * 
- * @return array An array of Order objects hydrated from the provided data.
- */
-private function hydrateOrders(array $ordersData): array {
-  // Initialize an empty array to store the hydrated Order objects.
-  $orders = [];
+  /**
+   * Helper method to hydrate Order objects from data array.
+   *
+   * @param array $ordersData The array of order data retrieved from the database.
+   * 
+   * @return array An array of Order objects hydrated from the provided data.
+   */
+  private function hydrateOrders(array $ordersData): array {
+    // Initialize an empty array to store the hydrated Order objects.
+    $orders = [];
   
-  // Loop through each order data in the array.
-  foreach($ordersData as $orderData) {
+    // Loop through each order data in the array.
+    foreach($ordersData as $orderData) {
+      // Convert string dates to DateTime objects
+      $createdAt = new DateTime($orderData["created_at"]);
+      $updatedAt = isset($orderData["updated_at"]) ? new DateTime($orderData["updated_at"]) : null;
       // Create a new Order object using the data from the current iteration.
       $order = new Order(
         $orderData["id"],
         $orderData["user_id"],
-        $orderData["created_at"],
+        $orderData["guest_name"],
+        $createdAt,
         $orderData["total_price"],
         $orderData["status"],
-        $orderData["updated_at"],
-        $orderData["guestName"]        
+        $updatedAt         
       );
       
       // Add the newly created Order object to the array.
       $orders[] = $order;
-  }
+    }
   
-  // Return the array of hydrated Order objects.
-  return $orders;
-}
+    // Return the array of hydrated Order objects.
+    return $orders;
+  }
 }

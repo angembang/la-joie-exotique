@@ -32,8 +32,20 @@
 
             <legend><label for="digicode-or-appt-name">Digicode or Apartment Name:</label></legend>
             <input type="text" id="digicode-or-appt-name" name="digicode-or-appt-name" placeholder="digicode ou nom figurant à la porte">
+            
             <legend><label for="totalAmount">Prix total :</label></legend>
             <input type="text" id="total-amount" name="total-amount" value="<?= isset($_SESSION['totalAmount']) ? htmlspecialchars($_SESSION['totalAmount'])."€" : ''; ?>">
+            
+            <!-- Hidden fields for each product in the cart -->
+            <?php 
+            if (isset($_SESSION['product_details']) && is_array($_SESSION['product_details'])) {
+                foreach ($_SESSION['product_details'] as $productId => $product) { ?>
+                    <input type="hidden" name="products[<?= $productId ?>][product_id]" value="<?= htmlspecialchars($product['product_id']) ?>">
+                    <input type="hidden" name="products[<?= $productId ?>][quantity]" value="<?= htmlspecialchars($product['quantity']) ?>">
+                    <input type="hidden" name="products[<?= $productId ?>][subtotal]" value="<?= htmlspecialchars($product['subtotal']) ?>">
+                <?php }
+            }
+            ?>
         </fieldset>
         <div id="payment-element">
             <!-- Stripe.js will inject the paiement element here -->

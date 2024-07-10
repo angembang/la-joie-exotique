@@ -5,7 +5,7 @@
         <table>
             <thead>
                 <tr>
-                    <th>ID Commande</th>
+                    <th class="hidden-column">ID Commande</th>
                     <th>Nom du Client</th>
                     <th>Date</th>
                     <th>Total</th>
@@ -16,7 +16,7 @@
             <tbody>
                 <?php foreach ($data['orders'] as $order): ?>
                     <tr>
-                        <td><?= $order->getId(); ?></td>
+                        <td class="hidden-column"><?= $order->getId(); ?></td>
                         <td><?= $order->getUserId() ? $order->getUserName() : $order->getGuestName(); ?></td>
                         <td><?= $order->getCreatedAt()->format('Y-m-d H:i:s'); ?></td>
                         <td><?= $order->getTotalPrice(); ?> €</td>

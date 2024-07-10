@@ -16,46 +16,37 @@ class OrderProductManager extends AbstractManager
    * 
    * @throws PDOException if an error occurs during the database operation.
    */
-  public function createOrderProduct(int $orderId, int $productId, int $quantity): bool
+  public function createOrderProduct(OrderProduct $orderProduct): ?OrderProduct
   {
-    try {
-      // Retrieve and validate the product
-      $productManager = new ProductManager();
-      $product = $productManager->findProductById($productId);
-      if (!$product) {
-        throw new PDOException("Product not found");
-      }
-      // Calculate the subtotal (price * quantity)
-      $subtotal = $product->getPrice() * $quantity;
+      try {
+          // Prepare the SQL query to insert a new order-product relation into the database
+          $query = $this->db->prepare("INSERT INTO orders_products
+          (order_id, product_id, quantity, subtotal) 
+          VALUES 
+          (:order_id, :product_id, :quantity, :subtotal)");
 
-      // Prepare the SQL query to insert a new order-product relation into the database
-      $query = $this->db->prepare("INSERT INTO orders_products
-      (order_id, product_id, quantity, subtotal) 
-      VALUES 
-      (:order_id, :product_id, :quantity, :subtotal)");
+          // Bind parameters with their values
+          $parameters = [
+              ":order_id" => $orderProduct->getOrderId(),
+              ":product_id" => $orderProduct->getProductId(),
+              ":quantity" => $orderProduct->getQuantity(),
+              ":subtotal" => $orderProduct->getSubtotal()
+          ];
 
-      // Bind parameters with their values
-      $parameters = [
-        ":order_id" => $orderId,
-        ":product_id" => $productId,
-        ":quantity" => $quantity,
-        ":subtotal" => $subtotal
-      ];
+          // Execute the query with parameters
+          $success = $query->execute($parameters);
 
-      // Execute the query with parameters
-      $success = $query->execute($parameters);
+          // Check if success
+          if($success) {
+              $orderProduct;
+          }
+          return null;
 
-      // Check if success
-      if($success) {
-        return true;
-      }
-      return false;
-
-    } catch (PDOException | InvalidArgumentException $e) {
-      error_log("Failed to create a new order-product: " . $e->getMessage().$e->getCode());
-      throw new PDOException("Failed to create a new order-product");
+        } catch (PDOException | InvalidArgumentException $e) {
+          error_log("Failed to create a new order-product: " . $e->getMessage().$e->getCode());
+          throw new PDOException("Failed to create a new order-product");
+        }
     }
-  }
 
 
   /**
@@ -71,32 +62,33 @@ class OrderProductManager extends AbstractManager
   {
     try {
       // Prepare the query to retrieve products by order identifier.
-      $query = $this->db->prepare("SELECT po.*, p.* FROM products_orders po 
-      JOIN products p 
-      ON po.product_id = p.id 
-      WHERE po.order_id = :order_id");
+        $query = $this->db->prepare("SELECT op.*, p.*
+        FROM orders_products op
+        JOIN products p ON op.product_id = p.id
+        WHERE op.order_id = :order_id");
 
-      // Bind the parameter with its value.
-      $parameter = [
-        ":order_id" => $orderId
-      ];
+        // Bind the parameter with its value.
+        $parameter = [
+            ":order_id" => $orderId
+        ];
 
-      // Execute the query with the parameter.
-      $query->execute($parameter);
+        // Execute the query with the parameter.
+        $query->execute($parameter);
 
-      // Fetch products data from the database.
-      $orderProductsData = $query->fetchAll(PDO::FETCH_ASSOC);
+        // Fetch products data from the database.
+        $orderProductsData = $query->fetchAll(PDO::FETCH_ASSOC);
 
-      // Check if products are found
-      if ($orderProductsData) {
-        return $this->hydrateOrderProducts($orderProductsData);
-      }
-      return null; 
+        // Check if products are found
+        if ($orderProductsData) {
+            return $this->hydrateOrderProducts($orderProductsData);
+        }
+
+        return null; 
 
     } catch(PDOException $e) {
-      error_log("Failed to find products of the order: " .$e->getMessage(). $e->getCode());
-      throw new PDOException("Failed to find products of the order");
-    }
+        error_log("Failed to find products of the order: " . $e->getMessage() . " Code: " . $e->getCode(), 3, __DIR__ . '/log/debug.log');
+        throw new PDOException("Failed to find products of the order");
+      }
   }
 
 

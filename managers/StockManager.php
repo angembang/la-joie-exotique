@@ -79,6 +79,7 @@ class StockManager extends AbstractManager
       // Check if the stock data is found.
       if ($stockData) {
         $stock = new Stock(
+          $stockData["id"],
           $stockData["product_id"],
           $stockData["quantity"]
         );
@@ -103,7 +104,7 @@ class StockManager extends AbstractManager
    * 
    * @throws PDOException if an error occurs during the database operation.
    */
-  public function updateStockQuantityByProductId(int $productId, int $quantity): bool 
+  public function updateStockQuantity(Stock $stock): ?Stock
   {
     try {
       // Prepare the SQL query to update the stock quantity for the specified product.
@@ -114,8 +115,8 @@ class StockManager extends AbstractManager
 
       // Bind parameters with their values.
       $parameters = [
-        ":quantity" => $quantity,
-        ":product_id" => $productId
+        ":quantity" => $stock->getQuantity(),
+        ":product_id" => $stock->getProductId()
       ];
 
       // Execute the query with parameters.
@@ -124,10 +125,10 @@ class StockManager extends AbstractManager
       // Check if success
       if($success) {
         // Return true
-        return true;
+        return $stock;
       }
       // Return false
-      return false;
+      return null;
 
     } catch (PDOException $e) {
       // Log error and throw exception if an error occurs during the database operation.

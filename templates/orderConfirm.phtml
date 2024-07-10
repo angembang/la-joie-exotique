@@ -1,1 +1,37 @@
-<h2>OrderConfirm</h2>
+<!-- templates/orderConfirmation.phtml -->
+<div class="paiement-redirect-page">
+    <section class="paiement-info-message">
+        <h2>Merci <?= htmlspecialchars($order->getGuestName()) ?></h2>
+        <div class="confirm-order-message">
+            <p>Votre commande a bien été enregistrée</p>
+            <i class="fa-regular fa-thumbs-up"></i>
+            <p>
+                Nous vous remerçions de votre confiance et
+                pour avoir choisi La joie Exotique pour vos courses
+            </p>
+        </div>
+        <p class="order-number">Le numéro de votre commande est : <?= htmlspecialchars($order->getId()) ?></p>
+    </section>
+    <section class="paiement-redirect"> 
+        <h3>Details de la commande</h3>
+        <table>
+            <thead>
+                <tr>
+                    <th class="col-nom">Nom produit</th>
+                    <th class="col-qty">Qté</th>
+                    <th class="col-subtotal">Sous-total</th>
+                </tr>
+            </thead>
+            <tbody>
+                <?php foreach ($orderProducts as $orderProduct): ?>
+                    <tr>
+                        <td class="col-nom"><?= htmlspecialchars($orderProduct['productName']) ?></td>
+                        <td class="col-qty"><?= htmlspecialchars($orderProduct['quantity']) ?></td>
+                        <td class="col-subtotal"><?= htmlspecialchars($orderProduct['subtotal']) ?>€</td>
+                    </tr>
+                <?php endforeach; ?>
+            </tbody>
+        </table>
+        <p class="order-total-amount"><strong>Total : <?= htmlspecialchars($order->getTotalPrice()) ?>€</strong></p>
+    </section>
+</div>
