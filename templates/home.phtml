@@ -1,16 +1,15 @@
-<main>
+<div class="home-page-div">
     <!-- Search bar -->
-    <form class="search-bar" action="index.php?route=search-course" method="GET">
-        <!-- Label for the input field -->
-        <label for="productName">Saisissez le nom du produit</label>
+    <form class="search-bar" action="index.php?route=search-product" method="GET">
+        <input type="hidden" name="route" value="search-product">
         <!-- Input field for entering the product name -->
-        <input type="text" name="product_name" id="product_name" placeholder="Rechercher produit">
-        <!-- Suggestions list -->
-        <ul id="suggestions-list"></ul>
+        <input type="search" name="keyword" id="keyword" placeholder="Rechercher produit">
         <!-- Submit button for initiating the search -->
         <button class="search-button" type="submit"><i class="fa-solid fa-magnifying-glass"></i></button>
     </form>
-    <img class="img-far-home" src="./images/sliderHomePage.png" alt="Image de divers produits exotiques disponibles dans notre boutique en ligne">
+    <div class="home-img-div">
+        <img class="img-far-home" src="./images/homeImg.png" alt="Image de divers produits exotiques disponibles dans notre boutique en ligne">
+    </div>
     <?php foreach ($data['productsCategoryArray'] as $categoryData): ?>
         <h2 class="category-name">
             <a href="index.php?route=category-products&category_id=<?= $categoryData['category']->getId(); ?>">
@@ -22,18 +21,14 @@
             <li>
                 <a href="index.php?route=product&product_id=<?= $product->getId(); ?>">
                 <?php foreach ($product->images as $image): ?>
-                        <div class="slider-home">
-                            <div class="home-slides-div">
-                                <div class="home-img-slide"><img src="<?= $image->getFileName(); ?>" alt="<?=$image->getAlt(); ?>"></div>
-                            </div>
-                        </div>
-                    <?php endforeach; ?>
+                <div class="home-img-slide"><img src="<?= $image->getFileName(); ?>" alt="<?=$image->getAlt(); ?>"></div>
+                <?php endforeach; ?>
                 </a>
             </li>
             <?php endforeach; ?>
         </ul>
         <?php endforeach; ?>
-                    
-</main>
+</div>
+
 
 

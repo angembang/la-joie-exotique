@@ -31,7 +31,7 @@
             <input type="text" id="number" name="number" placeholder="Numéro" required>
 
             <legend><label for="digicode-or-appt-name">Digicode or Apartment Name:</label></legend>
-            <input type="text" id="digicode-or-appt-name" name="digicode-or-appt-name" placeholder="digicode ou nom figurant à la porte">
+            <input type="text" id="digicode-or-appt-name" name="digicode-or-appt-name" placeholder="digicode ou nom figurant à la porte" required>
             
             <legend><label for="totalAmount">Prix total :</label></legend>
             <input type="text" id="total-amount" name="total-amount" value="<?= isset($_SESSION['totalAmount']) ? htmlspecialchars($_SESSION['totalAmount'])."€" : ''; ?>">

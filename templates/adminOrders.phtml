@@ -22,7 +22,7 @@
                         <td><?= $order->getTotalPrice(); ?> €</td>
                         <td><?= $order->getStatus(); ?></td>
                         <td>
-                            <a href="index.php?route=view-order&order_id=<?= $order->getId(); ?>">Voir</a>
+                            <a href="index.php?route=order-details&order_id=<?= $order->getId(); ?>">Voir</a>
                             <a href="index.php?route=update-order-status&order_id=<?= $order->getId(); ?>">Modifier le status</a>
                         </td>
                     </tr>

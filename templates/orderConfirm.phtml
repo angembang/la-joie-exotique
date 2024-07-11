@@ -34,4 +34,7 @@
         </table>
         <p class="order-total-amount"><strong>Total : <?= htmlspecialchars($order->getTotalPrice()) ?>€</strong></p>
     </section>
+    <form action="index.php?route=download-invoice&order_id=<?= $order->getId() ?>" method="POST">
+        <button type="submit" class="btn btn-primary">Télécharger la facture</button>
+    </form>
 </div>

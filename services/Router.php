@@ -61,7 +61,7 @@
 
         case "search-product":
           // Route for searching products
-          $productController->searchProduct(); 
+          $productController->searchProductsByKeyword(); 
           break;
 
           case "product":
@@ -141,6 +141,11 @@
           $shopController->orderConfirmation();
           break;
           
+        case "download-facture":
+          // Route for placing an order
+          $shopController->downloadFacture();
+          break;
+          
         case "order":
           // Route for placing an order
           $productController->order();
@@ -149,6 +154,21 @@
         case "show-orders":
           // Route for placing an order
           $shopController->showOrders();
+          break;
+          
+        case "order-details":
+          // Route for placing an order
+          $shopController->orderDetails();
+          break;
+          
+        case "update-order-status":
+          // Route for placing an order
+          $shopController->updateOrderStatus();
+          break;
+          
+         case "checkUpdate-order-status":
+          // Route for placing an order
+          $shopController->checkUpdateOrderStatus();
           break;
 
         case "payment-form":

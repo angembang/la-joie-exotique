@@ -22,16 +22,19 @@
 
             <!-- Email or phone field -->
             <label for="email_or_phone">Email or Phone:</label>
-            <input type="text" id="email_or_phone" name="emailOrPhone" required>
+            <input type="text" id="email_or_phone" name="emailOrPhone" placeholder="Email ou numéro de téléphone" required>
         
             <!-- Password field -->
             <label for="password">Password:</label>
-            <input type="password" id="password" name="password" required>
+            <input type="password" id="password" name="password" placeholder="Mot de passe" required>
         
             <!-- Submit button -->
             <button type="submit">Se connecter</button>
         </form>
-        <a href="#" id="toggleToRegister" class="toggle-link">Vous n'avez pas de compte, veuillez vous enregistrer</a>
+        <div class="authentification-question">
+            <p>Vous n'avez pas de compte ?</p>
+            <a href="#" id="toggleToRegister" class="toggle-link">Enregistrez-vous</a>
+        </div>
     </section>
 
     <section class="register-form form-section hidden">
@@ -87,6 +90,9 @@
             <!-- Submit button -->
             <button type="submit">S'inscrire</button>
         </form>
-        <a href="#" id="toggleToLogin" class="toggle-link">Vous avez déjà un compte? Connectez-vous</a>
+        <div class="authentification-question">
+            <p>Vous avez déjà un compte ?</p>
+            <a href="#" id="toggleToLogin" class="toggle-link">Connectez-vous</a>
+        </div>
     </section>
 </main>

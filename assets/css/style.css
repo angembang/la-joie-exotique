@@ -179,6 +179,19 @@ button {
 }
 
 /************************* page home ***************************/
+.home-page-div {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 1rem;
+  min-height: 88vh;
+}
+
+.home-page-div ul {
+  list-style: none;
+}
+
 .category-name {
   background-color: #00295B;
   border-radius: 15px;
@@ -205,9 +218,15 @@ button {
   grid-template-columns: 50% 50%;
   gap: 1rem;
   width: 400px;
-  height: 180px;
   overflow: hidden;
   margin-bottom: 1rem;
+}
+.category-product-image li {
+  height: 110px;
+}
+.category-product-image li img {
+  width: 100%;
+  height: auto;
 }
 
 /************************* end of image produit home ***************************/
@@ -509,12 +528,6 @@ footer i {
 /******************** End Modal succeeded add cart message ******************************/
 
 /******************** register login page ******************************/
-
-/* Style for hidden elements */
-.hidden {
-  display: none;
-}
-
 /* Style for the toggle link */
 .toggle-link {
   color: #00295B;
@@ -527,29 +540,28 @@ footer i {
 /* Main container styling */
 .main-container {
   max-width: 430px;
-  margin: 0 auto;
 }
 
 /* Form section styling */
 .form-section {
   width: 95%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
   background: rgba(174, 127, 36, 0.6);
   padding: 1rem;
   border-radius: 15px;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
   margin-bottom: 1rem;
-  margin: 0 auto;
+  font-size: 1.2rem;
 }
 
 /* Form headings */
 .form-section h2 {
   margin-bottom: 20px;
-  font-size: 1.5em;
+  font-size: 1.9rem;
   color: #00295B;
-  text-align: center;
-}
-
-.form-section a {
   text-align: center;
 }
 
@@ -566,8 +578,6 @@ footer i {
   border: 1px solid #ccc;
   border-radius: 4px;
   font-size: 1rem;
-  display: block;
-  margin: auto auto 2rem auto;
 }
 
 /* Submit buttons */
@@ -578,9 +588,7 @@ footer i {
   border-radius: 15px;
   font-size: 1rem;
   cursor: pointer;
-  display: block;
   margin: 20px auto;
-  margin-left: 3rem;
 }
 
 .form-section input::placeholder {
@@ -590,19 +598,73 @@ footer i {
   box-shadow: 0 0 0 30px #364c68 inset;
 }
 
+.authentification-question {
+  display: flex;
+  flex-direction:column;
+  justify-content: center;
+  align-items: center;
+}
+/* Style for hidden elements */
+.hidden {
+  display: none;
+}
+
 /******************** End of register login page ******************************/
 
 /******************** payment page ******************************/
+.payment-style {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
 .fieldset-payment {
   display: flex;
   flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.delivery-options {
+  width: 400px;
+  background-color: white;
+  padding: 1rem;
+  font-size: 1.2rem;
+}
+
+.delivery-options h2, 
+.delivery-options p {
+  text-align: center;
+  color: #00295B;
 }
 
 .delivery-options button {
-  margin-bottom: 2rem;
-  border-radius: 1rem;
+  width: 350px; 
+  margin-bottom: 1.5rem;
 }
 
+#payment-form {
+  width: 400px;
+  background-color: rgba(174, 127, 36, 0.6);
+  margin-bottom: 1rem;
+}
+
+#payment-form input {
+   width: 300px; 
+   font-size: 0.9rem;
+}
+
+#payment-form input::placeholder {
+  font-size: 0.8rem;
+  -webkit-text-fill-color: #888;
+  -webkit-box-shadow: 0 0 0 30px #364c68 inset;
+  box-shadow: 0 0 0 30px #364c68 inset;
+}
+
+#payment-form button {
+  margin-top: 1rem;
+}
 /******************** end of payment page ******************************/
 
 /******************** admin page ******************************/
@@ -684,6 +746,14 @@ footer i {
 /******************** admin page ******************************/
 
 /******************** add product page ******************************/
+.productForm {
+  width: 400px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
 .productForm input::placeholder,
 .productForm textarea::placeholder,
 .productForm select::placeholder {
@@ -698,8 +768,14 @@ footer i {
   -webkit-text-fill-color: #888;
   -webkit-box-shadow: 0 0 0 30px #364c68 inset;
   box-shadow: 0 0 0 30px #364c68 inset;
+  margin-left: 2rem;
 }
 
+.productForm input,
+.productForm textarea, 
+.productForm select {
+  width: 300px;
+}
 /******************** end of add product page ******************************/
 
 /* Dark mode */
@@ -798,3 +874,36 @@ footer i {
   margin-top: 1rem;
 }
 /**********************end of redirect confirm order page************/
+
+
+
+
+
+/****************** admin order details page *************************/
+.admin-order-details {
+  width: 400Px;
+  background: rgba(174, 127, 36, 0.6);
+  padding: 1rem;
+}
+/*********************************************************************/
+
+/*********************update order status page************************/
+.update-order-status {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  padding: 1rem;
+  background-color: white;
+  width: 400px;
+}
+
+.update-order-status h2 {
+  font-size: 2rem;
+  color: #00295B;
+}
+.update-order-status form button {
+  width: 150px;
+  margin-top: 1rem;
+}
+/*********************************************************************/

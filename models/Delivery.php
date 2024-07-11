@@ -121,7 +121,7 @@ class Delivery
    * 
    * @return int The address identifier of the delivrery.
    */
-  public function getAddressId(): int
+  public function getAddressId(): ?int
   {
     return $this->addressId;
   }

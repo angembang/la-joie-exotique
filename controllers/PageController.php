@@ -36,18 +36,19 @@ class PageController extends AbstractController
               $productItem->getImage2Id(),
               $productItem->getImage3Id(),
               $productItem->getImage4Id()
-              ];
+            ];
 
               $images = array_filter(array_map(function($imageId) use ($imageManager) {
-                return $imageId ? $imageManager->findImageById($imageId) : null;
-                }, $imageIds));
+              return $imageId ? $imageManager->findImageById($imageId) : null;
+            }, $imageIds));
 
-              $productItem->images = $images;
+            $productItem->images = $images;
           }
-          $productsCategoryArray[] = [
-            "category" => $category,
-            "products" => $productsCat
-          ];
+        
+        $productsCategoryArray[] = [
+          "category" => $category,
+          "products" => $productsCat
+        ];
       }
 
       $this->render("home", [

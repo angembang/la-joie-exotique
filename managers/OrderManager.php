@@ -359,28 +359,21 @@ class OrderManager extends AbstractManager
   public function updateOrder(Order $order): ?Order 
   {
     try {
-      // Set updated_at to the current date and time.
-      $now = new DateTime();
+        // Set updated_at to the current date and time.
+        $now = new DateTime();
 
-      // Prepare the SQL query to update an order in the database.
-      $query = $this->db->prepare("UPDATE orders SET 
-      user_id = :user_id,
-      created_at = :created_at,
-      total_price = :total_price, 
-      status = :status,
-      updated_at = :updated_at
-      WHERE id = :id");
+        // Prepare the SQL query to update the order status and updated_at fields in the database.
+        $query = $this->db->prepare("UPDATE orders SET 
+        status = :status,
+        updated_at = :updated_at
+        WHERE id = :id");
 
-      // Bind parameters with their values.
-      $parameters = [
-        ":id" => $order->getId(),
-        ":user_id" => $order->getUserId(),
-        ":created_at" => $order->getCreatedAt(),
-        ":total_price" => $order->getTotalPrice(),
-        ":status" => $order->getStatus(),
-        ":updated_at" => $now->format('Y-m-d H:i:s'),
-        ":guestName" =>$order->getGuestName()
-      ];
+        // Bind parameters with their values.
+        $parameters = [
+            ":id" => $order->getId(),
+            ":status" => $order->getStatus(),
+            ":updated_at" => $now->format('Y-m-d H:i:s')
+        ];
 
       // Execute the query with parameters.
       $success = $query->execute($parameters);

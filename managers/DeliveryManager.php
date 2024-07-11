@@ -19,14 +19,14 @@ class DeliveryManager extends AbstractManager
     try {
       // Prepare the SQL query to insert a new delivery into the database.
       $query = $this->db->prepare("INSERT INTO deliveries 
-      (order_id, address_id, to_user_address, delivery_address, status) VALUES 
-      (:order_id, :address_id, :to_user_address, :delivery_address, :status)");
+      (order_id, to_user_address, address_id, delivery_address, status) VALUES 
+      (:order_id, :to_user_address, :address_id, :delivery_address, :status)");
 
       // Bind parameters with their values.
       $parameters = [
         ":order_id" => $delivery->getOrderId(), 
+        "to_user_address" => $delivery->getToUserAddress() ? 1 : 0, 
         ":address_id" => $delivery->getAddressId(), 
-        ":to_user_address" => $delivery->getToUserAddress(), 
         ":delivery_address"=> $delivery->getDeliveryAddress(), 
         ":status" => $delivery->getStatus() 
       ];
@@ -44,8 +44,9 @@ class DeliveryManager extends AbstractManager
       return $delivery;
     
     } catch(PDOException $e) {
-      error_log("Failed to create a new delivery: " .$e->getMessage(). $e->getCode());
-      throw new PDOException("Failed to create a new delivery");
+      // Log l'erreur avec le message et le code
+        error_log("Failed to create a new delivery: " . $e->getMessage() . $e->getCode());
+        throw new PDOException("Failed to create a new delivery");
     }
   }
 

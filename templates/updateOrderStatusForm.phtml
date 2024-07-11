@@ -1,0 +1,19 @@
+<section class="update-order-status">
+    <h2>Mise à jour du statut</h2>
+    <form action="index.php?route=checkUpdate-order-status&order_id=<?= $order->getId(); ?>" method="POST">
+        <input type="hidden" name="order_id" value="<?= htmlspecialchars($order->getId()); ?>">
+
+        <div class="form-group">
+            <label for="status">Mettre à jour le statut </label>
+            <select id="status" name="status" required>
+                <option value="" disabled selected>Choisissez le statut</option>
+                <option value="annulé">Annulée</option>
+                <option value="en attente de livraison">En attente de livraison</option>
+                <option value="preparation">En cours de préparation</option>
+                <option value="expédiée">Expédiée</option>
+            </select>
+        </div>
+
+        <button type="submit" class="btn btn-primary">Mettre à jour</button>
+    </form>
+</section>

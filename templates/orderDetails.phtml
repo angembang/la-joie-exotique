@@ -1,0 +1,23 @@
+<!-- templates/orderConfirmation.phtml -->
+<div class="admin-order-details">
+    <section class="paiement-redirect"> 
+        <h3>Details de la commande</h3>
+        <table>
+            <thead>
+                <tr>
+                    <th class="col-nom">Nom produit</th>
+                    <th class="col-qty">Qté</th>
+                </tr>
+            </thead>
+            <tbody>
+                <?php foreach ($orderProducts as $orderProduct): ?>
+                    <tr>
+                        <td class="col-nom"><?= htmlspecialchars($orderProduct['productName']) ?></td>
+                        <td class="col-qty"><?= htmlspecialchars($orderProduct['quantity']) ?></td>
+                    </tr>
+                <?php endforeach; ?>
+            </tbody>
+        </table>
+        <p class="order-total-amount"><strong>Total : <?= htmlspecialchars($order->getTotalPrice()) ?>€</strong></p>
+    </section>
+</div>

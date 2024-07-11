@@ -246,7 +246,7 @@ class ProductManager extends AbstractManager
       // Fetch products data from the database
       $productsData = $query->fetchAll(PDO::FETCH_ASSOC);
 
-      // Check if users data is not empty
+      // Check if products data is not empty
       if($productsData) {
         return $this->hydrateProducts($productsData);
       }
@@ -297,6 +297,39 @@ class ProductManager extends AbstractManager
       error_log("Failed to find products: " .$e->getMessage());
       throw new PDOException("Failed to find products");
     }
+  }
+  
+  
+  /**
+     * Retrieves a product by keyword.
+     * 
+     * @param String $keyword The keyword of the product.
+     * 
+     * @return array|null The retrieved product or null if not found.
+     * 
+     */
+    public function searchProductByKeyword(string $keyword): ?array
+    {
+        // Prepare the query to retrieve product by keyword 
+        $query = $this->db->prepare("SELECT * FROM products 
+        WHERE (name LIKE :keyword OR description LIKE :keyword)");
+        // Prepare keyword for search
+        $keywordFormatted = '%' . $keyword . '%';
+        // Bind parameters
+        $parameters = [
+            ":keyword" => $keywordFormatted
+            ];
+        // Execute the query with the parameter
+        $query->execute($parameters); 
+        // Fetch the product data from the database
+        $productsData = $query->fetchAll(PDO::FETCH_ASSOC);
+        
+        // Check if products data is not empty
+      if($productsData) {
+        return $this->hydrateProducts($productsData);
+      }
+      return null;
+    
   }
 
 

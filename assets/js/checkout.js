@@ -46,7 +46,11 @@ document.addEventListener("DOMContentLoaded", function () {
 
     const form = document.querySelector("#payment-form");
     const guestName = form.querySelector("input[name='guest-name']").value;
-    const totalAmount = form.querySelector("input[name='total-amount']").value;
+    const city = form.querySelector("input[name='city']").value;
+    const postalCode = form.querySelector("input[name='postalCode']").value;
+    const street = form.querySelector("input[name='street']").value;
+    const number = form.querySelector("input[name='number']").value;
+    const digicode = form.querySelector("input[name='digicode-or-appt-name']").value;const totalAmount = form.querySelector("input[name='total-amount']").value;
     const userId = form.querySelector("input[name='user-id']").value || null;
 
     console.log("Guest Name:", guestName);
@@ -57,7 +61,7 @@ document.addEventListener("DOMContentLoaded", function () {
       const { error, paymentIntent } = await stripe.confirmPayment({
         elements,
         confirmParams: {
-          return_url: `https://angekamwangmbang.sites.3wa.io/php/la-joie-exotique/index.php?route=payment-success&guest_name=${encodeURIComponent(guestName)}&total_amount=${encodeURIComponent(totalAmount)}&user_id=${encodeURIComponent(userId)}`,
+          return_url: `https://angekamwangmbang.sites.3wa.io/php/la-joie-exotique/index.php?route=payment-success&guest_name=${encodeURIComponent(guestName)}&city=${encodeURIComponent(city)}&postalCode=${encodeURIComponent(postalCode)}&street=${encodeURIComponent(street)}&number=${encodeURIComponent(number)}&digicode=${encodeURIComponent(digicode)}&total_amount=${encodeURIComponent(totalAmount)}&user_id=${encodeURIComponent(userId)}`,
         },
       });
 
@@ -66,7 +70,7 @@ document.addEventListener("DOMContentLoaded", function () {
         setLoading(false);
       } else if (paymentIntent && paymentIntent.status === 'succeeded') {
         // Payment succeeded, perform the redirection
-        window.location.href = `https://angekamwangmbang.sites.3wa.io/php/la-joie-exotique/index.php?route=payment-success&payment_intent=${paymentIntent.id}&guest_name=${encodeURIComponent(guestName)}&total_amount=${encodeURIComponent(totalAmount)}&user_id=${encodeURIComponent(userId)}`;
+        window.location.href = `https://angekamwangmbang.sites.3wa.io/php/la-joie-exotique/index.php?route=payment-success&payment_intent=${paymentIntent.id}&guest_name=${encodeURIComponent(guestName)}&city=${encodeURIComponent(city)}&postalCode=${encodeURIComponent(postalCode)}&street=${encodeURIComponent(street)}&number=${encodeURIComponent(number)}&digicode=${encodeURIComponent(digicode)}&total_amount=${encodeURIComponent(totalAmount)}&user_id=${encodeURIComponent(userId)}`;
       } else {
         showMessage("An error occurred during the operation");
         setLoading(false);

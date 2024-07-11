@@ -383,153 +383,185 @@ class ShopController extends AbstractController
     public function paymentSuccess(): void
     {
         try {
-             // Activer l'affichage des erreurs pour ce script
-        ini_set('display_errors', 1);
-        ini_set('display_startup_errors', 1);
-        error_reporting(E_ALL);
+            // Activer l'affichage des erreurs pour ce script
+            ini_set('display_errors', 1);
+            ini_set('display_startup_errors', 1);
+            error_reporting(E_ALL);
 
-        // Définir le chemin du fichier de log
-        $logDir = __DIR__ . '/log';
-        $logfile = $logDir . '/debug.log';
+            // Définir le chemin du fichier de log
+            $logDir = __DIR__ . '/log';
+            $logfile = $logDir . '/debug.log';
 
-        // Vérifier si le répertoire de log existe, sinon le créer
-        if (!is_dir($logDir)) {
-            mkdir($logDir, 0777, true);
-        }
-
-        // Vérifier si le fichier de log est accessible
-        if (!file_exists($logfile)) {
-            touch($logfile);
-        }
-        if (!is_writable($logfile)) {
-            throw new Exception("Le fichier de log n'est pas accessible en écriture.");
-        }
-
-        // Log tous les paramètres GET reçus
-        error_log("Received GET parameters: " . print_r($_GET, true), 3, $logfile);
-
-        // Retrieve the redirection parameters
-        $paymentIntentId = $_GET["payment_intent"] ?? null;
-        $guestName = isset($_GET["guest_name"]) ? urldecode($_GET["guest_name"]) : null;
-        $totalAmount = isset($_GET["total_amount"]) ? urldecode($_GET["total_amount"]) : null;
-        $userId = isset($_GET["user"]) ? urldecode($_GET["user"]) : null;
-
-        // Log des paramètres reçus
-        error_log("Received parameters: Payment Intent ID = $paymentIntentId, Guest Name = $guestName, Total Amount = $totalAmount, User ID = $userId", 3, $logfile);
-
-        if (!$paymentIntentId || !$totalAmount) {
-            throw new Exception("Missing payment details.");
-        }
-
-        // Stocker les paramètres récupérés dans la session
-        $_SESSION['debug'] = [
-            "Payment Intent ID" => $paymentIntentId,
-            "Guest Name" => $guestName,
-            "Total Amount" => $totalAmount,
-            "User ID" => $userId
-        ];
-
-        // Check the payment status
-        $stripe = new \Stripe\StripeClient($_ENV["API_KEY"]);
-        $paymentIntent = $stripe->paymentIntents->retrieve($paymentIntentId);
-
-        if ($paymentIntent->status !== "succeeded") {
-            throw new Exception("Payment did not succeed.");
-        }
-
-        // Create an order object and persist it to the database
-        $createdAt = new DateTime();
-        $status = "commande payée en attente de préparation";
-        // Convert totalAmount to float
-        $totalAmount = (float)$totalAmount;
-
-        // Stocker les informations avant la création de la commande
-        $_SESSION['debug']["Before Creating Order"] = [
-            "User ID" => $userId,
-            "Guest Name" => $guestName,
-            "Total Amount" => $totalAmount
-        ];
-
-        $orderModel = new Order(null, $userId, $guestName, $createdAt, $totalAmount, $status, null);
-        $orderManager = new OrderManager();
-        $order = $orderManager->createOrder($orderModel);
-
-        // Retrieve the created order identifier
-        $orderId = $order->getId();
-
-        if (!$orderId) {
-            throw new Exception("Failed to create order.");
-        }
-
-        // Stocker les informations après la création de la commande
-        $_SESSION['debug']["Order Created"] = [
-            "Order ID" => $orderId
-        ];
-
-        // Log de la création de la commande
-        error_log("Order created with ID: $orderId", 3, $logfile);
-
-        // Retrieve product details from the session
-        if (!isset($_SESSION['product_details']) || empty($_SESSION['product_details'])) {
-            throw new Exception("No products found in the cart.");
-        }
-
-        $products = $_SESSION['product_details'];
-
-        // Create OrderProduct objects, persist them to the database and updating the product quantity
-        $orderProductManager = new OrderProductManager();
-        $productManager = new ProductManager();
-
-        foreach ($products as $product) {
-            if (isset($product['product_id'], $product['quantity'], $product['subtotal'])) {
-                $productId = (int)$product['product_id'];
-                $quantity = (int)$product['quantity'];
-                $subtotal = (float)$product['subtotal'];
-
-                // Ensure the values are not null or invalid
-                if ($productId > 0 && $quantity > 0 && $subtotal >= 0) {
-                    $orderProductData = new OrderProduct($orderId, $productId, $quantity, $subtotal);
-                    $orderProduct = $orderProductManager->createOrderProduct($orderProductData);
-
-                    // Log the creation of each order product
-                    error_log("OrderProduct created: Order ID = $orderId, Product ID = $productId, Quantity = $quantity, Subtotal = $subtotal", 3, $logfile);
-                    
-                    // Update the stock quantity
-                    $stockManager = new StockManager();
-                    $stockData = $stockManager->findStockByProductId($productId);
-                    if(!$stockData) {
-                        throw new Exception("No stock found with this product Id");
-                    }
-                    $stockQuantity = $stockData->getQuantity(); 
-                    $newStockQuantity = $stockQuantity - $quantity;
-                    $stockData->setQuantity($newStockQuantity);
-                    $updateProductStock = $stockManager->updateStockQuantity($stockData);
-                } else {
-                    error_log("Invalid product data: " . print_r($product, true), 3, $logfile);
-                }
-            } else {
-                error_log("Missing product data keys: " . print_r($product, true), 3, $logfile);
+            // Vérifier si le répertoire de log existe, sinon le créer
+            if (!is_dir($logDir)) {
+                mkdir($logDir, 0777, true);
             }
+
+            // Vérifier si le fichier de log est accessible
+            if (!file_exists($logfile)) {
+                touch($logfile);
+            }
+            if (!is_writable($logfile)) {
+                throw new Exception("Le fichier de log n'est pas accessible en écriture.");
+            }
+
+            // Log tous les paramètres GET reçus
+            error_log("Received GET parameters: " . print_r($_GET, true), 3, $logfile);
+            error_log("Received POST parameters: " . print_r($_POST, true), 3, $logfile);
+            // Retrieve the redirection parameters
+            $paymentIntentId = $_GET["payment_intent"] ?? null;
+            $guestName = isset($_GET["guest_name"]) ? urldecode($_GET["guest_name"]) : null;
+            $city = urldecode($_GET["city"]);
+            $postalCode = urldecode($_GET["postalCode"]);
+            $street = urldecode($_GET["street"]);
+            $number = urldecode($_GET["number"]);
+            $digicode = urldecode($_GET["digicode"]);
+            $totalAmount = isset($_GET["total_amount"]) ? urldecode($_GET["total_amount"]) : null;
+            $userId = isset($_GET["user"]) ? urldecode($_GET["user"]) : null;
+
+            // Log des paramètres reçus
+            error_log("Received parameters: Payment Intent ID = $paymentIntentId, Guest Name = $guestName, Total Amount = $totalAmount, User ID = $userId", 3, $logfile);
+
+            if (!$paymentIntentId || !$totalAmount) {
+                throw new Exception("Missing payment details.");
+            }
+
+            // Stocker les paramètres récupérés dans la session
+            $_SESSION['debug'] = [
+                "Payment Intent ID" => $paymentIntentId,
+                "Guest Name" => $guestName,
+                "Total Amount" => $totalAmount,
+                "User ID" => $userId,
+                "City" => $city,
+                "Postal Code" => $postalCode,
+                "Street" => $street,
+                "Number" => $number,
+                "Digicode" => $digicode
+            ];
+
+            // Check the payment status
+            $stripe = new \Stripe\StripeClient($_ENV["API_KEY"]);
+            $paymentIntent = $stripe->paymentIntents->retrieve($paymentIntentId);
+
+            if ($paymentIntent->status !== "succeeded") {
+                throw new Exception("Payment did not succeed.");
+            }
+
+            // Create an order object and persist it to the database
+            $createdAt = new DateTime();
+            $status = "En attente de préparation";
+            // Convert totalAmount to float
+            $totalAmount = (float)$totalAmount;
+
+            // Stocker les informations avant la création de la commande
+            $_SESSION['debug']["Before Creating Order"] = [
+                "User ID" => $userId,
+                "Guest Name" => $guestName,
+                "Total Amount" => $totalAmount
+            ];
+
+            $orderModel = new Order(null, $userId, $guestName, $createdAt, $totalAmount, $status, null);
+            $orderManager = new OrderManager();
+            $order = $orderManager->createOrder($orderModel);
+
+            // Retrieve the created order identifier
+            $orderId = $order->getId();
+
+            if (!$orderId) {
+                throw new Exception("Failed to create order.");
+            }
+
+            // Stocker les informations après la création de la commande
+            $_SESSION['debug']["Order Created"] = [
+                "Order ID" => $orderId
+            ];
+
+            // Log the creation of order
+            error_log("Order created with ID: $orderId", 3, $logfile);
+
+            // Retrieve product details from the session
+            if (!isset($_SESSION['product_details']) || empty($_SESSION['product_details'])) {
+                throw new Exception("No products found in the cart.");
+            }
+
+            $products = $_SESSION['product_details'];
+
+            // Create OrderProduct objects, persist them to the database and updating the product quantity
+            $orderProductManager = new OrderProductManager();
+            $productManager = new ProductManager();
+
+            foreach ($products as $product) {
+                if (isset($product['product_id'], $product['quantity'], $product['subtotal'])) {
+                    $productId = (int)$product['product_id'];
+                    $quantity = (int)$product['quantity'];
+                    $subtotal = (float)$product['subtotal'];
+
+                    // Ensure the values are not null or invalid
+                    if ($productId > 0 && $quantity > 0 && $subtotal >= 0) {
+                        $orderProductData = new OrderProduct($orderId, $productId, $quantity, $subtotal);
+                        $orderProduct = $orderProductManager->createOrderProduct($orderProductData);
+
+                        // Log the creation of each order product
+                        error_log("OrderProduct created: Order ID = $orderId, Product ID = $productId, Quantity = $quantity, Subtotal = $subtotal", 3, $logfile);
+                    
+                        // Update the stock quantity
+                        $stockManager = new StockManager();
+                        $stockData = $stockManager->findStockByProductId($productId);
+                        if(!$stockData) {
+                            throw new Exception("No stock found with this product Id");
+                        }
+                        $stockQuantity = $stockData->getQuantity(); 
+                        $newStockQuantity = $stockQuantity - $quantity;
+                        $stockData->setQuantity($newStockQuantity);
+                        $updateProductStock = $stockManager->updateStockQuantity($stockData);
+                    } else {
+                        error_log("Invalid product data: " . print_r($product, true), 3, $logfile);
+                    }
+                } else {
+                    error_log("Missing product data keys: " . print_r($product, true), 3, $logfile);
+                }
+            }
+
+            // Log the creation of order products
+            error_log("Order products created for Order ID: $orderId", 3, $logfile);
+
+            // Create Delivery object and persist it to the database
+            $deliveryManager = new DeliveryManager();
+            $deliveryStatus = "En attente";
+            // $toUserAddress = $userId ? true : false;
+            $toUserAddress = false; // False for guest user
+            $addressId = null; // Null for guest user
+            $deliveryAddress = $number." ".$street. " ".$postalCode. " ".$city. ". Digicode: ".$digicode;
+
+            error_log("Creating delivery with Address: $deliveryAddress", 3, $logfile);
+        
+            $deliveryModel = new Delivery(null, $orderId, $toUserAddress, $addressId, $deliveryAddress, $deliveryStatus);
+            $delivery = $deliveryManager->createDelivery($deliveryModel);
+
+            if (!$delivery) {
+                throw new Exception("Failed to create delivery.");
+            }
+
+            // Log the delivery creation
+            error_log("Delivery created for Order ID: $orderId", 3, $logfile);
+        
+            unset($_SESSION['cart']);
+            unset($_SESSION['product_details']);
+      
+            // Redirect to the confirm order page
+            $this->redirect("index.php?route=order-confirmation&order_id={$order->getId()}");
+
+        } catch (Exception $e) {
+            error_log("Error: " . $e->getMessage(), 3, $logfile); // Log the error message
+            $_SESSION["debug"] = [
+                "Error" => $e->getMessage(),
+                "GET Parameters" => $_GET, // Add this line to store GET parameters in session
+                "POST Parameters" => $_POST // Log the POST parameters
+            ];
+            header("Location: /php/la-joie-exotique/templates/logErrorPage.phtml");
+            exit();
         }
-
-        // Log the creation of order products
-        error_log("Order products created for Order ID: $orderId", 3, $logfile);
-
-        unset($_SESSION['cart']);
-        unset($_SESSION['product_details']);
-        // Redirect to the confirm order page
-        $this->redirect("index.php?route=order-confirmation&order_id={$order->getId()}");
-
-    } catch (Exception $e) {
-        error_log("Error: " . $e->getMessage(), 3, $logfile); // Log the error message
-        $_SESSION["debug"] = [
-            "Error" => $e->getMessage(),
-            "GET Parameters" => $_GET // Add this line to store GET parameters in session
-        ];
-        header("Location: /php/la-joie-exotique/templates/logErrorPage.phtml");
-        exit();
     }
-}
 
     
     /**
@@ -587,6 +619,238 @@ class ShopController extends AbstractController
             header("Location: /php/la-joie-exotique/templates/logErrorPage.phtml");
             exit();
         }
+    }
+    
+    
+    /**
+     * 
+     * 
+     */
+    public function orderDetails(): void 
+    {
+        try {
+            $orderId = $_GET['order_id'] ?? null;
+
+            if (!$orderId) {
+                throw new Exception("Missing order ID.");
+            }
+            $orderManager = new OrderManager();
+            $order = $orderManager->findOrderById($orderId);
+
+            if (!$order) {
+                throw new Exception("Order not found.");
+            }
+            $orderProductManager = new OrderProductManager();
+            $orderProducts = $orderProductManager->findProductsByOrderId($orderId);
+        
+            if(!$orderProducts) {
+                throw new Exception("No products found for this order.");    
+            }
+            $productManager = new ProductManager();
+            $detailedOrderProducts = [];
+
+            foreach ($orderProducts as $orderProduct) {
+                $product = $productManager->findProductById($orderProduct->getProductId());
+
+                if ($product) {
+                    $detailedOrderProducts[] = [
+                        'productName' => $product->getName(),
+                        'quantity' => $orderProduct->getQuantity(),
+                        'subtotal' => $orderProduct->getSubtotal()
+                    ];
+                }
+            }
+            $this->render("orderDetails", [
+                "order" => $order,
+                "orderProducts" => $detailedOrderProducts
+            ]);
+            
+            
+        }  catch (Exception $e) {
+            error_log("Error: " . $e->getMessage(), 3, __DIR__ . '/log/debug.log');
+            $_SESSION["debug"] = [
+                "Error" => $e->getMessage(),
+                "GET Parameters" => $_GET
+            ];
+            header("Location: /php/la-joie-exotique/templates/logErrorPage.phtml");
+            exit();
+        }
+    }
+    
+    
+    /**
+     * 
+     * 
+     */
+    public function updateOrderStatus(): void
+    {
+        try {
+            $orderId = $_GET['order_id'] ?? null;
+
+            if (!$orderId) {
+                throw new Exception("Missing order ID.");
+            }
+            $orderManager = new OrderManager();
+            $order = $orderManager->findOrderById($orderId);
+
+            if (!$order) {
+                throw new Exception("Order not found.");
+            }
+            $this->render("updateOrderStatusForm", [
+                "order" => $order
+            ]);
+                
+        } catch (Exception $e) {
+            error_log("Error: " . $e->getMessage(), 3, __DIR__ . '/log/debug.log');
+            $_SESSION["debug"] = [
+                "Error" => $e->getMessage(),
+                "GET Parameters" => $_GET
+            ];
+            header("Location: /php/la-joie-exotique/templates/logErrorPage.phtml");
+            exit();
+        }
+    }
+    
+    
+    /**
+     * 
+     * 
+     */
+    public function checkUpdateOrderStatus(): void
+    {
+        try {
+            $orderId = $_GET['order_id'] ?? null;
+
+            if (!$orderId) {
+                throw new Exception("Missing order ID.");
+            }
+            if (!isset($_POST["status"])) {
+                throw new Exception("Missing update info.");    
+            }
+
+            $status = htmlspecialchars($_POST["status"]);
+
+            $orderManager = new OrderManager();
+            $order = $orderManager->findOrderById($orderId);
+
+            if (!$order) {
+                throw new Exception("Order not found.");
+            }
+
+            $order->setStatus($status);
+            $updateOrderStatus = $orderManager->updateOrder($order);
+
+            if (!$updateOrderStatus) {
+                throw new Exception("Failed to update the order status.");    
+            }
+            
+            $this->redirect("index.php?route=show-orders");
+                
+        } catch (Exception $e) {
+            error_log("Error: " . $e->getMessage(), 3, __DIR__ . '/log/debug.log');
+            $_SESSION["debug"] = [
+                "Error" => $e->getMessage(),
+                "GET Parameters" => $_GET
+            ];
+            header("Location: /php/la-joie-exotique/templates/logErrorPage.phtml");
+            exit();
+        }
+    }
+    
+    
+    /**
+     * 
+     * 
+     */
+    public function downloadFacture(): void 
+    {
+        try {
+            $orderId = $_GET['order_id'] ?? null;
+
+            if (!$orderId) {
+                throw new Exception("Missing order ID.");
+            }
+
+            $orderManager = new OrderManager();
+            $order = $orderManager->findOrderById($orderId);
+
+            if (!$order) {
+                throw new Exception("Order not found.");
+            }
+
+            $orderProductManager = new OrderProductManager();
+            $orderProducts = $orderProductManager->findProductsByOrderId($orderId);
+
+            if (!$orderProducts) {
+                throw new Exception("No products found for this order.");
+            }
+
+            $productManager = new ProductManager();
+            $detailedOrderProducts = [];
+
+            foreach ($orderProducts as $orderProduct) {
+                $product = $productManager->findProductById($orderProduct->getProductId());
+
+                if ($product) {
+                    $detailedOrderProducts[] = [
+                        'productName' => $product->getName(),
+                        'quantity' => $orderProduct->getQuantity(),
+                        'subtotal' => $orderProduct->getSubtotal()
+                    ];
+                }
+            }
+
+            $this->generateInvoicePDF($order, $detailedOrderProducts);
+        } catch (Exception $e) {
+            error_log("Error: " . $e->getMessage(), 3, __DIR__ . '/log/debug.log');
+            $_SESSION["debug"] = [
+                "Error" => $e->getMessage(),
+                "GET Parameters" => $_GET
+            ];
+            header("Location: /php/la-joie-exotique/templates/logErrorPage.phtml");
+            exit();
+        }
+    }
+    
+    
+    /**
+     * 
+     * 
+     */
+    private function generateInvoicePDF($order, $orderProducts): void
+    {
+        require('fpdf.php'); 
+
+        $pdf = new FPDF();
+        $pdf->AddPage();
+        $pdf->SetFont('Arial', 'B', 16);
+
+        // Titre de la facture
+        $pdf->Cell(0, 10, 'Facture', 0, 1, 'C');
+
+        // Informations de la commande
+        $pdf->SetFont('Arial', '', 12);
+        $pdf->Cell(0, 10, 'Commande No: ' . $order->getId(), 0, 1);
+        $pdf->Cell(0, 10, 'Client: ' . $order->getGuestName(), 0, 1);
+
+        // Table des produits
+        $pdf->SetFont('Arial', 'B', 12);
+        $pdf->Cell(80, 10, 'Nom du produit', 1);
+        $pdf->Cell(30, 10, 'Quantite', 1);
+        $pdf->Cell(30, 10, 'Sous-total', 1, 1);
+
+        $pdf->SetFont('Arial', '', 12);
+        foreach ($orderProducts as $product) {
+            $pdf->Cell(80, 10, $product['productName'], 1);
+            $pdf->Cell(30, 10, $product['quantity'], 1);
+            $pdf->Cell(30, 10, $product['subtotal'] . '€', 1, 1);
+        }
+
+        // Total
+        $pdf->Cell(110, 10, 'Total', 1);
+        $pdf->Cell(30, 10, $order->getTotalPrice() . '€', 1, 1);
+
+        $pdf->Output('D', 'Facture-' . $order->getId() . '.pdf');
     }
 
 }

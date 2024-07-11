@@ -181,15 +181,6 @@ class ProductController extends AbstractController
     } 
 
 
-
-    /**
-     * 
-     */
-    public function searchProduct(): void
-    {
-    }
-
-
     /**
      * Show product by its unique identifier
      * 
@@ -235,19 +226,49 @@ class ProductController extends AbstractController
         }
   
   
-    /** 
-     * 
-    */
-    public function order(): void 
-    {
-    }
-
-
     /**
+     * Searches for products by keyword and renders the corresponding view. 
      * 
      */
-    public function confirmOrder(): void 
+    public function searchProductsByKeyword(): void
     {
+        try {
+            if (isset($_GET["keyword"])) {
+                $keyword = htmlspecialchars($_GET["keyword"]);
+            
+                $productManager = new ProductManager();
+                $imageManager = new ImageManager();
+                $products = $productManager->searchProductByKeyword($keyword);
+            
+                if (!$products) {
+                    throw new Exception("Products not found");
+                }
+                foreach($products as $product) {
+                    $imageIds = [
+                        $product->getImage1Id(),
+                        $product->getImage2Id(),
+                        $product->getImage3Id(),
+                        $product->getImage4Id()
+                    ];
+
+                    $images = array_filter(array_map(function($imageId) use ($imageManager) {
+                    return $imageId ? $imageManager->findImageById($imageId) : null;
+                }, $imageIds));
+
+                $product->images = $images;
+          
+                }
+                $this->render("searchProductsByKeyword", [
+                    'products' => $products,
+                    'searchKeyword' => $keyword
+                ]);
+                
+            } else {
+                $this->render("error.html.twig", []);
+            }
+        } catch (Exception $e) {
+            echo "Une erreur s'est produite lors de l'opération: " . $e->getMessage();
+        }
     }
 
 }
