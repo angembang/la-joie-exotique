@@ -408,6 +408,7 @@ class ShopController extends AbstractController
             // Log tous les paramètres GET reçus
             error_log("Received GET parameters: " . print_r($_GET, true), 3, $logfile);
             error_log("Received POST parameters: " . print_r($_POST, true), 3, $logfile);
+            
             // Retrieve the redirection parameters
             $paymentIntentId = $_GET["payment_intent"] ?? null;
             $guestName = isset($_GET["guest_name"]) ? urldecode($_GET["guest_name"]) : null;
@@ -489,6 +490,7 @@ class ShopController extends AbstractController
             // Create OrderProduct objects, persist them to the database and updating the product quantity
             $orderProductManager = new OrderProductManager();
             $productManager = new ProductManager();
+            $stockManager = new StockManager();
 
             foreach ($products as $product) {
                 if (isset($product['product_id'], $product['quantity'], $product['subtotal'])) {
@@ -505,15 +507,15 @@ class ShopController extends AbstractController
                         error_log("OrderProduct created: Order ID = $orderId, Product ID = $productId, Quantity = $quantity, Subtotal = $subtotal", 3, $logfile);
                     
                         // Update the stock quantity
-                        $stockManager = new StockManager();
-                        $stockData = $stockManager->findStockByProductId($productId);
-                        if(!$stockData) {
-                            throw new Exception("No stock found with this product Id");
-                        }
-                        $stockQuantity = $stockData->getQuantity(); 
-                        $newStockQuantity = $stockQuantity - $quantity;
-                        $stockData->setQuantity($newStockQuantity);
-                        $updateProductStock = $stockManager->updateStockQuantity($stockData);
+                    $stockData = $stockManager->findStockByProductId($productId);
+                    if(!$stockData) {
+                        error_log("No stock found for product ID: " . $productId, 3, $logfile);
+                        throw new Exception("No stock found with this product Id");
+                    }
+                    $stockQuantity = $stockData->getQuantity(); 
+                    $newStockQuantity = $stockQuantity - $quantity;
+                    $stockData->setQuantity($newStockQuantity);
+                    $updateProductStock = $stockManager->updateStockQuantity($stockData);
                     } else {
                         error_log("Invalid product data: " . print_r($product, true), 3, $logfile);
                     }
@@ -819,11 +821,17 @@ class ShopController extends AbstractController
      */
     private function generateInvoicePDF($order, $orderProducts): void
     {
-        require('fpdf.php'); 
-
+         // Définir le chemin vers le répertoire des polices
+    define('FPDF_FONTPATH', __DIR__ . '/../libs/fpdf186/font/');
+    
+    // Vérifiez que le répertoire des polices est accessible
+    if (!is_dir(FPDF_FONTPATH)) {
+        throw new Exception('Le répertoire des polices est introuvable: ' . FPDF_FONTPATH);
+    }
         $pdf = new FPDF();
         $pdf->AddPage();
         $pdf->SetFont('Arial', 'B', 16);
+        $euro = chr(128);
 
         // Titre de la facture
         $pdf->Cell(0, 10, 'Facture', 0, 1, 'C');
@@ -843,12 +851,12 @@ class ShopController extends AbstractController
         foreach ($orderProducts as $product) {
             $pdf->Cell(80, 10, $product['productName'], 1);
             $pdf->Cell(30, 10, $product['quantity'], 1);
-            $pdf->Cell(30, 10, $product['subtotal'] . '€', 1, 1);
+            $pdf->Cell(30, 10, $product['subtotal'] . $euro, 1, 1);
         }
 
         // Total
         $pdf->Cell(110, 10, 'Total', 1);
-        $pdf->Cell(30, 10, $order->getTotalPrice() . '€', 1, 1);
+        $pdf->Cell(30, 10, $order->getTotalPrice() . $euro, 1, 1);
 
         $pdf->Output('D', 'Facture-' . $order->getId() . '.pdf');
     }

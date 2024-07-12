@@ -75,7 +75,7 @@ class StockManager extends AbstractManager
 
       // Fetch the retrieved stock data from the database.
       $stockData = $query->fetch(PDO::FETCH_ASSOC);
-
+        
       // Check if the stock data is found.
       if ($stockData) {
         $stock = new Stock(

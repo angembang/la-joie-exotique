@@ -4,7 +4,8 @@
             "controllers/",
             "managers/",
             "models/",
-            "services/"
+            "services/",
+            "libs"
         ]
     },
     "require": {

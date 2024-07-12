@@ -128,6 +128,10 @@ main {
   font-size: 1rem;
 }
 
+.search-bar input {
+  width: 300px;
+}
+
 ul {
   margin: 0;
   padding: 0;
@@ -796,6 +800,51 @@ footer i {
 
 
 /************************* admin order page **************************/
+.admin-orders h2 {
+  font-size: 1.9rem;
+  color: #00295B;
+  text-align: center;  
+}
+
+.admin-orders table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 20px;
+}
+
+.admin-orders th, .admin-orders td {
+    padding: 10px;
+    text-align: left;
+    border-bottom: 1px solid #ddd;
+}
+
+/* Style de l'en-tête du tableau */
+.admin-orders th {
+    background-color: #f4f4f4;
+    color: #333;
+    font-weight: bold;
+}
+
+/* Style des lignes du tableau */
+.admin-orders tr:nth-child(even) {
+    background-color: #f9f9f9;
+}
+
+.admin-orders tr:hover {
+    background-color: #f1f1f1;
+}
+
+/* Style des liens dans le tableau */
+.admin-orders a {
+    color: #007BFF;
+    text-decoration: none;
+    margin-right: 10px;
+}
+
+.admin-orders a:hover {
+    text-decoration: underline;
+}
+  
 .hidden-column {
   display: none;
 }
@@ -813,6 +862,10 @@ footer i {
   background-color: rgba(174, 127, 36, 0.6);
   color: #00295B;
   font-size: 1.1rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
 }
 
 .paiement-redirect-page table {
@@ -849,7 +902,8 @@ footer i {
   margin: 1rem;
 }
 .paiement-redirect {
-  background-color: white;  
+  background-color: white;
+  width: 370px;
 }
 
 .paiement-info-message i {
@@ -873,6 +927,10 @@ footer i {
 .order-total-amount {
   margin-top: 1rem;
 }
+
+.paiement-redirect-page form button {
+  width: 250px;  
+} 
 /**********************end of redirect confirm order page************/
 
 
@@ -884,6 +942,15 @@ footer i {
   width: 400Px;
   background: rgba(174, 127, 36, 0.6);
   padding: 1rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  color: #00295B;
+}
+
+.admin-order-details table {
+  width: 300px;
 }
 /*********************************************************************/
 
