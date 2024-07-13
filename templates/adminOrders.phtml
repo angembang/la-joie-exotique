@@ -1,3 +1,6 @@
+<?php
+    require "adminHeader.phtml";
+?>
 <!-- templates/adminOrders.phtml -->
 <section class="admin-orders">
     <h2>Commandes</h2>
@@ -23,7 +26,7 @@
                         <td><?= $order->getStatus(); ?></td>
                         <td>
                             <a href="index.php?route=order-details&order_id=<?= $order->getId(); ?>">Voir</a>
-                            <a href="index.php?route=update-order-status&order_id=<?= $order->getId(); ?>">Modifier le status</a>
+                            <a href="index.php?route=update-order-status&order_id=<?= $order->getId(); ?>"><i class="fa-solid fa-edit"></i></a>
                         </td>
                     </tr>
                 <?php endforeach; ?>

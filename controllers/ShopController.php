@@ -860,5 +860,93 @@ class ShopController extends AbstractController
 
         $pdf->Output('D', 'Facture-' . $order->getId() . '.pdf');
     }
+    
+    
+    /**
+     * 
+     * 
+     */
+    public function inventory(): void {
+        try {
+            $orderManager = new OrderManager();
+            $orderProductManager = new OrderProductManager();
+            $productManager = new ProductManager();
+
+            // Récupérer toutes les commandes
+            $orders = $orderManager->findAll();
+
+            // Vérifier que les commandes ne sont pas nulles ou vides
+            if (empty($orders)) {
+                throw new Exception("No orders found.");
+            }
+
+            // Initialiser les variables pour stocker les informations
+            $productSales = [];
+            $totalSales = 0;
+
+            // Parcourir chaque commande
+            foreach ($orders as $order) {
+                // Récupérer les produits de la commande
+                $orderProducts = $orderProductManager->findProductsByOrderId($order->getId());
+
+                // Vérifier que les produits de la commande ne sont pas nulles ou vides
+                if (empty($orderProducts)) {
+                    error_log("No products found for order ID: " . $order->getId(), 3, __DIR__ . '/log/debug.log');
+                    continue;
+                }
+
+                // Parcourir chaque produit de la commande
+                foreach ($orderProducts as $orderProduct) {
+                    $productId = $orderProduct->getProductId();
+                    $quantity = $orderProduct->getQuantity();
+                    $subtotal = $orderProduct->getSubtotal();
+
+                    // Récupérer les informations du produit
+                    $product = $productManager->findProductById($productId);
+
+                    if ($product) {
+                        $productName = $product->getName();
+
+                        // Ajouter les informations du produit dans le tableau
+                        if (!isset($productSales[$productId])) {
+                            $productSales[$productId] = [
+                                'name' => $productName,
+                                'quantity' => 0,
+                                'subtotal' => 0
+                            ];
+                        }
+
+                        $productSales[$productId]['quantity'] += $quantity;
+                        $productSales[$productId]['subtotal'] += $subtotal;
+                        $totalSales += $subtotal;
+                    } else {
+                        error_log("Product not found for product ID: " . $productId, 3, __DIR__ . '/log/debug.log');
+                    }
+                }
+            }
+
+            // Trier les produits par quantité vendue pour trouver le top 5
+            usort($productSales, function ($a, $b) {
+                return $b['quantity'] - $a['quantity'];
+            });
+
+            $top5Products = array_slice($productSales, 0, 5);
+
+            // Afficher les résultats dans la vue
+            $this->render("inventory", [
+                'productSales' => $productSales,
+                'totalSales' => $totalSales,
+                'top5Products' => $top5Products
+            ]);
+        } catch (Exception $e) {
+            error_log("Error: " . $e->getMessage(), 3, __DIR__ . '/log/debug.log');
+            $_SESSION["debug"] = [
+                "Error" => $e->getMessage(),
+                "GET Parameters" => $_GET
+            ];
+            header("Location: /php/la-joie-exotique/templates/logErrorPage.phtml");
+            exit();
+        }
+    }
 
 }

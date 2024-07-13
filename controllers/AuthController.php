@@ -209,6 +209,11 @@ class AuthController extends AbstractController
    */
   public function logout(): void
   {
+    // Destroy session 
+        session_destroy();
+        // Render home page
+        header('Location: index.php?route=home');
+        exit();
+   }
 
-  }
 }

@@ -1,0 +1,46 @@
+<?php
+    require "adminHeader.phtml";
+?>
+<section class="inventory-section">
+    <h2>Inventaire des Ventes</h2>
+    <table>
+        <thead>
+            <tr>
+                <th>Nom du Produit</th>
+                <th>Quantité Vendue</th>
+                <th>Sous-total (€)</th>
+            </tr>
+        </thead>
+        <tbody>
+            <?php foreach ($productSales as $product): ?>
+                <tr>
+                    <td><?= htmlspecialchars($product['name']) ?></td>
+                    <td><?= htmlspecialchars($product['quantity']) ?></td>
+                    <td><?= htmlspecialchars(number_format($product['subtotal'], 2)) ?>€</td>
+                </tr>
+            <?php endforeach; ?>
+        </tbody>
+    </table>
+    <sction class="total-vente">
+        <h3>Total des Ventes: <?= htmlspecialchars(number_format($totalSales, 2)) ?>€</h3>
+    </sction>
+    <section class="top-five-products">
+        <h4>Top 5 des Produits les Plus Vendus</h4>
+        <table>
+            <thead>
+                <tr>
+                    <th>Nom du Produit</th>
+                    <th>Quantité Vendue</th>
+                </tr>
+            </thead>
+            <tbody>
+                <?php foreach ($top5Products as $product): ?>
+                    <tr>
+                        <td><?= htmlspecialchars($product['name']) ?></td>
+                        <td><?= htmlspecialchars($product['quantity']) ?></td>
+                    </tr>
+                <?php endforeach; ?>
+            </tbody>
+        </table>
+    </section>
+</section>

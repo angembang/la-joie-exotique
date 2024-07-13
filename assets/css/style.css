@@ -25,6 +25,7 @@ main {
 
 header, footer {
   height: 10%;
+  width: 100%;
 }
 
 /**************************************  Header **************************************/
@@ -677,16 +678,21 @@ footer i {
 .admin-header {
   background-color: rgba(174, 127, 36, 0.6);
   color: white;
-  padding: 15px;
-  text-align: center;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  padding: 1rem;
   font-size: 1.5rem;
 }
 
 .admin-main {
+  width: 95%;
   display: flex;
   flex-direction: column;
   align-items: center;
   margin: 10px;
+  margin-top: 2rem;
 }
 
 .admin-nav {
@@ -719,6 +725,7 @@ footer i {
   color: white;
   text-decoration: none;
   transition: background-color 0.3s ease;
+  font-size: 1.2rem;
 }
 
 .admin-nav a:hover {
@@ -737,8 +744,8 @@ footer i {
 
 .admin-content h2 {
   margin-top: 0;
-  color: #333;
-  font-size: 1.2rem;
+  color: #00295B;
+  font-size: 1.7rem;
   text-align: center;
 }
 
@@ -747,7 +754,9 @@ footer i {
   text-align: center;
 }
 
-/******************** admin page ******************************/
+/******************** end of admin page******************************/
+
+
 
 /******************** add product page ******************************/
 .productForm {
@@ -780,7 +789,7 @@ footer i {
 .productForm select {
   width: 300px;
 }
-/******************** end of add product page ******************************/
+/******************** end of add product page ***********************/
 
 /* Dark mode */
 /*@media (prefers-color-scheme: dark) {
@@ -799,7 +808,7 @@ footer i {
 }*/
 
 
-/************************* admin order page **************************/
+/************************* admin order page ************************/
 .admin-orders h2 {
   font-size: 1.9rem;
   color: #00295B;
@@ -810,6 +819,7 @@ footer i {
     width: 100%;
     border-collapse: collapse;
     margin-top: 20px;
+    color: #00295B;
 }
 
 .admin-orders th, .admin-orders td {
@@ -839,6 +849,12 @@ footer i {
     color: #007BFF;
     text-decoration: none;
     margin-right: 10px;
+    font-size: 1.2rem;
+    
+}
+
+.admin-orders a i {
+  color: red;
 }
 
 .admin-orders a:hover {
@@ -850,9 +866,10 @@ footer i {
 }
 .admin-orders {
   padding: 1rem;
+  background-color: rgba(174, 127, 36, 0.6);
 }
 
-/**********************end of admin order page ************************/
+/**********************end of admin order pag************************/
     
     
     
@@ -937,10 +954,9 @@ footer i {
 
 
 
-/****************** admin order details page *************************/
+/****************** admin order details page ***********************/
 .admin-order-details {
   width: 400Px;
-  background: rgba(174, 127, 36, 0.6);
   padding: 1rem;
   display: flex;
   flex-direction: column;
@@ -952,9 +968,14 @@ footer i {
 .admin-order-details table {
   width: 300px;
 }
+
+.admin-order-page {
+  background: rgba(174, 127, 36, 0.6); 
+  min-height: 90vh;
+}
 /*********************************************************************/
 
-/*********************update order status page************************/
+/*********************update order status page**********************/
 .update-order-status {
   display: flex;
   flex-direction: column;
@@ -974,3 +995,72 @@ footer i {
   margin-top: 1rem;
 }
 /*********************************************************************/
+
+
+
+
+/******************* admin header page *****************************/
+.admin-header-section {
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+}
+.admin-header-section p a {
+  font-size: 1.5rem;
+  text-decoration: underline;
+  color: red;
+}
+/*******************************************************************/
+
+
+
+
+/*********************** inventory page *************************/
+.inventory-section {
+  background-color: rgba(174, 127, 36, 0.6);
+  width: 95%;
+  padding: 1rem;
+  color: #00295B;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.inventory-section h2 {
+  text-align: center;
+  font-size: 1.9rem;
+} 
+
+.inventory-section h3, 
+.inventory-section h4 {
+  font-size: 1.6rem; 
+  text-align: center;
+}
+
+.inventory-section table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-bottom: 20px;
+    background-color: white;
+}
+
+.inventory-section table th,
+.inventory-section table td {
+    border: 1px solid #ddd;
+    padding: 8px;
+    text-align: left;
+}
+
+.inventory-section table th {
+    background-color: #f2f2f2;
+}
+
+.total-vente, 
+.top-five-products{
+  background-color: white;
+  padding: 1rem;
+  margin: 1rem;
+  width: 95%;
+}
+/*****************end of inventory page    ********************/

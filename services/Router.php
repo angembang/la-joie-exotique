@@ -122,7 +122,7 @@
           break;
           
         case "create-paiement-stripe":
-          // Route for placing an order
+          // Route for displaying a stripe paiement
           $shopController->createStripe();
           break;
 
@@ -132,17 +132,17 @@
           break;
           
         case "payment-success":
-          // Route for placing an order
+          // Route for the payment success
           $shopController->paymentSuccess();
           break;
           
         case "order-confirmation":
-          // Route for placing an order
+          // Route displaying the order confirmation place
           $shopController->orderConfirmation();
           break;
           
         case "download-facture":
-          // Route for placing an order
+          // Route for dowloading the facture
           $shopController->downloadFacture();
           break;
           
@@ -152,28 +152,33 @@
           break;
 
         case "show-orders":
-          // Route for placing an order
+          // Route for displaying orders
           $shopController->showOrders();
           break;
           
         case "order-details":
-          // Route for placing an order
+          // Route for displaying the order details
           $shopController->orderDetails();
           break;
           
         case "update-order-status":
-          // Route for placing an order
+          // Route for displaying the update order status form
           $shopController->updateOrderStatus();
           break;
           
          case "checkUpdate-order-status":
-          // Route for placing an order
+          // Route for checking the updating order status form
           $shopController->checkUpdateOrderStatus();
           break;
 
         case "payment-form":
           // Route for displaying the payment form
           $shopController->showPaymentForm();
+          break;
+          
+        case "admin-inventory":
+          // Route for displaying the inventaire page
+          $shopController->inventory();
           break;
 
         case "about":
@@ -192,10 +197,10 @@
           break;
 
         case "contact":
-          // Route for displaying the privacy policy page
+          // Route for displaying the contact page
           $pageController->contact();
           break;
-
+          
         default:
           // Default route, display the home page
           $pageController->home();
