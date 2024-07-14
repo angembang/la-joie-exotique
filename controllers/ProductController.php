@@ -143,7 +143,7 @@ class ProductController extends AbstractController
             $category =  $categoryManager->findCategoryById($categoryId);
 
             if($category) {
-                $categoryId = $category->getid();
+                $categoryId = $category->getId();
                 $products = $productManager->findProductsByCategoryId($categoryId);
 
                 foreach($products as $product) {
@@ -270,5 +270,90 @@ class ProductController extends AbstractController
             echo "Une erreur s'est produite lors de l'opération: " . $e->getMessage();
         }
     }
+    
+    
+    /**
+     * 
+     * 
+     */
+    public function showProductsOfAlimentaryCategory(): void {
+        try {
+            $categoryManager = new CategoryManager();
+            $productManager = new ProductManager();
+            $imageManager = new ImageManager();
+            $categoryName = "Produits alimentaires";
+            $category =  $categoryManager->findCategoryByName($categoryName);
+
+            if($category) {
+                $categoryId = $category->getId();
+                $products = $productManager->findProductsByCategoryId($categoryId);
+
+                foreach($products as $product) {
+                    $productImages = [
+                        $product->getImage1Id(),
+                        $product->getImage2Id(),  
+                        $product->getImage3Id(),
+                        $product->getImage4Id()  
+                    ];
+                    $images = array_filter(array_map(function ($imageId) use ($imageManager) {
+                        return $imageId ? $imageManager->findImageById($imageId) :null;
+                    },  $productImages));
+
+                    $product->images = $images;
+                }
+                $this->render("productsCategory", [
+                    "category" => $category,
+                    "products" => $products
+                ]);
+            }
+        } catch(Exception $e) {
+            error_log("Failed to show products by category: ".$e->getMessage().$e->getCode());
+            throw new Exception("Failed to show products by category");
+        }
+        
+    }
+        
+        
+    /**
+     * 
+     * 
+     */
+    public function showProductsOfCosmeticCategory(): void 
+    {
+       try {
+            $categoryManager = new CategoryManager();
+            $productManager = new ProductManager();
+            $imageManager = new ImageManager();
+            $categoryName = "Produits cosmétiques";
+            $category =  $categoryManager->findCategoryByName($categoryName);
+
+            if($category) {
+                $categoryId = $category->getId();
+                $products = $productManager->findProductsByCategoryId($categoryId);
+
+                foreach($products as $product) {
+                    $productImages = [
+                        $product->getImage1Id(),
+                        $product->getImage2Id(),  
+                        $product->getImage3Id(),
+                        $product->getImage4Id()  
+                    ];
+                    $images = array_filter(array_map(function ($imageId) use ($imageManager) {
+                        return $imageId ? $imageManager->findImageById($imageId) :null;
+                    },  $productImages));
+
+                    $product->images = $images;
+                }
+                $this->render("productsCategory", [
+                    "category" => $category,
+                    "products" => $products
+                ]);
+            }
+        } catch(Exception $e) {
+            error_log("Failed to show products by category: ".$e->getMessage().$e->getCode());
+            throw new Exception("Failed to show products by category");
+        }        
+    }
+    
 
 }

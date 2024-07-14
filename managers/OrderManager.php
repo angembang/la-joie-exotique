@@ -157,6 +157,51 @@ class OrderManager extends AbstractManager
       throw new PDOException("Failed to find orders");
     }
   }
+  
+  
+  /**
+   * Retrieves orders by their guest name
+   * 
+   * @param string $guestName The guest name of the order.
+   * 
+   * @return array|null The array of retrieved orders or null if no order is found.
+   * 
+   * @throws PDOException If an error occurs during the database operation.
+   */
+  public function findOrdersByGuestName(string $guestName): ?array 
+  {
+    try {
+      // Calculer la date il y a 3 mois
+        $threeMonthsAgo = (new DateTime())->modify('-3 months')->format('Y-m-d H:i:s');
+      // Prepare the query to retrieve orders by the user identifier.
+      $query = $this->db->prepare("SELECT * FROM orders
+      WHERE guest_name = :guest_name 
+      AND created_at >= :three_months_ago 
+      ORDER BY created_at DESC");
+
+      // Bind the parametre with its value.
+      $parameter = [
+        ":guest_name" => $guestName,
+        ":three_months_ago" => $threeMonthsAgo
+      ];
+
+      // Execute the query with the parameter.
+      $query->execute($parameter);
+
+      // Fetch the order data from the database.
+      $ordersData = $query->fetchAll(PDO::FETCH_ASSOC);
+
+      // Check if orders are found
+      if($ordersData) {
+        return $this->hydrateOrders($ordersData);
+      }
+      return null;  
+
+    } catch(PDOException $e) {
+      error_log("Failed to find orders: " .$e->getMessage(). $e->getCode());
+      throw new PDOException("Failed to find orders");
+    }
+  }
 
 
   /**

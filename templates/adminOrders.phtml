@@ -2,6 +2,13 @@
     require "adminHeader.phtml";
 ?>
 <!-- templates/adminOrders.phtml -->
+<nav aria-label="breadcrumb">
+    <ol class="breadcrumb breadcrumb-font-size">
+        <li class="breadcrumb-item"><a href="index.php?route=admin">Accueil</a></li>
+        <li class="breadcrumb-item active" aria-current="page">Commandes</li>
+        <li class="breadcrumb-item"><a href="index.php?route=admin-inventory">Inventaire</a></li></li>
+    </ol>
+</nav>
 <section class="admin-orders">
     <h2>Commandes</h2>
     <?php if (isset($data['orders']) && !empty($data['orders'])): ?>

@@ -186,7 +186,9 @@ class ShopController extends AbstractController
             echo json_encode([
                 'quantity' => $quantity,
                 'subtotal' => $subtotal,
-                'totalAmount' => $totalAmount
+                'totalAmount' => $totalAmount,
+                'message' => 'Quantité mise à jour',
+                'cart' => $_SESSION["cart"]
             ]);
         } else {
             echo json_encode(['error' => 'Product not found in cart']);
@@ -245,58 +247,15 @@ class ShopController extends AbstractController
                 return $product->getPrice() * $_SESSION["cart"][$id];
             }, array_keys($_SESSION["cart"])));
 
-            echo json_encode(['totalAmount' => $totalAmount]);
+            echo json_encode([
+                'totalAmount' => $totalAmount, 
+                'message' => 'Produit supprimé du panier',
+                'cart' => $_SESSION["cart"]
+                ]);
         } else {
             echo json_encode(['error' => 'Product not found in cart']);
         }
         exit();
-    }
-
-
-    /*
-     *
-     */
-    public function placeOrder(): void {
-        if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-            if (!isset($_SESSION)) {
-                session_start();
-            }
-    
-            $userId = isset($_SESSION['user']['id']) ? $_SESSION['user']['id'] : null;
-            $guestName = $_POST['guest-name'] ?? null;
-            $city = $_POST['city'] ?? null;
-            $postalCode = $_POST['postalCode'] ?? null;
-            $street = $_POST['street'] ?? null;
-            $number = $_POST['number'] ?? null;
-            $digicodeOrApptName = $_POST['digicode-or-appt-name'] ?? null;
-            $totalAmount = $_SESSION['totalAmount'];
-            $orderDate = new DateTime();
-            $status = 'Pending';
-    
-            // Log the received data
-            error_log("Order data: userId=$userId, guestName=$guestName, totalAmount=$totalAmount, status=$status");
-    
-            // Create the order
-            $orderManager = new OrderManager();
-            $order = new Order(null, $userId,  $orderDate, $totalAmount, $status, null, $guestName);
-            $createdOrder = $orderManager->createOrder($order);
-    
-            if ($createdOrder) {
-                $cart = $_SESSION['cart'];
-                $orderProductManager = new OrderProductManager();
-    
-                foreach ($cart as $productId => $quantity) {
-                    $orderProductManager->createOrderProduct($createdOrder->getId(), $productId, $quantity);
-                }
-    
-                unset($_SESSION['cart']);
-    
-                $this->redirect("index.php?route=payment-form&order_id={$createdOrder->getId()}");
-            } else {
-                $_SESSION['error-message'] = "Failed to create order.";
-                $this->redirect("index.php?route=shopping-cart");
-            }
-        }
     }
 
 
@@ -472,6 +431,8 @@ class ShopController extends AbstractController
                 throw new Exception("Failed to create order.");
             }
 
+            // Stocker le guestName dans la session
+            $_SESSION['guest_name'] = $guestName;
             // Stocker les informations après la création de la commande
             $_SESSION['debug']["Order Created"] = [
                 "Order ID" => $orderId
@@ -937,6 +898,43 @@ class ShopController extends AbstractController
                 'productSales' => $productSales,
                 'totalSales' => $totalSales,
                 'top5Products' => $top5Products
+            ]);
+        } catch (Exception $e) {
+            error_log("Error: " . $e->getMessage(), 3, __DIR__ . '/log/debug.log');
+            $_SESSION["debug"] = [
+                "Error" => $e->getMessage(),
+                "GET Parameters" => $_GET
+            ];
+            header("Location: /php/la-joie-exotique/templates/logErrorPage.phtml");
+            exit();
+        }
+    }
+    
+    
+    /**
+     * 
+     * 
+     */
+    public function showOrdersByGuestName(): void 
+    {
+        try {
+            // Récupérer le guestName de la session
+            $guestName = $_SESSION['guest_name'] ?? null;
+
+            if (!$guestName) {
+                throw new Exception("Guest name not found in session.");
+            }
+
+            $orderManager = new OrderManager();
+            $orders = $orderManager->findOrdersByGuestName($guestName);
+
+            if (!$orders) {
+                throw new Exception("No orders found for this guest.");
+            }
+
+            $this->render("userOrders", [
+                "guestName" => $guestName,
+                "orders" => $orders
             ]);
         } catch (Exception $e) {
             error_log("Error: " . $e->getMessage(), 3, __DIR__ . '/log/debug.log');

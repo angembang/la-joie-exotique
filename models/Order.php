@@ -55,7 +55,7 @@ class Order
   {
     $this->id = $id;
     $this->userId = $userId;
-    $this->createdAt =  new DateTime(); // Set to current date and time automatically
+    $this->createdAt = $createdAt; 
     $this->totalPrice = $totalPrice;
     $this->status = $status;
     $this->updatedAt = $updatedAt;

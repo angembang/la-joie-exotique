@@ -1,35 +1,36 @@
 <!-- header -->
 <header>
-<nav class="home-nav-bar" role="navigation" aria-label="Navigation principale">
-    <!-- Navigation Links -->
-    <ul>
-        <li><button class="burger" aria-label="Ouvrir le menu">
-            <i class="fa-solid fa-bars"></i>
-        </li></button>
-        <ul class="display-none">
-            <li><a href="index.php?route=about" aria-label="A-propos">A-propos</a></li>
-            <li><a href="index.php?route=contact" aria-label="Contact">Contact</a></li>
+    <nav class="home-nav-bar" role="navigation" aria-label="Navigation principale">
+        <!-- Navigation Links -->
+        <ul>
+            <li><button class="burger" id="menu-icon" aria-label="Ouvrir le menu">
+                <i class="fa-solid fa-bars"></i>
+            </li></button>
+            <ul class="display-none header-nav-ul">
+                <li><a href="index.php?route=about" aria-label="A-propos">A-propos</a></li>
+                <li><a href="index.php?route=contact" aria-label="Contact">Contact</a></li>
+            </ul>
         </ul>
-    </ul>
-    <h1>La joie Exotique</h1>
-    <ul class="nav-icone">
-        <li class="burgercolor">
-            <a href="index.php?route=register-login" aria-label="Connexion">
-                <i class="fa-solid fa-user"></i>
-            </a>
-        </li> 
-        <li>
-            <a href="index.php?route=shopping-cart" aria-label="Panier">
-                <i class="fa-solid fa-cart-shopping"></i>
-                <span class="cart-item-count">
-                    <?php if (isset($_SESSION["cart"]) && is_array($_SESSION["cart"])): ?>
-                        <?= array_sum($_SESSION["cart"]); ?>
-                    <?php else: ?>
-                        0
-                    <?php endif; ?>
-                </span>
-            </a>
-        </li> 
-    </ul>
-</nav>
+        <h1>La joie Exotique</h1>
+        <ul class="nav-icone">
+            <li class="burgercolor">
+                <a href="index.php?route=register-login" aria-label="Connexion">
+                    <i class="fa-solid fa-user"></i>
+                </a>
+            </li> 
+            <li>
+                <a href="index.php?route=shopping-cart" aria-label="Panier">
+                    <i class="fa-solid fa-cart-shopping"></i>
+                    <span class="cart-item-count">
+                        <?php if (isset($_SESSION["cart"]) && is_array($_SESSION["cart"])): ?>
+                            <?= array_sum($_SESSION["cart"]); ?>
+                        <?php else: ?>
+                            0
+                        <?php endif; ?>
+                    </span>
+                </a>
+            </li> 
+        </ul>
+    </nav>
+
 </header>

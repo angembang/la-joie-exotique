@@ -1,13 +1,16 @@
+<?php
+    require "header.phtml";
+?>
 <link rel="stylesheet" href="../assets/css/product.css">
-<main>
+<div class="main-product-page">
     <div id="successModal" class="modal">
        <div class="modal-content">
            <span class="close">&times;</span>
            <p id="modalMessage"></p>
         </div>
     </div>
-     <!-- Search bar -->
-    <form class="search-bar" action="index.php?route=search-product" method="GET">
+    <!-- Search bar -->
+    <form class="search-bar search-bar-product" action="index.php?route=search-product" method="GET">
         <input type="hidden" name="route" value="search-product">
         <!-- Input field for entering the product name -->
         <input type="search" name="keyword" id="keyword" placeholder="Rechercher produit">
@@ -15,6 +18,7 @@
         <button class="search-button" type="submit"><i class="fa-solid fa-magnifying-glass"></i></button>
     </form>
     <section class="product-detail">
+        <h2 class="product-title"><?= htmlspecialchars($product->getName()); ?></h2>
         <p class="product-description"><?= htmlspecialchars($product->getDescription()); ?></p>
         <!------------------------------------ images slider ------------------------------------------------->
         <div id="carousel-<?= $product->getId(); ?>" class="carousel slide carrousel-img product-detail-slider-box-img" data-ride="carousel">
@@ -44,5 +48,6 @@
         <p class="product-category-cart product-link-add-cart"><a href="#" class="add-to-cart add-to-cart-button" data-product-id="<?= $product->getId(); ?>">Ajouter au panier</a></p>
         
     </section>
-</main>
+</div>
+
 

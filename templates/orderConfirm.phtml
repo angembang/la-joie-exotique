@@ -1,5 +1,13 @@
 <!-- templates/orderConfirmation.phtml -->
 <div class="paiement-redirect-page">
+    <nav aria-label="breadcrumb">
+        <ol class="breadcrumb breadcrumb-font-size">
+            <li class="breadcrumb-item"><a href="index.php?route=home">Home</a></li>
+            <li class="breadcrumb-item"><a href="index.php?route=category-alimentary">Alimentaires</a></li>
+            <li class="breadcrumb-item"><a href="index.php?route=category-cosmetic">Cosmétiques</a></li></li>
+            <li class="breadcrumb-item"><a href="index.php?route=show-orders-by-guest-name">Mes commandes</a></li></li>
+        </ol>
+    </nav>
     <section class="paiement-info-message">
         <h2>Merci <?= htmlspecialchars($order->getGuestName()) ?></h2>
         <div class="confirm-order-message">

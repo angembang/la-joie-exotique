@@ -2,11 +2,19 @@
 <link rel="stylesheet" href="../assets/css/checkout.css">
 <script src="assets/js/checkout.js" defer></script>
 <section class="payment-style">
+    <nav aria-label="breadcrumb">
+        <ol class="breadcrumb breadcrumb-font-size">
+            <li class="breadcrumb-item"><a href="index.php?route=home">Home</a></li>
+            <li class="breadcrumb-item"><a href="index.php?route=category-alimentary">Alimentaires</a></li>
+            <li class="breadcrumb-item"><a href="index.php?route=category-cosmetic">Cosmétiques</a></li></li>
+            <li class="breadcrumb-item"><a href="index.php?route=show-orders-by-guest-name">Mes commandes</a></li></li>
+        </ol>
+    </nav>
     <!-- Delivery options -->
     <div id="delivery-options" class="delivery-options">
         <h2>Options de Livraison</h2>
         <p>Veuillez choisir une option :</p>
-        <button id="login-option" class="option-button">Se connecter avant de passer la commande</button>
+        <button id="login-option" class="option-button disabled" disabled>Se connecter avant de passer la commande</button>
         <button id="guest-option" class="option-button">Passer la commande sans se connecter</button>
     </div>
 

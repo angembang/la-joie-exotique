@@ -1,0 +1,43 @@
+<?php
+    require "header.phtml";
+?>
+<nav aria-label="breadcrumb">
+        <ol class="breadcrumb breadcrumb-font-size">
+            <li class="breadcrumb-item"><a href="index.php?route=home">Home</a></li>
+            <li class="breadcrumb-item"><a href="index.php?route=category-alimentary">Alimentaires</a></li>
+            <li class="breadcrumb-item"><a href="index.php?route=category-cosmetic">Cosmétiques</a></li></li>
+            <li class="breadcrumb-item active" aria-current="page">Mes commandes</li></li>
+        </ol>
+    </nav>
+<div class="user-orders-page">
+    <h2>Mes commandes</h2>
+    <div class="user-orders-table">
+    <?php if (!empty($orders)): ?>
+        <table>
+            <thead>
+                <tr>
+                    <th>Numéro commande</th>
+                    <th>Nom</th>
+                    <th>Prix total</th>
+                    <th>Status</th>
+                    <th>Date</th>
+                </tr>
+            </thead>
+            <tbody>
+                <?php foreach ($orders as $order): ?>
+                    <tr>
+                        <td><?= htmlspecialchars($order->getId()) ?></td>
+                        <td><?= htmlspecialchars($order->getGuestName()) ?></td>
+                        <td><?= htmlspecialchars($order->getTotalPrice()) ?></td>
+                        <td><?= htmlspecialchars($order->getStatus()) ?></td>
+                        <td><?= htmlspecialchars($order->getCreatedAt()->format('Y-m-d H:i:s')) ?></td>
+                    </tr>
+                <?php endforeach; ?>
+            </tbody>
+        </table>
+    <?php else: ?>
+        <p>No orders found for this guest.</p>
+    <?php endif; ?>
+    </div>
+
+</div>

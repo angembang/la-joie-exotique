@@ -84,6 +84,16 @@
             $pageController->error();
           }
           break;
+          
+        case "category-alimentary": 
+          // Route for displaying products of alimentary category
+          $productController->showProductsOfAlimentaryCategory();
+          break;
+          
+        case "category-cosmetic": 
+          // Route for displaying products of alimentary category
+          $productController->showProductsOfCosmeticCategory();
+          break;
 
         case "tag-products":
           // Route for displaying products by tag
@@ -125,11 +135,6 @@
           // Route for displaying a stripe paiement
           $shopController->createStripe();
           break;
-
-        case "place-order":
-          // Route for placing an order
-          $shopController->placeOrder();
-          break;
           
         case "payment-success":
           // Route for the payment success
@@ -154,6 +159,11 @@
         case "show-orders":
           // Route for displaying orders
           $shopController->showOrders();
+          break;
+          
+        case "show-orders-by-guest-name":
+          // Route for displaying orders by the guest name
+          $shopController->showOrdersByGuestName();
           break;
           
         case "order-details":

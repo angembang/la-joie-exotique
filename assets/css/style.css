@@ -28,10 +28,22 @@ header, footer {
   width: 100%;
 }
 
-/**************************************  Header **************************************/
+/************************  Header *******************************/
 header {
   padding: 1rem 0.5rem 0.5rem 0.5rem;
   overflow: hidden;
+}
+
+.header-nav-ul {
+  display: flex;
+  flex-direction: column;
+  width: 150px;
+  margin-top: 3rem;
+  margin-left: -2.5rem;
+}
+
+.header-nav-ul a {
+  text-decoration: underline;
 }
 
 img {
@@ -58,6 +70,10 @@ a {
 .burger, .burgercolor a {
   color: #AE7F24;
 }
+.burgercolor a {
+  margin-left: 0.5rem;
+}
+
 
 .fa-cart-shopping {
   color: white;
@@ -66,11 +82,12 @@ a {
   padding: 1rem 2.5rem 1rem 1rem;
   margin-top: -1rem;
   position: relative;
+  margin-left: -1rem;
 }
 
 .cart-item-count {
   position: absolute;
-  left: 97%;
+  left: 95%;
   font-size: 1.2rem;
   top: 14px;
   color: #AE7F24;
@@ -82,6 +99,7 @@ h1 {
   font-family: "Acme", sans-serif;
   font-weight: 500;
   font-style: normal;
+  margin-left: -0.6rem;
 }
 
 .home-nav-bar ul {
@@ -97,9 +115,12 @@ h1 {
   font-size: 2rem;
 }
 
-/****************************************** End of Header ******************************************/
+/*************************** End of Header ************************/
 
-/********************************************* Main ***********************************************/
+
+
+
+/**************************** Main **********************************/
 main {
   display: flex;
   flex-direction: column;
@@ -108,7 +129,7 @@ main {
   width: 100%;
 }
 
-/************ Bar de recherche ************/
+/*********************** Bar de recherche ***********************/
 .search-bar {
   position: relative;
   margin: -1.5rem;
@@ -124,9 +145,11 @@ main {
   cursor: pointer;
 }
 
-.search-bar input[type="text"]::placeholder {
-  -webkit-text-fill-color: #999;
+.search-bar input[type="search"]::placeholder {
   font-size: 1rem;
+  -webkit-text-fill-color: #888;
+  -webkit-box-shadow: 0 0 0 30px #364c68 inset;
+  box-shadow: 0 0 0 30px #364c68 inset;
 }
 
 .search-bar input {
@@ -183,6 +206,10 @@ button {
   align-self: center;
 }
 
+
+
+
+
 /************************* page home ***************************/
 .home-page-div {
   display: flex;
@@ -217,7 +244,40 @@ button {
   margin-top: 1rem;
 }
 
-/************************* image produit home ***************************/
+.breadcrumb-font-size {
+  font-size: 1rem;
+  color: #00295B;
+}
+/* Style de la liste de fil d'Ariane */
+.breadcrumb {
+  background-color: transparent; /* Pour enlever le fond par défaut */
+  padding: 0;
+ 
+}
+
+/* Style des éléments de la liste */
+.breadcrumb .breadcrumb-item {
+  font-size: 1rem; /* Ajustez la taille de la police selon vos besoins */
+}
+
+/* Style des liens */
+.breadcrumb .breadcrumb-item a {
+  color: #00295B; /* Couleur des liens */
+  text-decoration: none; /* Supprime le soulignement des liens */
+}
+
+/* Style des liens au survol */
+.breadcrumb .breadcrumb-item a:hover {
+  color: #0056b3; /* Couleur des liens au survol */
+  text-decoration: underline; /* Ajoute un soulignement au survol */
+}
+
+/* Style de l'élément actif */
+.breadcrumb .breadcrumb-item.active {
+  color: #6c757d; /* Couleur de l'élément actif */
+}
+
+/****************** image produit home ***************************/
 .category-product-image {
   display: grid;
   grid-template-columns: 50% 50%;
@@ -234,9 +294,14 @@ button {
   height: auto;
 }
 
-/************************* end of image produit home ***************************/
+.home-img-div {
+  margin-top: -2rem;
+}
+/******************** end of image produit home *********************/
 
-/************************************************************** end of main ******************************/
+
+
+/************************** footer ************************/
 footer {
   display: flex;
   flex-direction: column;
@@ -302,7 +367,7 @@ footer i {
   background-color: #00295B;
 }
 
-/******************** page shopping cart ******************************/
+/******************** page shopping cart ***************************/
 .shopping-cart-page {
   width: 90%;
   margin: auto;
@@ -361,14 +426,31 @@ footer i {
 .price-cart {
   font-size: 1.2rem;
 }
+/***************** End of shopping cart page **********************/
 
-/******************** End of shopping cart page ******************************/
 
-/******************** products category page ******************************/
+
+
+
+/******************** products category page ***********************/
 .products-category {
   width: 95%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
 }
 
+.search-bar-category {
+  margin-bottom: -0.5rem;
+}
+
+.category-product-list {
+  margin-top: -1.5rem;
+}
+.breadcrumb-style-margin {
+  margin-top: 0.5rem;
+}
 .products-category h2 {
   color: #00295B;
   font-size: 1.7rem;
@@ -432,27 +514,41 @@ footer i {
   color: #6643e6;
   text-decoration: underline;
 }
+/**************** end of products category page *********************/
 
-/******************** end of products category page ******************************/
+
+
 
 /********************  Page product ******************************/
-.product-detail {
-  width: 90%;
+.main-product-page {
   display: flex;
   flex-direction: column;
-  margin: 0.7rem 1rem 1rem 1rem;
-  padding: 0.5rem;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+.product-detail {
+  width: 95%;
+  display: flex;
+  flex-direction: column;
+  margin-top: 1rem;
+  padding: 1rem;
   background-color: rgba(174, 127, 36, 0.6);
   font-family: "Acme", sans-serif;
   font-weight: 200;
   font-style: normal;
   justify-content: center;
   align-items: center;
+  border-radius: 15px;
 }
 
 .product-detail-slider-box-img {
   width: 350px;
-  height: 250px;
+  height: auto;
 }
 
 .product-description {
@@ -462,21 +558,19 @@ footer i {
 
 .product-price {
   color: #00295B;
-  margin: 0.5rem;
+  margin: 1rem;
   font-size: 1.5rem;
 }
 
 .product-detail h2 {
   color: #00295B;
-  font-size: 1rem;
+  font-size: 1.5rem;
+  width: 400px;
+  text-align: center;
 }
 
-.product-detail-cart a {
-  background-color: #00295B;
-  color: white;
-  padding: 0.5rem 1.5rem 0.5rem 1.5rem;
-  font-size: 1.5rem;
-  border-radius: 15px;
+.product-detail p {
+ text-align: center;
 }
 
 .product-link-add-cart a {
@@ -485,11 +579,20 @@ footer i {
   padding: 0.5rem 2rem 0.5rem 2rem;
   border-radius: 15px;
   font-size: 1.2rem;
+  display: inline-block; /* S'assurer que le lien est en ligne */
+  text-align: center; /* Centrer le texte */
+  white-space: nowrap; 
 }
 
-/******************** End of Page product ******************************/
+.search-bar-product {
+    margin: 0;  
+}
+/**************** End of Page product ******************************/
 
-/******************** Modal succeeded add cart message ******************************/
+
+
+
+/*************** Modal succeeded add cart message *****************/
 .modal {
   display: none; /* Masquée par défaut */
   position: fixed; /* Rester en place (fixée) */
@@ -529,10 +632,11 @@ footer i {
   text-decoration: none;
   cursor: pointer;
 }
+/***************** End Modal succeeded add cart message*************/
 
-/******************** End Modal succeeded add cart message ******************************/
 
-/******************** register login page ******************************/
+
+/******************** register login page ************************/
 /* Style for the toggle link */
 .toggle-link {
   color: #00295B;
@@ -545,6 +649,7 @@ footer i {
 /* Main container styling */
 .main-container {
   max-width: 430px;
+  
 }
 
 /* Form section styling */
@@ -613,8 +718,10 @@ footer i {
 .hidden {
   display: none;
 }
+/******************** End of register login page*******************/
 
-/******************** End of register login page ******************************/
+
+
 
 /******************** payment page ******************************/
 .payment-style {
@@ -622,6 +729,7 @@ footer i {
   flex-direction: column;
   justify-content: center;
   align-items: center;
+  padding-top: 1rem;
 }
 
 .fieldset-payment {
@@ -670,10 +778,17 @@ footer i {
 #payment-form button {
   margin-top: 1rem;
 }
-/******************** end of payment page ******************************/
+
+.disabled {
+  color: #888;
+}
+/******************** end of payment page***************************/
+
+
+
+
 
 /******************** admin page ******************************/
-
 /* General styles for admin layout */
 .admin-header {
   background-color: rgba(174, 127, 36, 0.6);
@@ -758,6 +873,7 @@ footer i {
 
 
 
+
 /******************** add product page ******************************/
 .productForm {
   width: 400px;
@@ -791,6 +907,9 @@ footer i {
 }
 /******************** end of add product page ***********************/
 
+
+
+
 /* Dark mode */
 /*@media (prefers-color-scheme: dark) {
   body {
@@ -806,6 +925,9 @@ footer i {
     color: yellow;
   }
 }*/
+
+
+
 
 
 /************************* admin order page ************************/
@@ -874,6 +996,8 @@ footer i {
     
     
     
+
+
 /******************* redirect confirm order page ********************/
 .paiement-redirect-page {
   background-color: rgba(174, 127, 36, 0.6);
@@ -883,6 +1007,7 @@ footer i {
   flex-direction: column;
   justify-content: center;
   align-items: center;
+  padding-top: 1rem;
 }
 
 .paiement-redirect-page table {
@@ -918,6 +1043,11 @@ footer i {
   align-items: center;
   margin: 1rem;
 }
+
+.paiement-info-message {
+margin-top: 0;  
+}
+
 .paiement-redirect {
   background-color: white;
   width: 370px;
@@ -947,7 +1077,11 @@ footer i {
 
 .paiement-redirect-page form button {
   width: 250px;  
-} 
+}
+
+.paiement-info-message h2 {
+  text-align: center;
+}
 /**********************end of redirect confirm order page************/
 
 
@@ -1064,3 +1198,151 @@ footer i {
   width: 95%;
 }
 /*****************end of inventory page    ********************/
+
+
+
+
+/**************** user orders page *****************************/
+.user-orders-page {
+  width: 97%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  background-color: rgba(174, 127, 36, 0.6);
+  padding: 1rem;
+}
+
+.user-orders-page h2 {
+  color: #00295B;
+  font-size: 1.9rem;
+}
+
+.user-orders-table {
+    overflow-x: auto;
+    width: 100%;
+    background-color: white;
+}
+
+.user-orders-table table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-bottom: 20px;
+}
+
+.user-orders-table th, .user-orders-table td {
+    padding: 12px 15px;
+    text-align: left;
+    border-bottom: 1px solid #ddd;
+}
+
+.user-orders-table th {
+    background-color: #f8f8f8;
+    color: #00295B;
+}
+
+.user-orders-table tr:nth-child(even) {
+    background-color: #f2f2f2;
+}
+
+.user-orders-table tr:hover {
+    background-color: #f1f1f1;
+}
+
+.user-orders-table td {
+    color: #00295B;
+}
+
+.user-orders-table th, .user-orders-table td {
+    text-align: center;
+}
+
+.user-orders-table th:first-child, .user-orders-table td:first-child {
+    text-align: left;
+}
+/****************************************************************/
+
+
+
+/******************* about page **********************************/
+.about-page {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  color: #00295B;
+  padding: 1rem;
+  background-color: white;
+  margin: 1rem;
+  border-radius: 15px;
+  font-size: 1.3rem;
+}
+/****************************************************************/
+
+
+
+
+/******************* about page **********************************/
+.legacy-page, .privacy-policy {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  color: #00295B;
+  padding: 1rem;
+  background-color: rgba(174, 127, 36, 0.6);
+  margin: 1rem;
+  font-size: 1.3rem;
+  gap: 1rem;
+}
+
+.entreprise-name, 
+.heberger-info, 
+.rgpd,
+.right, 
+.cookies, 
+.update-legacy-info {
+  width: 97%;
+  background-color: white;
+  border-radius: 15px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  padding: 1rem;
+  
+}
+
+.rgpd ul {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  
+}
+
+.legacy-page h2, 
+.legacy-page h3, 
+.legacy-page h4, 
+.legacy-page h5, 
+.legacy-page h6 {
+  font-size: 1.6rem;
+  text-align: center;
+}
+/****************************************************************/
+
+
+
+
+/******************* contact page **********************************/
+.contact-page {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  color: #00295B;
+}
+/****************************************************************/
