@@ -1,6 +1,14 @@
 <?php
     require "adminHeader.phtml";
 ?>
+<nav aria-label="breadcrumb">
+    <ol class="breadcrumb breadcrumb-font-size">
+        <li class="breadcrumb-item"><a href="index.php?route=admin">Accueil</a></li>
+        <li class="breadcrumb-item active" aria-current="page">Ajouter produit</li>
+        <li class="breadcrumb-item"><a href="index.php?route=show-orders">Commandes</a></li>
+        <li class="breadcrumb-item"><a href="index.php?route=admin-inventory">Inventaire</a></li></li>
+    </ol>
+</nav>
 <!-- Add product form -->
 <form class="productForm" action="index.php?route=checkAddProduct" method="post" enctype="multipart/form-data">
   <!-- Token field -->
